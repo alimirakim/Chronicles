@@ -22,9 +22,7 @@ function App() {
     })();
   }, []);
 
-  if (!loaded) {
-    return null;
-  }
+  if (!loaded) return null;
 
   return (
     <BrowserRouter>

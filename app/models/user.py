@@ -8,17 +8,20 @@ class User(db.Model, UserMixin):
   id = db.Column(db.Integer, primary_key = True)
   username = db.Column(db.String(40), nullable = False, unique = True)
   email = db.Column(db.String(255), nullable = False, unique = True)
-  hashed_password = db.Column(db.String(255), nullable = False)
-
+  hashword = db.Column(db.String(255), nullable = False)
+  # created_at = db.Column(db.Time) # TODO Add created_ats for tables where it may add value
+  
+  chronicles = db.relationship("Chronicle", back_populates="user")
+  characters = db.relationship("Character", back_populates="user")
 
   @property
   def password(self):
-    return self.hashed_password
+    return self.hashword
 
 
   @password.setter
   def password(self, password):
-    self.hashed_password = generate_password_hash(password)
+    self.hashword = generate_password_hash(password)
 
 
   def check_password(self, password):
@@ -26,8 +29,9 @@ class User(db.Model, UserMixin):
 
 
   def to_dict(self):
-    return {
-      "id": self.id,
-      "username": self.username,
-      "email": self.email
-    }
+      """Convert to jsonifyable dictionary."""
+      return {
+          "id": self.id,
+          "username": self.username,
+          "email": self.email
+      }
