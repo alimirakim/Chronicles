@@ -13,12 +13,15 @@ def seed_effects():
       effect=effect2,
       asset_id=1,
       quantity=5,)
-    db.session.add(effect1, effect2, asseteffect1, asseteffect2)
-    db.session.commmit()
+    db.session.add(effect1)
+    db.session.add(effect2)
+    db.session.add(asseteffect1)
+    db.session.add(asseteffect2)
+    db.session.commit()
     
     
 def undo_effects():
-    db.session.execute('TRUNCATE asset_effects CASCADE;')
+    db.session.execute('TRUNCATE asset_effects RESTART IDENTITY CASCADE;')
     db.session.commit()
-    db.session.execute('TRUNCATE effects CASCADE;')
+    db.session.execute('TRUNCATE effects RESTART IDENTITY CASCADE;')
     db.session.commit()

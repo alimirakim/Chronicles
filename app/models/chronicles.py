@@ -6,7 +6,7 @@ class Chronicle(db.Model):
     __tablename__ = "chronicles"
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-    name = db.Column(db.String(50), nullable=False)
+    title = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String)
     
     user = db.relationship("User", back_populates="chronicles")
@@ -20,7 +20,7 @@ class Chronicle(db.Model):
         return {
             "id": self.id,
             "user_id": self.user_id,
-            "name": self.name,
+            "title": self.title,
             "description": self.description,
             "tale_ids": [tale.id for tale in self.tales],
             "character_ids": [character.id for character in self.characters],

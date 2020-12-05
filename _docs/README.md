@@ -21,22 +21,36 @@ Original Inspiration Reference: Fallen London https://www.fallenlondon.com/
 ## Feature List
 ### MVP Features
 * User accounts - signup, signing, signout
-* CRUD: tale/chronicle, character, material, location, thread, effects, locks
-* Threads can cause 'effects' that change the state of various things ()
-* Threads can have branching 'actions' to choose from.
-* Actions can be 'locked' with various requirements.
+* CRUD: Threads
+* Threads can have branching 'choice threads' to choose from.
 * Content can be viewed in short-summary-card galleries.
 * Tales can be viewed in chronological galleries showing threads, connecting actions, effects, and locks.
 
+### Stretch Goal Feature 1: Play Text Adventure
+* User can press 'play' to be shown the 'starting' thread of a tale.
+* User can click the connected Choices to continue the Tale.
+
+### Stretch Goal Feature 2: Effects and Locks
+* Choices can be 'locked' with various requirements (mvp: assets).
+* Threads can cause 'effects' that change the state of various things (mvp: assets)
+* Characters are 'auto-generated' with an inventory/state upon starting a Tale.
+* Character state is effected by Threads and effects the state of Locks.
+* Locks can deplete Assets and Effects can bestow Assets.
+
+### Stretch Goal Feature 3: CRUD Characters, Places, Assets
+* 
+
+### Stretch Goal Feature :
+###
 
 
-### Stretch Goal Feature 1: Playable Text Adventure
+### Stretch Goal Feature ???: Playable Text Adventure
 * CRUD: abilities, statuses
 * Tales can be 'shared'; a user can start a Tale, create or be given a starting character.
 * Tales can be bookmarked, with character and state saved for the user per action.
 * Can create a Playable Character for a Tale.
 * Navigatable map with locations. Players can change location state, based on accessibility, or be moved by story effects.
-* 
+* Tales can be put in chronological order 
 * Stores can be created by designating a location, availability, shopkeeper(s), inventory schedule, inventory, and prices.
 
 ## Models & Schema

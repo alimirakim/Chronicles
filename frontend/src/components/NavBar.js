@@ -3,7 +3,8 @@ import { NavLink } from 'react-router-dom';
 import LogoutButton from './auth/LogoutButton';
 
 const NavBar = ({ setAuthenticated }) => {
-  return (
+  return (<header>
+    <h1>TaleSpinner</h1>
     <nav>
       <ul>
         <li>
@@ -31,7 +32,7 @@ const NavBar = ({ setAuthenticated }) => {
         </li>
       </ul>
     </nav>
-  );
+  </header>);
 }
 
 export default NavBar;

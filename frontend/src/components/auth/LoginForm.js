@@ -1,32 +1,41 @@
 import React, { useState } from "react";
+import {useDispatch, useSelector } from 'react-redux'
 import { Redirect } from "react-router-dom";
 import { login } from "../../services/auth";
+import {getChronicles} from '../../actions/chronicleActions'
+import {getTales} from '../../actions/taleActions'
+import {getThreads} from '../../actions/threadActions'
+import ErrorMessages from '../ErrorMessages'
 
 const LoginForm = ({ authenticated, setAuthenticated }) => {
+  const dispatch = useDispatch()
   const [errors, setErrors] = useState([]);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("demo@aa.io");
+  const [password, setPassword] = useState("password");
 
   const onLogin = async (e) => {
     e.preventDefault();
-    const user = await login(email, password);
-    if (!user.errors) setAuthenticated(true)
-    else setErrors(user.errors);
+    const content = await login(email, password);
+    if (!content.errors) {
+      setAuthenticated(true)
+      dispatch(getChronicles(content.chronicles))
+      dispatch(getTales(content.tales))
+      dispatch(getThreads(content.threads))
+    } else { 
+      setErrors(content.errors);
+    }
   };
 
   const updateEmail = (e) => setEmail(e.target.value)
-
-  const updatePassword = (e) => {
-    setPassword(e.target.value);
-  };
+  const updatePassword = (e) => setPassword(e.target.value)
 
   if (authenticated) return <Redirect to="/" /> 
 
+
+  
   return (
     <form onSubmit={onLogin}>
-      <div>
-        {errors.map((error) => (<div>{error}</div>))}
-      </div>
+      <ErrorMessages errors={errors} />
       <div>
         <label htmlFor="email">Email</label>
         <input

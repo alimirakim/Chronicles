@@ -19,5 +19,5 @@ def seed_thread_choices():
     
     
 def undo_thread_choices():
-    db.session.execute('TRUNCATE thread_choices;')
+    db.session.execute('TRUNCATE thread_choices RESTART IDENTITY CASCADE;')
     db.session.commit()

@@ -6,7 +6,7 @@ class Tale(db.Model):
     __tablename__ = "tales"
     id = db.Column(db.Integer, primary_key=True)
     chronicle_id = db.Column(db.Integer, db.ForeignKey("chronicles.id"), nullable=False)
-    name = db.Column(db.String(50), nullable=False)
+    title = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String)
     
     chronicle = db.relationship("Chronicle", back_populates="tales")
@@ -17,7 +17,7 @@ class Tale(db.Model):
         return {
             "id": self.id,
             "chronicle_id": self.chronicle_id,
-            "name": self.name,
+            "title": self.title,
             "description": self.description,
             "thread_ids": [thread.id for thread in self.threads],
         }
