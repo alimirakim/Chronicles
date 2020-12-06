@@ -1,4 +1,5 @@
 from .db import db
+from pprint import pprint
 
 
 class Thread(db.Model):
@@ -7,37 +8,28 @@ class Thread(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     tale_id = db.Column(db.Integer, db.ForeignKey("tales.id"), nullable=False)
     title = db.Column(db.String(250), nullable=False)
-    description = db.Column(db.String, nullable=False)
+    description = db.Column(db.String)
+    x = db.Column(db.Integer, nullable=False, default=0)
+    y = db.Column(db.Integer, nullable=False, default=0)
+    color = db.Column(db.String(50), default="gray")
+    image = db.Column(db.String(250), default="default_thread")
     
     tale = db.relationship("Tale", back_populates="threads")
-    locks = db.relationship("Lock", back_populates="thread")
     effects = db.relationship("Effect", back_populates="thread")
+    choices = db.relationship("ThreadChoice", foreign_keys="ThreadChoice.current_thread_id", back_populates="choice_thread")
 
     def to_dict(self):
-        """Convert to jsonifyable dictionary."""
+        """Convert to dictionary."""
+        print("\n\nTHREAD DICTIONARY")
         return {
             "id": self.id,
             "tale_id": self.tale_id,
             "title": self.title,
             "description": self.description,
-            "lock_ids": [lock.id for lock in self.locks],
-            "effect_ids": [effect.id for effect in self.effects],
-        }
-
-
-class ThreadChoice(db.Model):
-    """A join table connecting a thread with a following branch thread."""
-    __tablename__ = "thread_choices"
-    id = db.Column(db.Integer, primary_key=True)
-    current_thread_id = db.Column(db.Integer, db.ForeignKey("threads.id"), nullable=False)
-    choice_thread_id = db.Column(db.Integer, db.ForeignKey("threads.id"), nullable=False)
-
-    current_thread = db.relationship("Thread", foreign_keys=[current_thread_id])
-    choice_thread = db.relationship("Thread", foreign_keys=[choice_thread_id])
-
-    def to_dict(self):
-        """Convert to jsonifyable dictionary."""
-        return {
-            "id": self.id,
-
+            "effects": [effect.to_dict() for effect in self.effects],
+            "choices": [choice.to_dict() for choice in self.choices],
+            "x": self.x,
+            "y": self.y,
+            "color": self.color,
+            "image": self.image,
         }

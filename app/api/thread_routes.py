@@ -2,6 +2,8 @@ from flask import Blueprint, jsonify, request
 from app.models import db, Thread
 from app.forms import ThreadForm
 from app.utils import validation_errors_to_messages
+from app.forms import ThreadForm
+
 
 thread_routes = Blueprint("threads", __name__)
 

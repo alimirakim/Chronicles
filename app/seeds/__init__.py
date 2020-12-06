@@ -3,7 +3,6 @@ from .users import seed_users, undo_users
 from .chronicles import seed_chronicles, undo_chronicles
 from .tales import seed_tales, undo_tales
 from .threads import seed_threads, undo_threads
-from .thread_choices import seed_thread_choices, undo_thread_choices
 from .assets import seed_assets, undo_assets
 from .effects import seed_effects, undo_effects
 from .locks import seed_locks, undo_locks
@@ -22,7 +21,6 @@ def seed():
     seed_chronicles()
     seed_tales()
     seed_threads()
-    seed_thread_choices()
     seed_assets()
     seed_effects()
     seed_locks()
@@ -35,7 +33,6 @@ def undo():
     undo_locks()
     undo_effects()
     undo_assets()
-    undo_thread_choices()
     undo_threads()
     undo_tales()
     undo_chronicles()

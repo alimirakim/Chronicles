@@ -6,7 +6,8 @@ def seed_tales():
     tale = Tale(
         chronicle_id=1,
         title="Demo Tale",
-        description="A demonstration tale.")
+        description="A demonstration tale.",
+        first_thread_id=1,)
     db.session.add(tale)
     db.session.commit()
     

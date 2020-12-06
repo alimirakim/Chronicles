@@ -1,18 +1,18 @@
 from .db import db
 
 
-class Rank(db.Model):
-    """Represents a metered state for an entity, such as an ability, skill,
-    growth, or knowledge rank."""
-    __tablename__ = "ranks"
+class Condition(db.Model):
+    """
+    A temporary, usually time-constrained condition that can inflict an entity.
+    """
+    __tablename__ = "conditions"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String)
-    # type = db.Column(db.String(50), nullable=False) # rank, status, 
     color = db.Column(db.String(50), default="gray")
-    image = db.Column(db.String(250), default="default_rank")
+    image = db.Column(db.String(250), default="default_condition")
     
-    entity_ranks = db.relationship("EntityRank", back_populates="rank")
+    entity_conditions = db.relationship("EntityCondition", back_populates="condition")
     
     def to_dict(self):
         """Convert to jsonifyable dictionary."""

@@ -3,6 +3,7 @@ import logger from 'redux-logger'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import charactersReducer from './charactersReducer'
 import assetsReducer from './assetsReducer'
+import choicesReducer from './choicesReducer'
 import chroniclesReducer from './chroniclesReducer'
 import placesReducer from './placesReducer'
 import talesReducer from './talesReducer'
@@ -13,6 +14,7 @@ import errorsReducer from './errorsReducer'
 
 const rootReducer = combineReducers({
     assets: assetsReducer,
+    choices: choicesReducer,
     characters: charactersReducer,
     chronicles: chroniclesReducer,
     errors: errorsReducer,

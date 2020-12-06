@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Route } from "react-router-dom";
 import {useDispatch, useSelector} from 'react-redux'
+
+// COMPONENTS
 import LoginForm from "./components/auth/LoginForm";
 import SignUpForm from "./components/auth/SignUpForm";
 import NavBar from "./components/NavBar";
@@ -8,17 +10,23 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 import UsersList from "./components/UsersList";
 import User from "./components/User";
 import Home from './components/Home'
+import TaleSpinner from './components/TaleSpinner'
+
+// ACTIONS
 import {getChronicles} from './actions/chronicleActions'
 import {getTales} from './actions/taleActions'
 import {getThreads} from './actions/threadActions'
+import {getChoices} from './actions/choiceActions'
+
 
 function App() {
   const dispatch = useDispatch()
   const [authenticated, setAuthenticated] = useState(false);
   const [loaded, setLoaded] = useState(false);
-  const chronicles = useSelector(state => state.chronicles)
-  const tales = useSelector(state => state.tales)
+  // const chronicles = useSelector(state => state.chronicles)
+  // const tales = useSelector(state => state.tales)
   const threads = useSelector(state => state.threads)
+  // const choices = useSelector(state => state.choices)
 
   useEffect(() => {
     (async() => {
@@ -32,6 +40,7 @@ function App() {
         dispatch(getChronicles(content.chronicles))
         dispatch(getTales(content.tales))
         dispatch(getThreads(content.threads))
+        dispatch(getChoices(content.choices))
       }
       setLoaded(true)
     })()
@@ -42,7 +51,7 @@ function App() {
   return (
     <BrowserRouter>
       
-      <NavBar setAuthenticated={setAuthenticated} />
+      <NavBar authenticated={authenticated} setAuthenticated={setAuthenticated} />
       
       {/* Login and Signup forms */}
       <Route path="/login" exact={true}>
@@ -54,7 +63,8 @@ function App() {
       <Route path="/sign-up" exact={true}>
         <SignUpForm 
           authenticated={authenticated}
-          setAuthenticated={setAuthenticated} />
+          setAuthenticated={setAuthenticated}
+        />
       </Route>
       
       {/* Homepage */}
@@ -62,6 +72,10 @@ function App() {
         <Home />
       </ProtectedRoute>
 
+      {/* TaleSpinner */}
+      <ProtectedRoute path="/talespinner/tales/:tid" exact={true} authenticated={authenticated}>
+        <TaleSpinner threads={threads} />
+      </ProtectedRoute>
 
       {/* User list and individual user profiles */}
       <ProtectedRoute path="/users" exact={true} authenticated={authenticated}>

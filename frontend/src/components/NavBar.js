@@ -2,7 +2,8 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import LogoutButton from './auth/LogoutButton';
 
-const NavBar = ({ setAuthenticated }) => {
+const NavBar = ({ authenticated, setAuthenticated }) => {
+  
   return (<header>
     <h1>TaleSpinner</h1>
     <nav>
@@ -12,14 +13,11 @@ const NavBar = ({ setAuthenticated }) => {
             Home
           </NavLink>
         </li>
+
+      {!authenticated && <>
         <li>
-          <NavLink to="/login" exact={true} activeClassName="active">
-            Login
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/sign-up" exact={true} activeClassName="active">
-            Sign Up
+          <NavLink to="/talespinner" exact={true} activeClassName="active">
+            TaleSpinner
           </NavLink>
         </li>
         <li>
@@ -30,6 +28,22 @@ const NavBar = ({ setAuthenticated }) => {
         <li>
           <LogoutButton setAuthenticated={setAuthenticated} />
         </li>
+      </>}
+        
+        {/* For Anon Users, show only Login/Signup options: */}
+        {authenticated && <>
+          <li>
+            <NavLink to="/login" exact={true} activeClassName="active">
+              Login
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/sign-up" exact={true} activeClassName="active">
+              Sign Up
+            </NavLink>
+          </li>
+        </>}
+        
       </ul>
     </nav>
   </header>);

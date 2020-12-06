@@ -9,6 +9,8 @@ class Effect(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     type = db.Column(db.String(50), nullable=False, default="asset") # (db.Enum("asset", "location", "status"), nullable=False, default="asset")
     thread_id = db.Column(db.Integer, db.ForeignKey("threads.id"), nullable=False)
+    color = db.Column(db.String(50), default="gray")
+    image = db.Column(db.String(250), default="default_effect")
     
     thread = db.relationship("Thread", back_populates="effects")
     asset_effect = db.relationship("AssetEffect", back_populates="effect")
@@ -18,7 +20,9 @@ class Effect(db.Model):
         return {
             "id": self.id,
             "type": self.type,
-            "thread_id": self.thread_id
+            "thread_id": self.thread_id,
+            "color": self.color,
+            "image": self.image,
         }
 
 
@@ -29,6 +33,7 @@ class AssetEffect(db.Model):
     effect_id = db.Column(db.Integer, db.ForeignKey("effects.id"), nullable=False)
     asset_id = db.Column(db.Integer, db.ForeignKey("assets.id"), nullable=False)
     quantity = db.Column(db.Integer, nullable=-False, default=1)
+    is_gained = db.Column(db.Boolean, nullable=False, default=True)
     
     effect = db.relationship("Effect", back_populates="asset_effect")
     asset = db.relationship("Asset", back_populates="effects")
@@ -41,4 +46,5 @@ class AssetEffect(db.Model):
             "asset_id": self.asset_id,
             "quantity": self.quantity,
             "thread_id": self.effect.thread_id,
+            "is_gained": self.is_gained,
         }

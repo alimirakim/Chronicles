@@ -3,6 +3,7 @@ from app.models import db, Tale, Thread
 from app.forms import TaleForm, ThreadForm
 from app.utils import validation_errors_to_messages
 
+
 tale_routes = Blueprint("tales", __name__)
 
 
@@ -17,7 +18,7 @@ def edit_tale(tid):
         tale.title = form["title"].data,
         tale.description = form["description"].data
         db.session.commit()
-        return jsonify(tale.to_dict())
+        return jsonify({tale.id: tale.to_dict()})
     else:
         return {"errors": validation_errors_to_messages(form.errors)}, 401
 
@@ -44,14 +45,18 @@ def create_thread(tid):
             tale_id=tid,
             title=form["title"].data,
             description=form["description"].data,)
-        # for choice in form["choices"].data:
+        
+        choices = []
+        # for choice in request.json("choices")_:
         #     thread_choice = ThreadChoice(
+        #         title=choice[1],
         #         current_thread=thread,
-        #         choice_thread_id=choice,)
+        #         choice_thread_id=choice[0])
         #     db.session.add(thread_choice)
+        #     choices.append({thread_choice.id: thread_choice.to_dict()})
         db.session.add(thread)
         db.session.commit()
         print("\n\nNEW THREAD", thread.to_dict())
-        return thread.to_dict()
+        return {thread.id: thread.to_dict()} #choices=choices)
     else:
         {"error": validation_errors_to_messages(form.errors)}, 401

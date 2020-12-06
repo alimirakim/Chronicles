@@ -8,12 +8,12 @@ class Chronicle(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     title = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String)
+    color = db.Column(db.String(50), default="gray")
+    image = db.Column(db.String(250), default="default_chronicle")
     
     user = db.relationship("User", back_populates="chronicles")
+    entities = db.relationship("Entity", back_populates="chronicle")
     tales = db.relationship("Tale", back_populates="chronicle")
-    assets = db.relationship("Asset", back_populates="chronicle")
-    places = db.relationship("Place", back_populates="chronicle")
-    characters = db.relationship("Character", back_populates="chronicle")
     
     def to_dict(self):
         """Convert to jsonifyable dictionary."""
@@ -23,8 +23,11 @@ class Chronicle(db.Model):
             "title": self.title,
             "description": self.description,
             "tale_ids": [tale.id for tale in self.tales],
-            "character_ids": [character.id for character in self.characters],
-            "place_ids": [place.id for place in self.places],
+            "character_eids": [entity.id for entity in self.entities if entity.type == "character"],
+            "place_eids": [entity.id for entity in self.entities if entity.type == "place"],
+            "asset_eids": [entity.id for entity in self.entities if entity.type == "asset"],
+            "color": self.color,
+            "image": self.image,
         }
       
 

@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 from flask_login import current_user
 from app.models import db, Chronicle, Tale, Thread, ThreadChoice
 from app.utils import validation_errors_to_messages
+from app.forms import ChronicleForm, TaleForm
 
 chronicle_routes = Blueprint("chronicles", __name__)
 
@@ -17,9 +18,22 @@ def create_chronicle():
             user_id=current_user.id,
             title=form["title"].data,
             description=form["description"].data)
+        tale = Tale(
+            chronicle=chronicle,
+            title=f"{chronicle.title}'s First Tale")
+        thread = Thread(
+            tale=tale,
+            title=f"Start Here!",
+            description="Edit this scene and link threads with choices!")
         db.session.add(chronicle)
+        # db.session.add(tale)
+        # db.session.add(thread)
         db.session.commit()
-        return jsonify(chronicle.to_dict())
+        return jsonify({chronicle.id: chronicle.to_dict()})
+            # chronicle={chronicle.id: chronicle.to_dict()}, 
+            # tale={tale.id: tale.to_dict()}, 
+            # thread={thread.id: thread.to_dict()}
+        
     else:
       return {"errors": validation_errors_to_messages(form.errors)}, 401
 
@@ -35,7 +49,7 @@ def edit_chronicle(cid):
         chronicle.title = form["title"].data
         chronicle.description = form["description"].data
         db.session.commit()
-        return jsonify(chronicle.to_dict())
+        return jsonify({chronicle.id: chronicle.to_dict()})
     else:
         return {"errors": validation_errors_to_messages(form.errors)}, 401
 
@@ -62,7 +76,7 @@ def create_tale(cid):
             description=form["description"].data)
         db.session.add(tale)
         db.session.commit()
-        return jsonify(tale.to_dict())
+        return jsonify({tale.id: tale.to_dict()})
     else:
         return {"errors": validation_errors_to_messages(form.errors)}, 401
 

@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 from flask_login import current_user
 from app.models import db, Character, Asset
 from app.utils import validation_errors_to_messages
+from app.forms import CharacterForm
 
 character_routes = Blueprint("characters", __name__)
 

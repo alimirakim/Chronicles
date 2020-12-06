@@ -1,27 +1,25 @@
 from .db import db
+from datetime import datetime, timedelta
 
 
 class Asset(db.Model):
-    """An obtainable entity representing an object or idea."""
+    """An obtainable entity representing a thing or idea."""
     __tablename__ = "assets"
     id = db.Column(db.Integer, primary_key=True)
-    chronicle_id = db.Column(db.Integer, db.ForeignKey("chronicles.id"), nullable=False)
-    name = db.Column(db.String(50), nullable=False)
+    entity_id = db.Column(db.Integer, db.ForeignKey("entities.id"), nullable=False)
     type = db.Column(db.String(50), nullable=False, default="item") # (db.Enum(item, bond, deed, title, idea))
-    description = db.Column(db.String)
+    is_unique = db.Column(db.Boolean, nullable=False, default=False)
     
-    chronicle = db.relationship("Chronicle", back_populates="assets")
-    # characters = db.relationship("Character", back_populates="assets")
-    # places = db.relationship("Place", back_populates="assets")
+    entity = db.relationship("Entity", back_populates="asset")
     effects = db.relationship("AssetEffect", back_populates="asset")
     locks = db.relationship("AssetLock", back_populates="asset")
+    entity_assets = db.relationship("EntityAsset", back_populates="asset")
 
     def to_dict(self):
-        """Convert to jsonifyable dictionary."""
+        """Convert to dictionary."""
         return {
             "id": self.id,
-            "chronicle_id": self.chronicle_id,
-            "name": self.name,
+            "entity_id": self.entities_id,
             "type": self.type,
-            "description": self.description,
+            "is_unique": self.is_unique,
         }
