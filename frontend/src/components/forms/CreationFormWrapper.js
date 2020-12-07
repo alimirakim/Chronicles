@@ -1,37 +1,34 @@
-import React, { useState, cloneElement } from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import ErrorMessages from '../ErrorMessages'
 import { TextInput, TextAreaInput } from './FormInputs'
 import { getErrors, wipeErrors } from '../../actions/errorActions'
-
+import { updateSelection} from '../../actions/selectionActions'
 
 export default function CreationFormWrapper({
-  creationType,
-  uniqueInputs,
   path,
+  creationType,
+  uniqueInputs: UniqueInput,
   actionCreator,
-  setActive,
+  selectionType
 }) {
+  
   const dispatch = useDispatch()
   const errors = useSelector(state => state.errors)
   const [open, setOpen] = useState(false)
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
-  const [uniqueContent, setUniqueContent] = useState({})
   // const [colors, setColors] = useState(useSelector(state => state.colors)
   // const [images, setImages] = useState(useSelector(state => state.images)
+  const [uniqueContent, setUniqueContent] = useState({})
 
-  const handleActive = (content) => (e) => setActive({...content})
-  
+  const handleSelection = (selection) => (e) => updateSelection({ selectionType, selection })
   const handleChange = (setFieldValue) => (e) => setFieldValue(e.target.value)
-
   const handleOpen = (e) => setOpen(true)
-
   const handleClose = (e) => {
     setOpen(false)
     if (errors) dispatch(wipeErrors())
   }
-  // const uniqueInputsWithHandleChange = cloneElement(uniqueInputs, handleChange, setUniqueContent)
 
   const submitCreation = async (e) => {
     e.preventDefault()
@@ -39,22 +36,22 @@ export default function CreationFormWrapper({
     const res = await fetch(path, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, description, }),
+      body: JSON.stringify({ title, description, ...uniqueContent}),
     })
     const content = await res.json()
     if (!content.errors) {
-      handleActive(content)
+      handleSelection(content)
       dispatch(actionCreator(content))
-      console.log("active now", content)
-      
+
       // Reset form input values
       setTitle("")
       setDescription("")
       setUniqueContent({})
       handleClose()
-      
+
     } else {
-      console.log("ERROR!!!", content.errors)
+      console.error("ERROR!!!", content.errors)
+      console.info("INFO1!!!")
       dispatch(getErrors(content.errors))
     }
   }
@@ -62,24 +59,24 @@ export default function CreationFormWrapper({
   return (<>
     <button type="button" onClick={handleOpen}>+{creationType}</button>
     <div className={`${open ? "" : "is-hidden"}`}>
-      <button onClick={handleClose}>x</button>
-
       <h2>Create a {creationType}</h2>
+    
+      {/* Hides popup form on click */}
+      <button onClick={handleClose}>x</button>
+      
+      {/* Shows error messages on failed submission */}
       <ErrorMessages errors={errors} />
 
       <form onSubmit={submitCreation}>
+        {/* Generic inputs */}
         <TextInput label="Title" handleChange={handleChange} value={title} setValue={setTitle} />
         <TextAreaInput label="Description" handleChange={handleChange} value={description} setValue={setDescription} />
         {/* <SelectInput label="Color" handleChange={handleChange} values={colors} value={color} setValue={setColor} /> */}
         {/* <SelectInput label="Image" handleChange={handleChange} values={images} value={image} setValue={setImage} /> */}
-
-        {/* TODO FFFFFFFFFFFFUUUUUUUUUUUUUUCCCCCCCCCCCCCCCKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK FUCK FUCK FUCKITY FUCK */}
-        {/* {uniqueInputs} */}
-
+        
+        <UniqueInput handleChange={handleChange} setUniqueContent={setUniqueContent} />
+        
         <button type="submit">Create</button>
-
-        {/* <button onClick={addEffect}>+Effect</button> */}
-        {/* <button onClick={addLock}>+Lock</button> */}
 
       </form>
     </div>

@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { addThread } from '../../actions/threadActions'
-import ErrorMessages from '../ErrorMessages'
-import { TextInput, TextAreaInput, AddToList } from './FormInputs'
+import { useSelector } from 'react-redux'
+import { AddToList } from './FormInputs'
 
 
 
@@ -16,11 +14,18 @@ export default function ThreadForm({ handleChange, setUniqueContent }) {
   const [choices, setChoices] = useState([])
 
   useEffect(() => {
-    setUniqueContent(choices)
+    setUniqueContent({choices})
+    console.log("choices", choices)
   }, [choices])
 
   return (<>
-    <AddToList creationType="Choices" allItems={threads} chosenItemIds={choices} setChosenItemIds={setChoices} handleChange={handleChange} />
+    <AddToList
+      creationType="Choice"
+      allItems={threads}
+      chosenItemIds={choices}
+      setChosenItemIds={setChoices}
+      handleChange={handleChange}
+    />
     {/* <button onClick={addEffect}>+Effect</button> */}
     {/* <button onClick={addLock}>+Lock</button> */}
 

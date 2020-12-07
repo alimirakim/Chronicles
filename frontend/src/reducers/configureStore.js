@@ -6,6 +6,7 @@ import assetsReducer from './assetsReducer'
 import choicesReducer from './choicesReducer'
 import chroniclesReducer from './chroniclesReducer'
 import placesReducer from './placesReducer'
+import selectionsReducer from './selectionsReducer'
 import talesReducer from './talesReducer'
 import threadsReducer from './threadsReducer'
 import errorsReducer from './errorsReducer'
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
     chronicles: chroniclesReducer,
     errors: errorsReducer,
     places: placesReducer,
+    selections: selectionsReducer,
     tales: talesReducer,
     threads: threadsReducer,
 })

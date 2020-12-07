@@ -6,115 +6,138 @@ import CreationFormWrapper from './forms/CreationFormWrapper'
 import ChronicleForm from './forms/ChronicleForm'
 import TaleForm from './forms/TaleForm'
 import ThreadForm from './forms/ThreadForm'
+import ChoiceForm from './forms/ChoiceForm'
 import { addChronicle } from '../actions/chronicleActions'
 import { addTale } from '../actions/taleActions'
 import { addThread } from '../actions/threadActions'
+import { addChoice } from '../actions/choiceActions'
+import { updateSelections, wipeSelections } from '../actions/selectionActions'
+
 
 export default function Home() {
-  const chronicles = useSelector(state => state.chronicles)
-  const all_tales = useSelector(state => state.tales)
-  const all_threads = useSelector(state => state.threads)
-  const all_choices = useSelector(state => state.choices)
-  const [tales, setTales] = useState([])
-  const [threads, setThreads] = useState([])
-  const [choices, setChoices] = useState([])
-  const [activeChronicle, setActiveChronicle] = useState(Object.keys(chronicles) ? chronicles[Object.keys(chronicles)[0]] : "")
-  const [activeTale, setActiveTale] = useState("")
-  const [activeThread, setActiveThread] = useState("")
-  const [activeChoice, setActiveChoice] = useState("")
+  const dispatch = useDispatch()
+  const { chronicles, tales, threads, choices, selected } = useSelector(state => ({
+    chronicles: state.chronicles,
+    tales: state.tales,
+    threads: state.threads,
+    choices: state.choices,
+    selected: state.selections
+  }))
 
+  // Select a user's first chronicle and its tales/content upon initialization
   useEffect(() => {
-    setTales(Object.values(all_tales).filter(tale => tale.chronicle_id === activeChronicle.id))
-    setThreads(Object.values(all_threads).filter(thread => thread.tale_id === activeTale.id))
-    setChoices(Object.values(all_choices).filter(choice => choice.current_thread_id === activeThread.id))
-  }, [activeChronicle, activeTale, activeThread, all_tales, all_threads, all_choices, chronicles])
+    dispatch(updateSelections([
+      { type: "chronicle", selection: Object.keys(chronicles) ? chronicles[Object.keys(chronicles)[0]] : "" },
+    ]))
+  }, [])
 
+  // Upon chronicle-selection, clear dependent selections and refresh tales // TODO Plus charas, places, assets, etc.
   useEffect(() => {
-    setActiveTale("")
-    setActiveThread("")
-  }, [activeChronicle])
+    dispatch(wipeSelections(["tale", "thread", "choice", "threads", "choices"]))
+    dispatch(updateSelections([
+      { type: "tales", selection: Object.values(tales).filter(tale => tale.chronicle_id === selected.chronicle.id) },
+    ]))
+  }, [selected.chronicle])
 
+  // Upon tale selection, clear dependent selections and refresh threads
   useEffect(() => {
-    setActiveThread("")
-  }, [activeTale])
+    dispatch(wipeSelections(["thread", "choice", "threads", "choices"]))
+    dispatch(updateSelections([
+      { type: "threads", selection: Object.values(threads).filter(thread => thread.tale_id === selected.tale.id) }
+    ]))
+  }, [selected.tale])
 
+  // Upon thread selection, clear dependent selections and refresh choices // TODO Plus effects
   useEffect(() => {
-    console.log("activeC", activeChronicle, "activeT", activeTale, "activeTh", activeThread)
-  }, [activeChronicle, activeTale, activeThread])
+    dispatch(wipeSelections(["choice", "choices"]))
+    dispatch(updateSelections([
+      { type: "choices", selection: Object.values(choices).filter(choice => choice.current_thread_id === selected.thread.id) },
+    ]))
+  }, [selected.thread])
+
 
   return (
     <main>
       {/* <p>Welcome, {user.username}...</p> */}
+
+
       <CreationFormWrapper
         creationType="Chronicle"
         uniqueInputs={ChronicleForm}
         path={`/api/chronicles/create`}
         actionCreator={addChronicle}
-        setActive={setActiveChronicle}
+        selectionType="chronicle"
       />
       <YourCreations
         creation_type="Chronicles"
-        active={activeChronicle}
+        active={selected.chronicle}
         creations={chronicles}
-        setActive={setActiveChronicle}
+        selectionType="chronicle"
       />
+
 
       <CreationFormWrapper
         creationType="Tale"
         uniqueInputs={TaleForm}
-        path={`/api/chronicles/${activeChronicle.id}/tales/create`}
+        path={`/api/chronicles/${selected.chronicle.id}/tales/create`}
         actionCreator={addTale}
-        setActive={setActiveTale}
+        selectionType="tale"
       />
       <YourCreations
         creation_type="Tales"
-        creations={tales}
-        active={activeTale}
-        setActive={setActiveTale}
+        creations={selected.tales}
+        active={selected.tale}
+        selectionType="tale"
       />
 
-      <Link to={`/talespinner/tales/${activeTale.id}`}>Go to TaleSpinner</Link>
+
+      <Link to={`/talespinner/tales/${selected.tale.id}`}>Go to TaleSpinner</Link>
       <CreationFormWrapper
         creationType="Thread"
         uniqueInputs={ThreadForm}
-        path={`/api/tales/${activeTale.id}/threads/create`}
+        path={`/api/tales/${selected.tale.id}/threads/create`}
         actionCreator={addThread}
-        setActive={setActiveThread}
+        selectionType="thread"
       />
       <YourCreations
         creation_type="Threads"
-        creations={threads}
-        active={activeThread}
-        setActive={setActiveThread}
+        creations={selected.threads}
+        active={selected.thread}
+        selectionType="thread"
       />
+
 
       <CreationFormWrapper
         creationType="Choices"
         uniqueInputs={ChoiceForm}
-        path={`/api/threads/${activeThread.id}/choices/create`}
+        path={`/api/threads/${selected.thread.id}/choices/create`}
         actionCreator={addChoice}
-        setActive={setActiveChoice}
+        selectionType="choice"
       />
       <YourCreations
         creation_type="Choices"
-        creations={choices}
-        active={activeChoice}
-        setActive={setActiveChoice}
+        creations={selected.choices}
+        active={selected.choice}
+        selectionType="choice"
       />
 
-      <CreationFormWrapper
+
+      {/* <CreationFormWrapper
         creationType="Characters"
         uniqueInputs={CharacterForm}
         path={`/api/chronicles/${activeChronicle.id}/characters/create`}
         actionCreator={addCharacter}
         setActive={setActiveCharacter}
+        selectionType="character"
       />
       <YourCreations
         creation_type="Characters"
         creations={characters}
         active={activeCharacter}
         setActive={setActiveCharacter}
+        selectionType="character"
       />
+
 
       <CreationFormWrapper
         creationType="Places"
@@ -122,13 +145,16 @@ export default function Home() {
         path={`/api/chronicles/${activeChronicle.id}/places/create`}
         actionCreator={addPlace}
         setActive={setActivePlace}
+        selectionType="place"
       />
       <YourCreations
         creation_type="Places"
         creations={places}
         active={activePlace}
         setActive={setActivePlace}
+        selectionType="place"
       />
+
 
       <CreationFormWrapper
         creationType="Assets"
@@ -136,41 +162,45 @@ export default function Home() {
         path={`/api/chronicles/${activeChronicle.id}/assets/create`}
         actionCreator={addAsset}
         setActive={setActiveAsset}
+        selectionType="asset"
       />
       <YourCreations
         creation_type="Assets"
         creations={assets}
         active={activeAsset}
         setActive={setActiveAsset}
+        selectionType="asset"
       />
+
 
       <CreationFormWrapper
         creationType="Conditions"
         uniqueInputs={ConditionForm}
         path={`/api/chronicles/${activeChronicle.id}/conditions/create`}
         actionCreator={addCondition}
-        setActive={setActiveCondition}
+        selectionType="condition"
       />
       <YourCreations
         creation_type="Conditions"
         creations={conditions}
         active={activeCondition}
-        setActive={setActiveCondition}
+        selectionType="condition"
       />
+
 
       <CreationFormWrapper
         creationType="Ranks"
         uniqueInputs={RankForm}
         path={`/api/chronicles/${activeChronicle.id}/races/create`}
         actionCreator={addRank}
-        setActive={setActiveRank}
+        selectionType="rank"
       />
       <YourCreations
         creation_type="Ranks"
         creations={ranks}
         active={activeRank}
-        setActive={setActiveRank}
-      />
+        selectionType="rank"
+      /> */}
 
       {/* <ChronicleForm /> */}
       {/* <CharacterForm /> */}

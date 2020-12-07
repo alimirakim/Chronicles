@@ -1,9 +1,15 @@
 import React from 'react'
+import {useDispatch} from 'react-redux'
+import {updateSelection} from '../actions/selectionActions'
 
-
-export default function YourCreations({ creation_type, creations, active, setActive }) {
-  
-  const handleActive = (creation) => (e) => setActive(creation)
+export default function YourCreations({ creation_type, creations, active, selectionType }) {
+  const dispatch = useDispatch()
+  const handleActive = (selection) => (e) => {
+    // console.info("selected: ", selection)
+    // console.error("selected: ", selection)
+    // console.warn("selected: ", selection)
+    dispatch(updateSelection(selectionType, selection))
+  }
   
   let isEmpty = true
   if (Object.keys(creations).length) isEmpty = false

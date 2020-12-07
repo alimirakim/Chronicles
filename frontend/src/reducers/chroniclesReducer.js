@@ -5,6 +5,7 @@ import {
     DELETE_CHRONICLE
 } from '../actions/chronicleActions'
 
+
 export default function chroniclesReducer(state = {}, action) {
     const newState = {...state }
     switch (action.type) {

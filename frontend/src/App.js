@@ -11,6 +11,9 @@ import UsersList from "./components/UsersList";
 import User from "./components/User";
 import Home from './components/Home'
 import TaleSpinner from './components/TaleSpinner'
+import TaleStart from './components/play/TaleStart'
+import CurrentThread from './components/play/CurrentThread'
+
 
 // ACTIONS
 import {getChronicles} from './actions/chronicleActions'
@@ -65,6 +68,13 @@ function App() {
           authenticated={authenticated}
           setAuthenticated={setAuthenticated}
         />
+      </Route>
+      
+      <Route path="/chronicles/:cid/tales/:tid" exact={true}>
+        <TaleStart />
+      </Route>
+      <Route path="/chronicles/:cid/tales/:tid/play">
+        <CurrentThread />
       </Route>
       
       {/* Homepage */}

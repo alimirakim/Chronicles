@@ -1,8 +1,10 @@
 import React from 'react';
+import {useSelector} from 'react-redux'
 import { NavLink } from 'react-router-dom';
 import LogoutButton from './auth/LogoutButton';
 
 const NavBar = ({ authenticated, setAuthenticated }) => {
+  const tid = useSelector(state => state.selections.tale ? `/tales/${state.selections.tale.id}` : "")
   
   return (<header>
     <h1>TaleSpinner</h1>
@@ -14,9 +16,9 @@ const NavBar = ({ authenticated, setAuthenticated }) => {
           </NavLink>
         </li>
 
-      {!authenticated && <>
+      {authenticated && <>
         <li>
-          <NavLink to="/talespinner" exact={true} activeClassName="active">
+          <NavLink to={`/talespinner${tid}`} exact={true} activeClassName="active">
             TaleSpinner
           </NavLink>
         </li>
@@ -31,7 +33,7 @@ const NavBar = ({ authenticated, setAuthenticated }) => {
       </>}
         
         {/* For Anon Users, show only Login/Signup options: */}
-        {authenticated && <>
+        {!authenticated && <>
           <li>
             <NavLink to="/login" exact={true} activeClassName="active">
               Login

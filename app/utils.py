@@ -48,9 +48,9 @@ def get_and_normalize_all_data_for_user(uid):
     
     print("\n\nUSER, CHRONICLES, TALES, THREADS, CHOICES")
     pprint(uid)
-    pprint(chronicles)
-    pprint(tales)
-    pprint(threads)
-    pprint(choices)
+    # pprint(chronicles)
+    # pprint(tales)
+    # pprint(threads)
+    # pprint(choices)
     
     return chronicles, tales, threads, choices

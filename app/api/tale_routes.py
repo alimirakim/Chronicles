@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from app.models import db, Tale, Thread
+from app.models import db, Tale, Thread, ThreadChoice
 from app.forms import TaleForm, ThreadForm
 from app.utils import validation_errors_to_messages
 
@@ -46,14 +46,19 @@ def create_thread(tid):
             title=form["title"].data,
             description=form["description"].data,)
         
+        # Create choices that new thread connects to
         choices = []
-        # for choice in request.json("choices")_:
-        #     thread_choice = ThreadChoice(
-        #         title=choice[1],
-        #         current_thread=thread,
-        #         choice_thread_id=choice[0])
-        #     db.session.add(thread_choice)
-        #     choices.append({thread_choice.id: thread_choice.to_dict()})
+        req_choices = [int(choice) for choice in request.json["choices"]]
+        queried_threads = Thread.query.filter(Thread.id.in_(req_choices)).all()
+        for choice in req_choices:
+            # TODO Check if 'choices' is object so as to grab alt title.
+            [queried_thread] = [qt for qt in queried_threads if qt.id == choice]
+            thread_choice = ThreadChoice(
+                title= f"Continue to: {queried_thread.title}",
+                current_thread=thread,
+                choice_thread_id=choice)
+            db.session.add(thread_choice)
+            choices.append({thread_choice.id: thread_choice.to_dict()})
         db.session.add(thread)
         db.session.commit()
         print("\n\nNEW THREAD", thread.to_dict())

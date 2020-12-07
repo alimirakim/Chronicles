@@ -1,3 +1,25 @@
+# MIRA NOTES
+
+1. NODES - 
+  * Add node
+  * delete node
+  * add link
+  * customize link
+  * delete link
+  * save coordinates
+  * save changes to database
+
+2. LIVE PLAY
+
+
+3. FORMS AND DISPLAY - STYLING
+
+
+4. ??? WTF I DON'T REMEMBER ????
+
+
+* HEROKU NPSEED, HEROKU TALESPINNER, TESTS, ADOBE
+
 # Flask React Project
 
 This is the backend for the Flask React project.

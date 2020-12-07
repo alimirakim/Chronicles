@@ -1,11 +1,11 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 
-const ProtectedRoute = props => {
+function ProtectedRoute(props) {
 
-if (!props.authenticated) return <Redirect to="/sign-up"/>
+  if (!props.authenticated) return <Redirect to="/sign-up" />
 
-  return <Route {...props}/>
+  return <Route {...props} />
 };
 
 export default ProtectedRoute;

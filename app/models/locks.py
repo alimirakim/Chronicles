@@ -41,6 +41,7 @@ class AssetLock(db.Model):
     asset = db.relationship("Asset", back_populates="locks")
     
     def to_dict(self):
+        """Convert into dictionary."""
         return {
             "id": self.id,
             "lock_id": self.lock_id,
