@@ -3,21 +3,19 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import Diagram, { createSchema, useSchema } from 'beautiful-react-diagrams'
 import ThreadForm from './forms/ThreadForm'
-import CreationFormWrapper from './forms/CreationFormWrapper'
 import { addThread } from '../actions/threadActions'
 
-function StyledNode({ inputs }) {
+function CustomNode({ id, content, data, inputs, outputs }) {
   return (
-    <div style={{ background: 'lightblue', borderRadius: '1rem' }}>
-      <div style={{ padding: '10px', color: 'navy' }}>
-        Navy Node
+    <div style={{ background: data.color, borderRadius: '1rem' }} onClick={()=>data.onClickEdit(id)}>
+      <div style={{ padding: '10px' }}>
+        <button onClick={() => data.onClickDelete(id)}>x</button>
+        <button onClick={() => data.onClickCreateChoice(id)}>x</button>
+        {content}
       </div>
       <div style={{ marginTop: '2rem' }}>
-        {inputs.map(port => {
-          cloneElement(port,
-            { style: { width: '1rem', height: '1rem', background: 'navy' } }
-          )
-        })}
+        {inputs.map(port => { cloneElement(port, { style: { width: '1rem', height: '1rem', borderRadius: "50% 0 0 50%", color: 'rgba(255,255,255,0.5)' } }) })}
+        {outputs.map(port => { cloneElement(port, { style: { width: '1rem', height: '1rem', borderRadius: "50% 0 0 50%", color: 'rgba(255,255,255,0.5)' } }) })}
       </div>
     </div>
   )
@@ -30,12 +28,30 @@ export default function TaleSpinner() {
   const nodes = []
   const links = []
   const coords = [50, 0]
-  
-  // const addThread = () => {
+
+  // const deleteThreadNode = (id) => {
+  //   const node = schema.nodes.find(node => node.id === id)
+  //   removeNode(nodeToRemove)
+  // }
+  // const editThreadNode = (id) => {
     
-  //   // const newThread = {
-  //   //   id: 
-  //   // }
+  // }
+  // const createChoiceThreadNode = (id) => {
+    
+  // }
+
+  // const addThreadNode = () => {
+  //   const newThread = await fetch()
+  //   const threadNode = {
+  //     id: newThread.id,
+  //     content: newThread.title,
+  //     coordinates: [0, 0],
+  //     render: CustomNode,
+  //     data: { onClick: deleteThreadNode },
+  //     inputs: [{ id: `input-${newThread.id}`, alignment: 'left' }],
+  //     outputs: [{ id: `output-${newThread.id}`, alignment: 'right' }],
+  //   }
+  //   addNode(threadNode)
   // }
 
 
@@ -45,8 +61,8 @@ export default function TaleSpinner() {
       id: String(thread.id),
       content: String(thread.title),
       coordinates: [coords[0], coords[1]],
-      inputs: [{id: `input-${thread.id}`, alignment: 'left'}],
-      outputs: [{id: `output-${thread.id}`, alignment: 'right'}],
+      inputs: [{ id: `input-${thread.id}`, alignment: 'left' }],
+      outputs: [{ id: `output-${thread.id}`, alignment: 'right' }],
     })
     Object.values(thread.choices).map((choice, i) => {
       // console.log("link", choice)
@@ -73,21 +89,15 @@ export default function TaleSpinner() {
     <ThreadForm tid={tid} open={open} handleClose={handleClose} handleChange={} /> */}
 
     <h2>Your Threads</h2>
-    <CreationFormWrapper
-        creationType="Thread"
-        uniqueInputs={ThreadForm}
-        path={`/api/tales/${tid}/threads/create`}
-        actionCreator={addThread}
-        // setActive={setActiveThread}
-      />
-      
+
+
     <TaleDiagram initialSchema={initialSchema} />
   </>)
 }
 
 
 function TaleDiagram({ initialSchema }) {
-  
+
   const release = async (e) => {
     // const res = await fetch(`/api/threads/${}/edit-xy`, {
     //   method: "PATCH",
@@ -98,12 +108,12 @@ function TaleDiagram({ initialSchema }) {
     console.log("target...", e.target.key, e.target.id)
   }
 
-  const [schema, { onChange }] = useSchema(initialSchema)
+  const [schema, { onChange, addNode, removeNode }] = useSchema(initialSchema)
   // console.log("what is schema, onChange", schema, onChange)
 
   return (
     <div style={{ height: "50rem", outline: "3px purple solid" }} onMouseUp={release}>
-        <Diagram schema={schema} onChange={onChange} />
+      <Diagram schema={schema} onChange={onChange} />
     </div>
   )
 }

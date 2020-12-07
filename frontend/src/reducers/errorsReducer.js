@@ -6,7 +6,7 @@ import {
     WIPE_ERRORS
 } from '../actions/errorActions'
 
-export default function errorsReducer(state = {}, action) {
+export default function errorsReducer(state = [], action) {
     const newState = {...state }
     switch (action.type) {
         case GET_ERRORS:
@@ -20,7 +20,7 @@ export default function errorsReducer(state = {}, action) {
             delete newState[action.error.id]
             return newState
         case WIPE_ERRORS:
-            return {}
+            return []
         default:
             return state
     }

@@ -48,8 +48,10 @@ def create_thread(tid):
         
         # Create choices that new thread connects to
         choices = []
+        
         req_choices = [int(choice) for choice in request.json["choices"]]
         queried_threads = Thread.query.filter(Thread.id.in_(req_choices)).all()
+        
         for choice in req_choices:
             # TODO Check if 'choices' is object so as to grab alt title.
             [queried_thread] = [qt for qt in queried_threads if qt.id == choice]

@@ -41,7 +41,13 @@ button {
 .is-hidden {
   display: none;
 }
-
+.is-popped {
+  position: absolute;
+  width: 70%;
+  margin: 2rem;
+  background-color: white;
+  box-shadow: 5px 5px 5px gray;
+}
 
 .bi.bi-diagram {
 box-sizing: border-box;

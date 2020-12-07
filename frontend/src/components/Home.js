@@ -56,157 +56,85 @@ export default function Home() {
   }, [selected.thread])
 
 
+
   return (
     <main>
       {/* <p>Welcome, {user.username}...</p> */}
 
-
-      <CreationFormWrapper
-        creationType="Chronicle"
-        uniqueInputs={ChronicleForm}
-        path={`/api/chronicles/create`}
-        actionCreator={addChronicle}
-        selectionType="chronicle"
-      />
       <YourCreations
-        creation_type="Chronicles"
+        creationType="Chronicle"
         active={selected.chronicle}
         creations={chronicles}
-        selectionType="chronicle"
+        creationForm={ChronicleForm}
       />
 
-
-      <CreationFormWrapper
-        creationType="Tale"
-        uniqueInputs={TaleForm}
-        path={`/api/chronicles/${selected.chronicle.id}/tales/create`}
-        actionCreator={addTale}
-        selectionType="tale"
-      />
+      {selected.chronicle ?
+        <TaleForm id={selected.chronicle.id} /> :
+        <button disabled>+Tale</button>
+      }
+      <Link to={`/talespinner/tales/${selected.tale.id}`}>Go to TaleSpinner</Link>
       <YourCreations
-        creation_type="Tales"
+        pid={selected.chronicle.id}
+        creationType="Tale"
         creations={selected.tales}
         active={selected.tale}
-        selectionType="tale"
+        creationForm={TaleForm}
       />
 
-
-      <Link to={`/talespinner/tales/${selected.tale.id}`}>Go to TaleSpinner</Link>
-      <CreationFormWrapper
-        creationType="Thread"
-        uniqueInputs={ThreadForm}
-        path={`/api/tales/${selected.tale.id}/threads/create`}
-        actionCreator={addThread}
-        selectionType="thread"
-      />
       <YourCreations
-        creation_type="Threads"
+        pid={selected.tale.id}
+        creationType="Thread"
         creations={selected.threads}
         active={selected.thread}
-        selectionType="thread"
+        creationForm={ThreadForm}
       />
 
-
-      <CreationFormWrapper
-        creationType="Choices"
-        uniqueInputs={ChoiceForm}
-        path={`/api/threads/${selected.thread.id}/choices/create`}
-        actionCreator={addChoice}
-        selectionType="choice"
-      />
       <YourCreations
-        creation_type="Choices"
+        pid={selected.thread.id}
+        creationType="Choice"
         creations={selected.choices}
         active={selected.choice}
-        selectionType="choice"
+        creationForm={ChoiceForm}
       />
 
-
-      {/* <CreationFormWrapper
+      {/* <YourCreations
         creationType="Characters"
-        uniqueInputs={CharacterForm}
-        path={`/api/chronicles/${activeChronicle.id}/characters/create`}
-        actionCreator={addCharacter}
-        setActive={setActiveCharacter}
-        selectionType="character"
-      />
-      <YourCreations
-        creation_type="Characters"
         creations={characters}
         active={activeCharacter}
         setActive={setActiveCharacter}
         selectionType="character"
       />
 
-
-      <CreationFormWrapper
-        creationType="Places"
-        uniqueInputs={PlaceForm}
-        path={`/api/chronicles/${activeChronicle.id}/places/create`}
-        actionCreator={addPlace}
-        setActive={setActivePlace}
-        selectionType="place"
-      />
       <YourCreations
-        creation_type="Places"
+        creationType="Places"
         creations={places}
         active={activePlace}
         setActive={setActivePlace}
         selectionType="place"
       />
 
-
-      <CreationFormWrapper
-        creationType="Assets"
-        uniqueInputs={AssetForm}
-        path={`/api/chronicles/${activeChronicle.id}/assets/create`}
-        actionCreator={addAsset}
-        setActive={setActiveAsset}
-        selectionType="asset"
-      />
       <YourCreations
-        creation_type="Assets"
+        creationType="Assets"
         creations={assets}
         active={activeAsset}
         setActive={setActiveAsset}
         selectionType="asset"
       />
 
-
-      <CreationFormWrapper
-        creationType="Conditions"
-        uniqueInputs={ConditionForm}
-        path={`/api/chronicles/${activeChronicle.id}/conditions/create`}
-        actionCreator={addCondition}
-        selectionType="condition"
-      />
       <YourCreations
-        creation_type="Conditions"
+        creationType="Conditions"
         creations={conditions}
         active={activeCondition}
         selectionType="condition"
       />
 
-
-      <CreationFormWrapper
-        creationType="Ranks"
-        uniqueInputs={RankForm}
-        path={`/api/chronicles/${activeChronicle.id}/races/create`}
-        actionCreator={addRank}
-        selectionType="rank"
-      />
       <YourCreations
-        creation_type="Ranks"
+        creationType="Ranks"
         creations={ranks}
         active={activeRank}
         selectionType="rank"
       /> */}
 
-      {/* <ChronicleForm /> */}
-      {/* <CharacterForm /> */}
-      {/* <MaterialForm /> */}
-      {/* <PlaceForm /> */}
-      {/* <TaleForm /> */}
     </main>
   )
 }

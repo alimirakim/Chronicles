@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 
 
-export function TextInput({ handleChange, label, value, setValue }) {
+export function TextInput({ label, value, setValue }) {
+  const handleChange = (setFieldValue) => (e) => setFieldValue(e.target.value)
+  
   return (
     <label>{label}
       <input type="text" onChange={handleChange(setValue)} value={value} required />
@@ -10,7 +12,9 @@ export function TextInput({ handleChange, label, value, setValue }) {
 }
 
 
-export function TextAreaInput({ handleChange, label, value, setValue }) {
+export function TextAreaInput({ label, value, setValue }) {
+  const handleChange = (setFieldValue) => (e) => setFieldValue(e.target.value)
+  
   return (
     <label>{label}
       <textarea onChange={handleChange(setValue)} value={value} required />
@@ -19,8 +23,9 @@ export function TextAreaInput({ handleChange, label, value, setValue }) {
 }
 
 
-export function SelectInput({ handleChange, label, values, value, setValue }) {
-
+export function SelectInput({ label, values, value, setValue }) {
+  const handleChange = (setFieldValue) => (e) => setFieldValue(e.target.value)
+  
   return (
     <label>{label}
       <select value={value} onChange={handleChange(setValue)}>
@@ -34,13 +39,12 @@ export function SelectInput({ handleChange, label, values, value, setValue }) {
 
 export function AddToList({
   creationType,
-  handleChange,
   allItems,
   chosenItemIds,
   setChosenItemIds
 }) {
   const [item_id, setItemId] = useState("")
-
+  
   const addItem = (e) => {
     if (item_id) {
       setChosenItemIds([...chosenItemIds, item_id])
@@ -60,7 +64,6 @@ export function AddToList({
     
     <SelectInput
       label={creationType}
-      handleChange={handleChange}
       values={allItems}
       value={item_id}
       setValue={setItemId}

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import CreationFormWrapper from './CreationFormWrapper'
 import { AddToList } from './FormInputs'
-
+import {addThread, updateThread} from '../../actions/threadActions'
 
 
 // const threads = useSelector(state => state.threads)
@@ -9,23 +10,33 @@ import { AddToList } from './FormInputs'
 // const editChoiceTitle = (e) => 
 
 
-export default function ThreadForm({ handleChange, setUniqueContent }) {
+export default function ThreadForm({ id, edit }) {
   const threads = useSelector(state => state.threads)
-  const [choices, setChoices] = useState([])
+  console.log("edit object", edit)
+  const [choices, setChoices] = useState(edit ? edit.choices.map(choice => choice.choice_thread_id) : [])
 
-  useEffect(() => {
-    setUniqueContent({choices})
-    console.log("choices", choices)
-  }, [choices])
-
-  return (<>
+  const resetUniqueContent = () => setChoices([])
+  
+  const addChoicesToThread = () => (
     <AddToList
       creationType="Choice"
       allItems={threads}
       chosenItemIds={choices}
       setChosenItemIds={setChoices}
-      handleChange={handleChange}
     />
+  )
+
+  return (<>
+    <CreationFormWrapper
+      edit={edit}
+      path={edit ? `/api/threads/${id}/edit` : `/api/tales/${id}/threads/create`}
+      creationType="Thread"
+      actionCreator={edit ? updateThread : addThread}
+      uniqueContent={{choices}}
+      resetUniqueContent={resetUniqueContent}
+      uniqueForm={addChoicesToThread}
+    />
+
     {/* <button onClick={addEffect}>+Effect</button> */}
     {/* <button onClick={addLock}>+Lock</button> */}
 

@@ -26,7 +26,6 @@ const initialState = {
   // rank: "",
 }
 
-
 export default function selectionsReducer(state = initialState, action) {
   const newState = { ...state }
   switch (action.type) {
