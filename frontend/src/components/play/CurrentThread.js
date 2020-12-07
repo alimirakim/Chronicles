@@ -11,13 +11,24 @@ export default function CurrentThread() {
     thread: state.threads[thid],
     currentThreadChoices: Object.values(state.choices).filter(choice => choice.current_thread_id === thid),
   }))
+  const [history, setHistory] = useState([])
   const [currentThread, setCurrentThread] = useState(thread)
   const [currentChoices, setCurrentChoices] = useState(currentThreadChoices)
   
-  const handleChoice = (tcid) => (e) => {
-    console.log("currentThread", threadChoices, currentThread, tcid)
-    setCurrentThread(threads[tcid])
-    setCurrentChoices(Object.values(threadChoices).filter(choice => choice.current_thread_id == threads[tcid].id))
+  const handleChoice = (chid) => (e) => {
+    const updatedHistory = [...history]
+    updatedHistory.push(currentThread.id)
+    setHistory(updatedHistory)
+      console.log("history", history)
+    setCurrentThread(threads[chid])
+    setCurrentChoices(Object.values(threadChoices).filter(choice => choice.current_thread_id == threads[chid].id))
+  }
+  
+  const handleGoBack = (e) => {
+    const prevThread = threads[history[history.length-1]]
+    setHistory(history.slice(0, history.length-1))
+    setCurrentThread(threads[prevThread.id])
+    setCurrentChoices(Object.values(threadChoices).filter(choice => choice.current_thread_id == prevThread.id))
   }
   
   return (<section>
@@ -26,8 +37,9 @@ export default function CurrentThread() {
     
     <h3>Make Your Choice...</h3>
     <ul>
+    {history.length ? <li><button onClick={handleGoBack}>Go Back</button></li> : ""}
     {currentChoices.map(choice => (
-      <li><button onClick={handleChoice(choice.choice_thread_id)}>{choice.title}</button></li>
+      <li key={choice.id}><button onClick={handleChoice(choice.choice_thread_id)}>{choice.title}</button></li>
     ))}
     </ul>
     </section>
