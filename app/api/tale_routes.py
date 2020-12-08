@@ -45,6 +45,7 @@ def create_thread(tid):
             tale_id=tid,
             title=form["title"].data,
             description=form["description"].data,)
+        db.session.add(thread)
         
         # Create choices that new thread connects to
         choices = []
@@ -61,9 +62,8 @@ def create_thread(tid):
                 choice_thread_id=choice)
             db.session.add(thread_choice)
             choices.append({thread_choice.id: thread_choice.to_dict()})
-        db.session.add(thread)
         db.session.commit()
         print("\n\nNEW THREAD", thread.to_dict())
-        return {thread.id: thread.to_dict()} #choices=choices)
+        return jsonify(thread=thread.to_dict(), choices=choices)
     else:
         {"error": validation_errors_to_messages(form.errors)}, 401

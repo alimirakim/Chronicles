@@ -9,15 +9,10 @@ import {
 
 const initialState = {
   chronicle: "",
-  tales: {},
   tale: "",
-  threads: {},
   thread: "",
-  choices: {},
   choice: "",
-  // effects: {},
   // effect: "",
-  // locks: {},
   // lock: "",
   // character: "",
   // place: "",

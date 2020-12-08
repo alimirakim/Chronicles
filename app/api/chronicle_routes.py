@@ -29,7 +29,7 @@ def create_chronicle():
         # db.session.add(tale)
         # db.session.add(thread)
         db.session.commit()
-        return jsonify({chronicle.id: chronicle.to_dict()})
+        return chronicle.to_dict()
             # chronicle={chronicle.id: chronicle.to_dict()}, 
             # tale={tale.id: tale.to_dict()}, 
             # thread={thread.id: thread.to_dict()}
@@ -49,7 +49,7 @@ def edit_chronicle(cid):
         chronicle.title = form["title"].data
         chronicle.description = form["description"].data
         db.session.commit()
-        return jsonify({chronicle.id: chronicle.to_dict()})
+        return chronicle.to_dict()
     else:
         return {"errors": validation_errors_to_messages(form.errors)}, 401
 
@@ -76,7 +76,7 @@ def create_tale(cid):
             description=form["description"].data)
         db.session.add(tale)
         db.session.commit()
-        return jsonify({tale.id: tale.to_dict()})
+        return tale.to_dict()
     else:
         return {"errors": validation_errors_to_messages(form.errors)}, 401
 

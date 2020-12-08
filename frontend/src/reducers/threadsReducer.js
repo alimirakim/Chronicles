@@ -7,6 +7,7 @@ import {
 import { DELETE_TALE } from '../actions/taleActions'
 import { DELETE_CHRONICLE } from '../actions/chronicleActions'
 
+
 export default function threadsReducer(state = {}, action) {
   const newState = { ...state }
 
@@ -24,10 +25,10 @@ export default function threadsReducer(state = {}, action) {
       return newState
 
     case DELETE_TALE:
-      return state.filter(thread => thread.tale_id !== action.tale.id)
+      return Object.values(state).filter(thread => thread.tale_id !== action.tale.id)
 
     case DELETE_CHRONICLE:
-      return state.filter(thread => action.chronicle.tale_ids.includes(thread.tale_id))
+      return Object.values(state).filter(thread => action.chronicle.tale_ids.includes(thread.tale_id))
 
     default:
       return state

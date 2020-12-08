@@ -8,7 +8,7 @@ export default function TaleForm({ id, edit }) {
   return (<>
       <CreationFormWrapper
         edit={edit}
-        path={edit ? `/api/tales/${id}/edit` : `/api/chronicles/${id}tales/create` }
+        path={edit ? `/api/tales/${id}/edit` : `/api/chronicles/${id}/tales/create` }
         creationType="Tale"
         actionCreator={edit ? updateTale : addTale}
         uniqueContent={{}}

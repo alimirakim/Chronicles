@@ -6,7 +6,7 @@ class Thread(db.Model):
     """One scene that can connect sequentially to other Threads."""
     __tablename__ = "threads"
     id = db.Column(db.Integer, primary_key=True)
-    tale_id = db.Column(db.Integer, db.ForeignKey("tales.id"), nullable=False)
+    tale_id = db.Column(db.Integer, db.ForeignKey("tales.id", ondelete="CASCADE"), nullable=False)
     title = db.Column(db.String(250), nullable=False)
     description = db.Column(db.String)
     x = db.Column(db.Integer, nullable=False, default=0)
@@ -14,7 +14,7 @@ class Thread(db.Model):
     color = db.Column(db.String(50), default="gray")
     image = db.Column(db.String(250), default="default_thread")
     
-    tale = db.relationship("Tale", back_populates="threads")
+    tale = db.relationship("Tale", back_populates="threads", passive_deletes=True)
     effects = db.relationship("Effect", back_populates="thread")
     choices = db.relationship("ThreadChoice", foreign_keys="ThreadChoice.current_thread_id", back_populates="choice_thread")
 

@@ -22,10 +22,10 @@ export default function CreationFormWrapper({
   const [description, setDescription] = useState(edit ? edit.description : "")
   // const [image, setImage] = useState(edit ? edit.image : 1)
   // const [color, setColor] = useState(edit ? edit.color : 1)
-  // const colors = useState(useSelector(state => state.colors)
-  // const images = useState(useSelector(state => state.images)
+  // const colors = useState(useSelector(state => state.colors))
+  // const images = useState(useSelector(state => state.images))
 
-  const handleSelection = (selection) => (e) => updateSelection({ selectionType: creationType.toLowerCase(), selection })
+  const handleSelection = (selection) => dispatch(updateSelection(creationType.toLowerCase(), selection))
   const handleOpen = (e) => setOpen(true)
   const handleClose = (e) => {
     setOpen(false)
@@ -49,7 +49,7 @@ export default function CreationFormWrapper({
     if (!content.errors) {
       dispatch(actionCreator(content))
       handleSelection(content)
-
+      handleClose()
     } else {
       console.error("ERROR!!!", content.errors)
       dispatch(getErrors(content.errors))

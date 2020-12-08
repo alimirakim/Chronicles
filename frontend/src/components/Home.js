@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import YourCreations from './YourCreations'
-import CreationFormWrapper from './forms/CreationFormWrapper'
 import ChronicleForm from './forms/ChronicleForm'
 import TaleForm from './forms/TaleForm'
 import ThreadForm from './forms/ThreadForm'
 import ChoiceForm from './forms/ChoiceForm'
-import { addChronicle } from '../actions/chronicleActions'
-import { addTale } from '../actions/taleActions'
-import { addThread } from '../actions/threadActions'
-import { addChoice } from '../actions/choiceActions'
+import { deleteChronicle } from '../actions/chronicleActions'
+import { deleteTale } from '../actions/taleActions'
+import { deleteThread } from '../actions/threadActions'
+import { deleteChoice } from '../actions/choiceActions'
 import { updateSelections, wipeSelections } from '../actions/selectionActions'
 
 
@@ -31,32 +30,6 @@ export default function Home() {
     ]))
   }, [])
 
-  // Upon chronicle-selection, clear dependent selections and refresh tales // TODO Plus charas, places, assets, etc.
-  useEffect(() => {
-    dispatch(wipeSelections(["tale", "thread", "choice", "threads", "choices"]))
-    dispatch(updateSelections([
-      { type: "tales", selection: Object.values(tales).filter(tale => tale.chronicle_id === selected.chronicle.id) },
-    ]))
-  }, [selected.chronicle])
-
-  // Upon tale selection, clear dependent selections and refresh threads
-  useEffect(() => {
-    dispatch(wipeSelections(["thread", "choice", "threads", "choices"]))
-    dispatch(updateSelections([
-      { type: "threads", selection: Object.values(threads).filter(thread => thread.tale_id === selected.tale.id) }
-    ]))
-  }, [selected.tale])
-
-  // Upon thread selection, clear dependent selections and refresh choices // TODO Plus effects
-  useEffect(() => {
-    dispatch(wipeSelections(["choice", "choices"]))
-    dispatch(updateSelections([
-      { type: "choices", selection: Object.values(choices).filter(choice => choice.current_thread_id === selected.thread.id) },
-    ]))
-  }, [selected.thread])
-
-
-
   return (
     <main>
       {/* <p>Welcome, {user.username}...</p> */}
@@ -66,34 +39,37 @@ export default function Home() {
         active={selected.chronicle}
         creations={chronicles}
         creationForm={ChronicleForm}
+        deleteActionCreator={deleteChronicle}
       />
 
-      {selected.chronicle ?
-        <TaleForm id={selected.chronicle.id} /> :
-        <button disabled>+Tale</button>
-      }
       <Link to={`/talespinner/tales/${selected.tale.id}`}>Go to TaleSpinner</Link>
       <YourCreations
         pid={selected.chronicle.id}
         creationType="Tale"
-        creations={selected.tales}
+        creations={tales}
         active={selected.tale}
+        filterBySelect={(tales, cid) => Object.values(tales).filter(tale => tale.chronicle_id === cid)}
+        deleteActionCreator={deleteTale}
         creationForm={TaleForm}
       />
 
       <YourCreations
         pid={selected.tale.id}
         creationType="Thread"
-        creations={selected.threads}
+        creations={threads}
         active={selected.thread}
+        filterBySelect={(threads, tid) => Object.values(threads).filter(thread => thread.tale_id === tid)}
+        deleteActionCreator={deleteThread}
         creationForm={ThreadForm}
       />
 
       <YourCreations
         pid={selected.thread.id}
         creationType="Choice"
-        creations={selected.choices}
+        creations={choices}
         active={selected.choice}
+        filterBySelect={(choices, thid) => Object.values(choices).filter(choice => choice.current_thread_id === thid)}
+        deleteActionCreator={deleteChoice}
         creationForm={ChoiceForm}
       />
 
@@ -101,38 +77,45 @@ export default function Home() {
         creationType="Characters"
         creations={characters}
         active={activeCharacter}
-        setActive={setActiveCharacter}
-        selectionType="character"
+        filterBySelect={(characters, cid) => Object.values(characters).filter(tale => tale.chronicle.id === cid)}
+        deleteActionCreator={deleteCharacter}
+        creationForm={CharacterForm}
       />
 
       <YourCreations
         creationType="Places"
         creations={places}
         active={activePlace}
-        setActive={setActivePlace}
-        selectionType="place"
+        filterBySelect={(places, cid) => Object.values(places).filter(tale => tale.chronicle.id === cid)}
+        deleteActionCreator={deletePlace}
+        creationForm={PlaceForm}
       />
 
       <YourCreations
         creationType="Assets"
         creations={assets}
         active={activeAsset}
-        setActive={setActiveAsset}
-        selectionType="asset"
+        filterBySelect={(assets, cid) => Object.values(assets).filter(tale => tale.chronicle.id === cid)}
+        deleteActionCreator={deleteAsset}
+        creationForm={AssetForm}
       />
 
       <YourCreations
         creationType="Conditions"
         creations={conditions}
         active={activeCondition}
-        selectionType="condition"
+        filterBySelect={(conditions, cid) => Object.values(conditions).filter(tale => tale.chronicle.id === cid)}
+        deleteActionCreator={deleteCondition}
+        creationForm={ConditionForm}
       />
 
       <YourCreations
         creationType="Ranks"
         creations={ranks}
         active={activeRank}
-        selectionType="rank"
+        filterBySelect={(ranks, cid) => Object.values(ranks).filter(tale => tale.chronicle.id === cid)}
+        deleteActionCreator={deleteRank}
+        creationForm={RankForm}
       /> */}
 
     </main>

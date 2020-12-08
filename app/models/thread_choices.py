@@ -6,13 +6,13 @@ class ThreadChoice(db.Model):
     __tablename__ = "thread_choices"
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(250))
-    current_thread_id = db.Column(db.Integer, db.ForeignKey("threads.id"), nullable=False)
+    current_thread_id = db.Column(db.Integer, db.ForeignKey("threads.id", ondelete="CASCADE"), nullable=False)
     choice_thread_id = db.Column(db.Integer, db.ForeignKey("threads.id"), nullable=False)
     color = db.Column(db.String(50), default="gray")
     image = db.Column(db.String(250), default="default_choice")
     
     current_thread = db.relationship("Thread", foreign_keys=[current_thread_id])
-    choice_thread = db.relationship("Thread", foreign_keys=[choice_thread_id])
+    choice_thread = db.relationship("Thread", foreign_keys=[choice_thread_id], passive_deletes=True)
     locks = db.relationship("Lock", back_populates="choice")
 
     def to_dict(self):

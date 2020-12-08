@@ -15,7 +15,7 @@ import { DELETE_CHRONICLE } from '../actions/chronicleActions'
 export default function choicesReducer(state = {}, action) {
   let newState = { ...state }
   switch (action.type) {
-    
+
     case GET_CHOICES:
       return action.choices
     case ADD_CHOICE:
@@ -32,17 +32,17 @@ export default function choicesReducer(state = {}, action) {
       action.choices.forEach(choice => newState[choice.id] = choice)
       return newState
     case UPDATE_THREAD:
-      newState = state.filter(choice => choice.current_thread_id !== action.thread.id)
+      newState = Object.values(state).filter(choice => choice.current_thread_id !== action.thread.id)
       action.choices.forEach(choice => newState[choice.id] = choice)
       return newState
     case DELETE_THREAD:
-      return state.filter(choice => choice.current_thread_id !== action.thread.id)
+      return Object.values(state).filter(choice => choice.current_thread_id !== action.thread.id)
 
     case DELETE_TALE:
-      return state.filter(choice => action.tale.thread_ids.includes(choice.current_thread_id))
+      return Object.values(state).filter(choice => action.tale.thread_ids.includes(choice.current_thread_id))
 
     case DELETE_CHRONICLE:
-    // return state.filter(choice => ???)
+    return Object.values(state).filter(choice => action.chronicle.tale_ids.includes(choice.tale_id))
 
     default:
       return state
