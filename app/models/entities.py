@@ -10,7 +10,7 @@ class Entity(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     chronicle_id = db.Column(db.Integer, db.ForeignKey("chronicles.id"), nullable=False)
     type = db.Column(db.String(50), nullable=False, default="asset") # (db.Enum("asset", "character", "place"))
-    name = db.Column(db.String(50), nullable=False)
+    title = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String)
     color = db.Column(db.String(50), default="gray")
     image = db.Column(db.String(250), default="default_asset")
@@ -29,7 +29,7 @@ class Entity(db.Model):
             "id": self.id,
             "chronicle_id": self.chronicle_id,
             "type": self.type,
-            "name": self.name,
+            "title": self.title,
             "description": self.description,
             "color": self.color,
             "image": self.image,

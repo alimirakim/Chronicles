@@ -8,12 +8,12 @@ class Effect(db.Model):
     __tablename__ = "effects"
     id = db.Column(db.Integer, primary_key=True)
     type = db.Column(db.String(50), nullable=False, default="asset") # (db.Enum("asset", "location", "status"), nullable=False, default="asset")
-    thread_id = db.Column(db.Integer, db.ForeignKey("threads.id"), nullable=False)
+    thread_id = db.Column(db.Integer, db.ForeignKey("threads.id", ondelete="cascade"), nullable=False)
     color = db.Column(db.String(50), default="gray")
     image = db.Column(db.String(250), default="default_effect")
     
     thread = db.relationship("Thread", back_populates="effects")
-    asset_effect = db.relationship("AssetEffect", back_populates="effect")
+    asset_effect = db.relationship("AssetEffect", back_populates="effect", cascade="all, delete", passive_deletes=True)
     
     def to_dict(self):
         """Convert to jsonifyable dictionary."""
@@ -30,8 +30,8 @@ class AssetEffect(db.Model):
     """A type of Effect that bestows or removes Assets from an entity."""
     __tablename__ = "asset_effects"
     id = db.Column(db.Integer, primary_key=True)
-    effect_id = db.Column(db.Integer, db.ForeignKey("effects.id"), nullable=False)
-    asset_id = db.Column(db.Integer, db.ForeignKey("assets.id"), nullable=False)
+    effect_id = db.Column(db.Integer, db.ForeignKey("effects.id", ondelete="cascade"), nullable=False)
+    asset_id = db.Column(db.Integer, db.ForeignKey("assets.id", ondelete="cascade"), nullable=False)
     quantity = db.Column(db.Integer, nullable=-False, default=1)
     is_gained = db.Column(db.Boolean, nullable=False, default=True)
     

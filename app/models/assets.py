@@ -1,5 +1,4 @@
 from .db import db
-from datetime import datetime, timedelta
 
 
 class Asset(db.Model):
@@ -19,7 +18,10 @@ class Asset(db.Model):
         """Convert to dictionary."""
         return {
             "id": self.id,
-            "entity_id": self.entities_id,
+            "title": self.entity.title,
+            "description": self.entity.description,
+            # "color": self.entity.color,
+            # "image": self.entity.image,
             "type": self.type,
             "is_unique": self.is_unique,
         }

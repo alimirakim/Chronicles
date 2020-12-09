@@ -7,5 +7,5 @@ from app.utils import within_length_limit
 
 class TaleForm(FlaskForm):
     """Maps form inputs to apply backend validations."""
-    title = StringField(validators=[DataRequired(), within_length_limit])
+    title = StringField(validators=[DataRequired(), within_length_limit], default="Untitled")
     description = StringField()

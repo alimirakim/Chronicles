@@ -19,7 +19,9 @@ export default function YourCreations({
   const handleActive = (selection) => (e) => dispatch(updateSelection(creationType.toLowerCase(), selection))
 
   useEffect(() => {
+    console.log("creations", creations)
     if (filterBySelect) setSelectedCreations(filterBySelect(creations, pid))
+    else setSelectedCreations(creations)
   }, [creations, selected])
 
   let isEmpty = true
@@ -32,13 +34,14 @@ export default function YourCreations({
       {isEmpty ? <p>You have no {creationType} yet! Why not start one? :B</p> : ""}
       <dl>
         {Object.values(selectedCreations).map(creation => (
-          <button key={creation.id} type="button" onClick={handleActive(creation)} className={active.id === creation.id ? "active" : ""}>
-            <DeleteForm creation={creation} creationType={creationType} deleteActionCreator={deleteActionCreator} />
-            <CreationForm id={creation.id} edit={creation} />
+          <div key={creation.id} onClick={handleActive(creation)} className={active.id === creation.id ? "card active" : "card"}>
+            <div style={{ display: "flex", justifyContent: "space-around" }}>
+              <DeleteForm creation={creation} creationType={creationType} deleteActionCreator={deleteActionCreator} />
+              <CreationForm id={creation.id} edit={creation} />
+            </div>
             <dt>{creation.title}</dt>
             <dd>{creation.description}</dd>
-          </button>
-        ))}
+          </div>))}
       </dl>
     </article>
   )

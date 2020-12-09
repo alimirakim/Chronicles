@@ -13,5 +13,8 @@ class Place(db.Model):
         """Convert to jsonifyable dictionary."""
         return {
             "id": self.id,
-
+            "title": self.entity.title,
+            "description": self.entity.description,
+            # "color": self.entity.color,
+            # "image": self.entity.image,
         }

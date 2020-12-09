@@ -1,26 +1,47 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
+
+// YOUR COMPONENTS
 import YourCreations from './YourCreations'
+
+// FORM COMPONENTS
 import ChronicleForm from './forms/ChronicleForm'
 import TaleForm from './forms/TaleForm'
 import ThreadForm from './forms/ThreadForm'
 import ChoiceForm from './forms/ChoiceForm'
+import CharacterForm from './forms/CharacterForm'
+import PlaceForm from './forms/PlaceForm'
+import AssetForm from './forms/AssetForm'
+import ConditionForm from './forms/ConditionForm'
+import RankForm from './forms/RankForm'
+
+// ACTION CREATORS
 import { deleteChronicle } from '../actions/chronicleActions'
 import { deleteTale } from '../actions/taleActions'
 import { deleteThread } from '../actions/threadActions'
 import { deleteChoice } from '../actions/choiceActions'
+import {deleteCharacter } from '../actions/characterActions'
+import {deletePlace } from '../actions/placeActions'
+import {deleteAsset } from '../actions/assetActions'
+import {deleteCondition } from '../actions/conditionActions'
+import {deleteRank } from '../actions/rankActions'
 import { updateSelections, wipeSelections } from '../actions/selectionActions'
 
 
 export default function Home() {
   const dispatch = useDispatch()
-  const { chronicles, tales, threads, choices, selected } = useSelector(state => ({
+  const { chronicles, tales, threads, choices, selected, characters, assets, places, conditions, ranks } = useSelector(state => ({
     chronicles: state.chronicles,
     tales: state.tales,
     threads: state.threads,
     choices: state.choices,
-    selected: state.selections
+    selected: state.selections,
+    characters: state.characters,
+    assets: state.assets,
+    places: state.places,
+    conditions: state.conditions,
+    ranks: state.ranks,
   }))
 
   // Select a user's first chronicle and its tales/content upon initialization
@@ -29,6 +50,21 @@ export default function Home() {
       { type: "chronicle", selection: Object.keys(chronicles) ? chronicles[Object.keys(chronicles)[0]] : "" },
     ]))
   }, [])
+  // Upon chronicle-selection, clear dependent selections and refresh tales // TODO Plus charas, places, assets, etc.
+  useEffect(() => {
+    dispatch(wipeSelections(["tale", "thread", "choice", "threads", "choices"]))
+    console.log("tales", tales)
+  }, [selected.chronicle])
+
+  // Upon tale selection, clear dependent selections and refresh threads
+  useEffect(() => {
+    dispatch(wipeSelections(["thread", "choice", "threads", "choices"]))
+  }, [selected.tale])
+
+  // Upon thread selection, clear dependent selections and refresh choices // TODO Plus effects
+  useEffect(() => {
+    dispatch(wipeSelections(["choice", "choices"]))
+  }, [selected.thread])
 
   return (
     <main>
@@ -73,50 +109,55 @@ export default function Home() {
         creationForm={ChoiceForm}
       />
 
-      {/* <YourCreations
-        creationType="Characters"
+      <YourCreations
+        pid={selected.chronicle.id}
+        creationType="Character"
         creations={characters}
-        active={activeCharacter}
+        active={selected.character}
         filterBySelect={(characters, cid) => Object.values(characters).filter(tale => tale.chronicle.id === cid)}
         deleteActionCreator={deleteCharacter}
         creationForm={CharacterForm}
       />
 
       <YourCreations
-        creationType="Places"
+        pid={selected.chronicle.id}
+        creationType="Place"
         creations={places}
-        active={activePlace}
+        active={selected.place}
         filterBySelect={(places, cid) => Object.values(places).filter(tale => tale.chronicle.id === cid)}
         deleteActionCreator={deletePlace}
         creationForm={PlaceForm}
       />
 
       <YourCreations
-        creationType="Assets"
+        pid={selected.chronicle.id}
+        creationType="Asset"
         creations={assets}
-        active={activeAsset}
+        active={selected.asset}
         filterBySelect={(assets, cid) => Object.values(assets).filter(tale => tale.chronicle.id === cid)}
         deleteActionCreator={deleteAsset}
         creationForm={AssetForm}
       />
 
       <YourCreations
-        creationType="Conditions"
+        pid={selected.chronicle.id}
+        creationType="Condition"
         creations={conditions}
-        active={activeCondition}
+        active={selected.condition}
         filterBySelect={(conditions, cid) => Object.values(conditions).filter(tale => tale.chronicle.id === cid)}
         deleteActionCreator={deleteCondition}
         creationForm={ConditionForm}
       />
 
       <YourCreations
-        creationType="Ranks"
+        pid={selected.chronicle.id}
+        creationType="Rank"
         creations={ranks}
-        active={activeRank}
+        active={selected.rank}
         filterBySelect={(ranks, cid) => Object.values(ranks).filter(tale => tale.chronicle.id === cid)}
         deleteActionCreator={deleteRank}
         creationForm={RankForm}
-      /> */}
+      />
 
     </main>
   )

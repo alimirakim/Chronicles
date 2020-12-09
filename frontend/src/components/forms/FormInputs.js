@@ -3,10 +3,10 @@ import React, { useState } from 'react'
 
 export function TextInput({ label, value, setValue }) {
   const handleChange = (setFieldValue) => (e) => setFieldValue(e.target.value)
-  
+
   return (
     <label>{label}
-      <input type="text" onChange={handleChange(setValue)} value={value} required />
+      <input type="text" onChange={handleChange(setValue)} value={value} />
     </label>
   )
 }
@@ -14,21 +14,21 @@ export function TextInput({ label, value, setValue }) {
 
 export function TextAreaInput({ label, value, setValue }) {
   const handleChange = (setFieldValue) => (e) => setFieldValue(e.target.value)
-  
+
   return (
     <label>{label}
-      <textarea onChange={handleChange(setValue)} value={value} required />
+      <textarea onChange={handleChange(setValue)} value={value} />
     </label>
   )
 }
 
 
 export function SelectInput({ label, values, value, setValue }) {
-  const handleChange = (setFieldValue) => (e) => setFieldValue(e.target.value)
-  
+  const handleChange = (e) => setValue(e.target.value)
+
   return (
     <label>{label}
-      <select value={value} onChange={handleChange(setValue)}>
+      <select value={value} onChange={handleChange}>
         <option value="">--</option>
         {Object.values(values).map(val => (<option key={val.id} value={val.id}>{val.title}</option>))}
       </select>
@@ -38,45 +38,54 @@ export function SelectInput({ label, values, value, setValue }) {
 
 
 export function AddToList({
-  creationType,
-  allItems,
-  chosenItemIds,
-  setChosenItemIds
-}) {
-  const [item_id, setItemId] = useState("")
+    creationType,
+    allItems,
+    addedItems,
+    setAddedItems
+  }) {
+  const [itemId, setItemId] = useState("")
   
   const addItem = (e) => {
-    if (item_id) {
-      setChosenItemIds([...chosenItemIds, item_id])
+    if (itemId) {
+      const updatedAddedItems = [...addedItems ]
+      const newAddedItem = {choice_thread_id: itemId, title: `Go to: ${allItems[itemId].title}`}
+      updatedAddedItems.push(newAddedItem)
+      setAddedItems(updatedAddedItems)
       setItemId("")
     }
   }
+  
+  const handleChange = (i) => (e) => {
+    console.log("oh", e.target.value)
+    const updatedAddedItems = [...addedItems]
+    updatedAddedItems[i]["title"] = e.target.value
+    setAddedItems(updatedAddedItems)
+  }
 
-  const removeItem = (id) => (e) => {
-    const removeIndex = chosenItemIds.indexOf(id)
-    const newList = [...chosenItemIds]
-    newList.splice(removeIndex, 1)
-    setChosenItemIds(newList)
+  const removeItem = (i) => (e) => {
+    const updatedAddedItems = [ ...addedItems ]
+    updatedAddedItems.splice(i, 1)
+    setAddedItems(updatedAddedItems)
   }
 
   return (<>
     <h3>Add a {creationType}</h3>
-    
+
     <SelectInput
       label={creationType}
       values={allItems}
-      value={item_id}
+      value={itemId}
       setValue={setItemId}
     />
-    
+
     <button type="button" onClick={addItem}>Add</button>
 
     <h4>Added {creationType}s</h4>
     <ul>
-      {Object.values(chosenItemIds).map(cid => (<div key={cid}>
-        <button type="button">{allItems[cid].title}</button>
-        <button type="button" onClick={removeItem(cid)}>Remove</button>
-        <br/>
+      {addedItems.map((addedItem, i) => (<div key={i}>
+        <input type="text" value={addedItem.title} onChange={handleChange(i)} />
+        <button type="button" onClick={removeItem(i)}>Remove</button>
+        <br />
       </div>
       ))}
     </ul>

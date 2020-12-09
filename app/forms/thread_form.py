@@ -7,6 +7,8 @@ from app.utils import within_length_limit
 
 class ThreadForm(FlaskForm):
     """Maps form inputs to apply backend validations."""
-    title = StringField(validators=[DataRequired(), within_length_limit])
+    title = StringField(validators=[DataRequired(), within_length_limit], default="Untitled")
     description = StringField()
+    # color = SelectField(choices=range(1,12), validators=[DataRequired()], default=1)
+    # image = SelectField(choices=range(1,12), validators=[DataRequired()], default=1)
     # TODO Choices how? Effects, locks?

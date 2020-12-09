@@ -7,12 +7,18 @@ body {
   margin: 2rem 0.5rem 10rem;
 }
 * {
+  box-sizing: border-box;
   /* outline: 1px dotted lightblue; */
 }
 .active {
-  box-shadow: 5px 5px 5px gray;
+  background-color: #ffc8dd;
 }
-
+.card {
+  margin: 0.5rem;
+  border-radius: 0.2rem;
+  box-shadow: 5px 2px 5px gray;
+  padding: 0.2rem;
+}
 dt {
   font-weight: bold;
 }
@@ -25,8 +31,8 @@ dl {
   /* flex-direction: column-reverse; */
 }
 dl > * {
-  width: 18%;
-  height: 10rem;
+  width: 12%;
+  height: 5rem;
   overflow: hidden;
   margin: 0.5rem 0.2rem;
 }
@@ -38,15 +44,37 @@ button {
   display: block;
 }
 
+button {
+  cursor: pointer;
+  background-color: rgba(0,0,0,0);
+  border-radius: 5px;
+  border-width: 0;
+  font: bold 0.8rem Calibri;
+  text-transform: uppercase;
+}
+
 .is-hidden {
   display: none;
 }
-.is-popped {
-  position: absolute;
+form.is-popped {
+  z-index: 10;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 70%;
-  margin: 2rem;
   background-color: white;
-  box-shadow: 5px 5px 5px gray;
+  padding: 1rem;
+  box-shadow: 5px 5px 10px rgb(70,70,80);
+}
+div.is-popped {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  pointer-events: all;
 }
 
 

@@ -1,5 +1,6 @@
 from .db import db
 
+
 # character-unique traits? gender, species/race, culture, occupation, schedule, goals/quests, mood, bonds, equipped
 class Character(db.Model):
     """
@@ -20,7 +21,10 @@ class Character(db.Model):
         """Convert to dictionary."""
         return {
             "id": self.id,
-            "entity_id": self.entity_id,
             "user_id": self.user_id,
+            "title": self.entity.title,
+            "description": self.entity.description,
+            # "color": self.entity.color,
+            # "image": self.entity.image,
             # "place_id": self.place_id,
         }

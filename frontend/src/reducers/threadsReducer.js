@@ -28,7 +28,7 @@ export default function threadsReducer(state = {}, action) {
       return Object.values(state).filter(thread => thread.tale_id !== action.tale.id)
 
     case DELETE_CHRONICLE:
-      return Object.values(state).filter(thread => action.chronicle.tale_ids.includes(thread.tale_id))
+      return Object.values(state).filter(thread => !action.chronicle.tale_ids.includes(thread.tale_id))
 
     default:
       return state

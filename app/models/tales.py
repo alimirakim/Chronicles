@@ -5,15 +5,15 @@ class Tale(db.Model):
     """A chronologically connected series of threads"""
     __tablename__ = "tales"
     id = db.Column(db.Integer, primary_key=True)
-    chronicle_id = db.Column(db.Integer, db.ForeignKey("chronicles.id", ondelete="CASCADE"), nullable=False)
+    chronicle_id = db.Column(db.Integer, db.ForeignKey("chronicles.id", ondelete="cascade"), nullable=False)
     title = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String)
     first_thread_id = db.Column(db.Integer)
     color = db.Column(db.String(50), default="gray")
     image = db.Column(db.String(250), default="default_tale")
     
-    chronicle = db.relationship("Chronicle", back_populates="tales", passive_deletes=True)
-    threads = db.relationship("Thread", back_populates="tale")
+    chronicle = db.relationship("Chronicle", back_populates="tales")
+    threads = db.relationship("Thread", back_populates="tale", cascade="all, delete", passive_deletes=True)
     
 
     def to_dict(self):

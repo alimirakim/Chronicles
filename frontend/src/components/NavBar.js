@@ -22,6 +22,33 @@ const NavBar = ({ authenticated, setAuthenticated }) => {
             TaleSpinner
           </NavLink>
         </li>
+        
+        {/* <li>
+          <NavLink to="/characters" exact={true} activeClassName="active">
+            My Characters
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/Places" exact={true} activeClassName="active">
+            My Places
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/assets" exact={true} activeClassName="active">
+            My Assets
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/users" exact={true} activeClassName="active">
+            Users
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/users" exact={true} activeClassName="active">
+            Users
+          </NavLink>
+        </li> */}
+
         <li>
           <NavLink to="/users" exact={true} activeClassName="active">
             Users

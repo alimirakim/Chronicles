@@ -12,8 +12,8 @@ class Chronicle(db.Model):
     image = db.Column(db.String(250), default="default_chronicle")
     
     user = db.relationship("User", back_populates="chronicles")
-    entities = db.relationship("Entity", back_populates="chronicle", cascade="all, delete-orphan")
-    tales = db.relationship("Tale", back_populates="chronicle", cascade="all, delete-orphan")
+    entities = db.relationship("Entity", back_populates="chronicle", cascade="all,delete", passive_deletes=True)
+    tales = db.relationship("Tale", back_populates="chronicle", cascade="all,delete", passive_deletes=True)
     
     def to_dict(self):
         """Convert to jsonifyable dictionary."""

@@ -14,4 +14,4 @@ from .places import Place
 from .ranks import Rank
 from .tales import Tale
 from .threads import Thread
-from .thread_choices import ThreadChoice
+from .thread_choices import ThreadChoice#, thread_choices

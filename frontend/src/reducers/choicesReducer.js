@@ -7,7 +7,7 @@ import {
 import {
   ADD_THREAD,
   UPDATE_THREAD,
-  DELETE_THREAD
+  DELETE_THREAD,
 } from '../actions/threadActions'
 import { DELETE_TALE } from '../actions/taleActions'
 import { DELETE_CHRONICLE } from '../actions/chronicleActions'
@@ -29,20 +29,20 @@ export default function choicesReducer(state = {}, action) {
       return newState
 
     case ADD_THREAD:
-      action.choices.forEach(choice => newState[choice.id] = choice)
+      Object.values(action.choices).forEach(choice => newState[choice.id] = choice)
       return newState
     case UPDATE_THREAD:
       newState = Object.values(state).filter(choice => choice.current_thread_id !== action.thread.id)
-      action.choices.forEach(choice => newState[choice.id] = choice)
+      Object.values(action.choices).forEach(choice => newState[choice.id] = choice)
       return newState
     case DELETE_THREAD:
       return Object.values(state).filter(choice => choice.current_thread_id !== action.thread.id)
 
     case DELETE_TALE:
-      return Object.values(state).filter(choice => action.tale.thread_ids.includes(choice.current_thread_id))
+      return Object.values(state).filter(choice => !action.tale.thread_ids.includes(choice.current_thread_id))
 
     case DELETE_CHRONICLE:
-    return Object.values(state).filter(choice => action.chronicle.tale_ids.includes(choice.tale_id))
+      return Object.values(state).filter(choice => !action.chronicle.tale_ids.includes(choice.tale_id))
 
     default:
       return state

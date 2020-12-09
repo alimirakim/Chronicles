@@ -44,9 +44,9 @@ class AssetLock(db.Model):
         """Convert into dictionary."""
         return {
             "id": self.id,
+            "choice_id": self.lock.choice_id,
             "lock_id": self.lock_id,
             "asset_id": self.asset_id,
             "quantity": self.quantity,
             "type": self.type,
-            "choice_id": self.lock.choice_id,
         }

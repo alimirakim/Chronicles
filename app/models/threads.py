@@ -1,12 +1,12 @@
 from .db import db
 from pprint import pprint
 
-
+        
 class Thread(db.Model):
     """One scene that can connect sequentially to other Threads."""
     __tablename__ = "threads"
     id = db.Column(db.Integer, primary_key=True)
-    tale_id = db.Column(db.Integer, db.ForeignKey("tales.id", ondelete="CASCADE"), nullable=False)
+    tale_id = db.Column(db.Integer, db.ForeignKey("tales.id", ondelete="cascade"), nullable=False)
     title = db.Column(db.String(250), nullable=False)
     description = db.Column(db.String)
     x = db.Column(db.Integer, nullable=False, default=0)
@@ -14,9 +14,31 @@ class Thread(db.Model):
     color = db.Column(db.String(50), default="gray")
     image = db.Column(db.String(250), default="default_thread")
     
-    tale = db.relationship("Tale", back_populates="threads", passive_deletes=True)
-    effects = db.relationship("Effect", back_populates="thread")
-    choices = db.relationship("ThreadChoice", foreign_keys="ThreadChoice.current_thread_id", back_populates="choice_thread")
+    tale = db.relationship("Tale", back_populates="threads")
+    effects = db.relationship("Effect", 
+        back_populates="thread", 
+        cascade="all, delete", 
+        passive_deletes=True)
+    choices = db.relationship("ThreadChoice", 
+        foreign_keys="ThreadChoice.current_thread_id", 
+        back_populates="choice_thread", 
+        cascade="all, delete",
+        passive_deletes=True)
+    
+    # TODO Convert thread choices into a through table
+    # choices = db.relationship("Thread", "thread_choices",
+    #     primaryjoin=Thread.id == thread_choices.c.current_thread_id,
+    #     secondaryjoin=Thread.id == thread_choices.c.choice_thread_id,
+    #     backref="parent_thread",
+    #     cascade="all, delete"
+    #     passive_deletes=True
+    #     )
+    
+    # def choice_to_dict():
+    #     """Convert thread to dictionary, including only information for choice."""
+    #     return {
+    #         "id": self.id,
+    #     }
 
     def to_dict(self):
         """Convert to dictionary."""

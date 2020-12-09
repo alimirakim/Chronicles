@@ -23,7 +23,7 @@ export default function talesReducer(state = {}, action) {
       return newState
     
     case DELETE_CHRONICLE:
-      return Object.values(state).filter(tale => tale.chronicle_id === action.chronicle.id)
+      return Object.values(state).filter(tale => tale.chronicle_id !== action.chronicle.id)
       
     default:
       return state

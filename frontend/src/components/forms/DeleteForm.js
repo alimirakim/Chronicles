@@ -28,5 +28,6 @@ export default function DeleteForm({creation, creationType, deleteActionCreator}
       <button type="button" onClick={handleClose}>Cancel</button>
       <button onClick={handleDelete}>Delete</button>
     </form>
+      <div className={`${open ? "is-popped" : "is-hidden"}`}></div>
   </>)
 }

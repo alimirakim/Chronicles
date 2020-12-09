@@ -6,4 +6,6 @@ from .asset_form import AssetForm
 from .chronicle_form import ChronicleForm
 from .tale_form import TaleForm
 from .thread_form import ThreadForm
+from .condition_form import ConditionForm
+from .rank_form import RankForm
 # from ._form import Form

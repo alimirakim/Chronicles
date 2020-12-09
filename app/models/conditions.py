@@ -7,7 +7,7 @@ class Condition(db.Model):
     """
     __tablename__ = "conditions"
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False)
+    title = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String)
     color = db.Column(db.String(50), default="gray")
     image = db.Column(db.String(250), default="default_condition")
@@ -18,7 +18,7 @@ class Condition(db.Model):
         """Convert to jsonifyable dictionary."""
         return {
             "id": self.id,
-            "name": self.name,
+            "title": self.title,
             "description": self.description,
             "color": self.color,
             "image": self.image,
