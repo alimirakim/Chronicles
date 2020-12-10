@@ -2,8 +2,14 @@
 # Iris Isle
 
 ## Description
-Original Inspiration Reference: Fallen London https://www.fallenlondon.com/
+Original Inspiration Reference: 
+Fallen London https://www.fallenlondon.com/
+Twine: https://twinery.org/
 
+A text-adventure game creator that allows users to build text-based games via
+sequentially connected and branching written 'story threads', creating and
+manipulating 'entities' like characters and places, and manipulating their
+'state' via effects and 'choices' via 'locks'. 
 
 ## Technologies
 * JavaScript
@@ -12,165 +18,423 @@ Original Inspiration Reference: Fallen London https://www.fallenlondon.com/
 * Flask
 * SqlAlchemy
 * Alembic
-* Marshmallow-SQLAlchemy
 * WTForms/Flask-WTF
 * React
 * HTML/CSS/Sass
 * Visual Studio Code
 
+### React Components
+* beautiful-react-diagrams
+* react-quill
+
+
 ## Feature List
 ### MVP Features
-* User accounts - signup, signing, signout
-* CRUD: Threads
+* User accounts - signup, signin, signout
+* CRUD: Chronicles, Tales, Threads
 * Threads can have branching 'choice threads' to choose from.
 * Content can be viewed in short-summary-card galleries.
-* Tales can be viewed in chronological galleries showing threads, connecting actions, effects, and locks.
-
-### Stretch Goal Feature 1: Play Text Adventure
-* User can press 'play' to be shown the 'starting' thread of a tale.
+* Game gallery page displaying user Chronicles that players can join
+* A Tale's Threads can be viewed in chronological galleries showing Choices.
+* User can press 'play' to be start a Tale in play-mode.
 * User can click the connected Choices to continue the Tale.
+* User can click a 'back' button during gameplay.
+* Use can format their content with react-quill markdown/GUI options.
 
-### Stretch Goal Feature 2: Effects and Locks
+### Stretch Goal Feature: Effects and Locks
 * Choices can be 'locked' with various requirements (mvp: assets).
 * Threads can cause 'effects' that change the state of various things (mvp: assets)
-* Characters are 'auto-generated' with an inventory/state upon starting a Tale.
+* Characters are 'auto-generated' with an inventory/state upon starting a Chronicle.
 * Character state is effected by Threads and effects the state of Locks.
 * Locks can deplete Assets and Effects can bestow Assets.
+* MAJOR: Character, Asset, Place CRUD
+* MAJOR: Condition, Rank CRUD
 
-### Stretch Goal Feature 3: CRUD Characters, Places, Assets
-* 
-
-### Stretch Goal Feature :
-###
-
-
-### Stretch Goal Feature ???: Playable Text Adventure
-* CRUD: abilities, statuses
-* Tales can be 'shared'; a user can start a Tale, create or be given a starting character.
-* Tales can be bookmarked, with character and state saved for the user per action.
-* Can create a Playable Character for a Tale.
-* Navigatable map with locations. Players can change location state, based on accessibility, or be moved by story effects.
+### Stretch Goals: Miscellaneous
+* Theme modes (dark, light)
+* Color/icon select menus - grid-like box selector component
+* User-image upload for Chronicles, Tales, etc.
+* Tag system for genres, warnings, etc.
+* Hover effect for nodes/links - show details hoverbox
+* Toggle-option to 'allow go-back', default yes
+* Toggle-option for 'show when locked', default yes
+* Ending-thread setting option
+* Note-scratchpad
+* Select/transfer multiple
+* Expand/collapse option for GUI
+* Public/private mode for user pages, chronicles, tales, etc.
+* Macros to allow choices, links to character/place/etc. or hover info, within Threads.
+* Randomization options
 * Tales can be put in chronological order 
-* Stores can be created by designating a location, availability, shopkeeper(s), inventory schedule, inventory, and prices.
+
+### Stretch Goals: Major Features
+* Player can create a playable character upon starting a Chronicle, see its state in library, etc.
+* Chronicle page component for player-facing mode: displays summary, player's character/state, available tales, bulletin, (maybe comment/message system), started tales, map, etc.
+* Input options for game-creators (example: pets/companions)
+* Library of joined Chronicles, Bookmarked Tales, character and state saved for the user upon every choice.
+* Navigatable visual map and location system. Players can change location state, based on accessibility, or be moved by story effects.
+* Time-based and IRL-time-based system
+* Gallery discovery page options: latest, random, followed, by tag/genre, popular, trending
+
+
 
 ## Models & Schema
-
 * users
+* chronicles
 * tales
 * threads
-* effects - how to connect effects of different kinds? ex. material effect, state effect, location effect...
-* actions
-* locks - same as for effect
-* characters - many joins? characters have many materials, many states, many abilities...
-* locations
-* materials
-* states
-* abilities
-* tags
+* thread_choices 
+* effects 
+* locks 
+* entities (characters, assets, places)
+* player_characters [note: join]
+* entity_assets, entity_conditions, entity_ranks, entity_equipped
+* conditions
+* ranks
+<!-- * tags -->
 
-* character_materials
-* character_states
-* character_abilities
+> **NOTE** Join tables!
 
+### users
+| COLUMN | CONSTRAINTS |
+|--------|-------------|
+| id     | SERIAL, PK  |
+| username | varchar(50), unique |
+| email    | varchar(250), unique |
+| hashword | varchar(250) |
 
-databases
-blockers - database
-today 
-build databases
+### chronicles
+| COLUMN      | CONSTRAINTS                                          |
+|-------------|------------------------------------------------------|
+| id          | SERIAL, PK                                           |
+| user_id     | integer, FK(users.id)                                |
+| title       | varchar(250), not null, default("Untitled")          |
+| description | varchar                                              |
+| color       | varchar(50), not null, default("gray")               |
+| image       | varchar(250), not null, default("default_chronicle") |
+
+### tales
+| COLUMN          | CONSTRAINTS                                     |
+|-----------------|-------------------------------------------------|
+| id              | SERIAL, PK                                      |
+| chronicle_id    | integer, FK(chronicles.id)                      |
+| title           | varchar(250), not null, default("Untitled")     |
+| description     | varchar                                         |
+| color           | varchar(50), not null, default("gray")          |
+| image           | varchar(250), not null, default("default_tale") |
+| first_thread_id | integer                                         |
+
+### threads
+| COLUMN      | CONSTRAINTS                                       |
+|-------------|---------------------------------------------------|
+| id          | SERIAL, PK                                        |
+| tale_id     | integer, FK(tales.id)                             |
+| title       | varchar(250), not null, default("Untitled")       |
+| description | varchar                                           |
+| color       | varchar(50), not null, default("gray")            |
+| image       | varchar(250), not null, default("default_thread") |
+| x           | integer, not null, default(0)                     |
+| y           | integer, not null, default(0)                     |
+
+### thread_choices
+| COLUMN            | CONSTRAINTS                                       |
+|-------------------|---------------------------------------------------|
+| id                | SERIAL, PK                                        |
+| current_thread_id | integer, FK(threads.id)                           |
+| choice_thread_id  | integer, FK(threads.id)                           |
+| title             | varchar(250), not null                            |
+| color             | varchar(50), not null, default("gray")            |
+| image             | varchar(250), not null, default("default_choice") |
+> **NOTE** Thread Choice defaults to \`Go to: ${self.choice_thread.title}\`
+
+### effects (parent to asset_effects... place_effects, condition_effects, rank_effects)
+| COLUMN    | CONSTRAINTS                                       |
+|-----------|---------------------------------------------------|
+| id        | SERIAL, PK                                        |
+| thread_id | integer, FK(threads.id)                           |
+| color     | varchar(50), not null, default("gray")            |
+| image     | varchar(250), not null, default("default_thread") |
+| type      | enum("asset", "location", "time", "condition", "rank"), not null, default("asset") |
+
+### asset_effects
+| COLUMN    | CONSTRAINTS                                       |
+|-----------|---------------------------------------------------|
+| id        | SERIAL, PK                                        |
+| effect_id | integer, FK(effects.id), not null                 |
+| asset_id  | integer, FK(assets.id), not null                  |
+| quantity  | integer, not null, default(1)                     |
+| is_gained | boolean, not null, default(true)                  |
+
+### locks (parent to asset_locks... place_locks, time_locks, attire_locks, condition_locks, rank_locks)
+| COLUMN    | CONSTRAINTS                                       |
+|-----------|---------------------------------------------------|
+| id        | SERIAL, PK                                        |
+| choice_id | integer, FK(thread_choices.id)                    |
+| color     | varchar(50), not null, default("gray")            |
+| image     | varchar(250), not null, default("default_thread") |
+| type      | enum("asset", "location", "time", "attire", "condition", "trial") |
+
+### asset_locks
+| COLUMN    | CONSTRAINTS                                            |
+|-----------|--------------------------------------------------------|
+| id        | SERIAL, PK                                             |
+| lock_id   | integer, FK(locks.id), not null                        |
+| entity_id | integer, FK(entities.id), not null                     |
+| quantity  | integer, not null, default(1)                          |
+| type      | enum("price", "proof", "prohibited"), default("price") |
+
+### entities (characters, places, assets)
+| COLUMN       | CONSTRAINTS                                       |
+|--------------|---------------------------------------------------|
+| id           | SERIAL, PK                                        |
+| chronicle_id | integer, FK(chronicles.id)                        |
+| title        | varchar(250), not null, default("Untitled")       |
+| description  | varchar                                           |
+| color        | varchar(50), not null, default("gray")            |
+| image        | varchar(250), not null, default("default_entity") |
+| type         | enum("character", "asset", "place")               |
+| subtype      | enum("item", "bond", "deed", "title", "idea", "shop", ), not null | 
+| is_unique    | boolean, not null, default(true)                  |
+> **NOTE** Consider that subtype can have custom types for user-creator, like "royalty", "officer", "hostile", "dragon-related"
+
+### player_characters
+| COLUMN       | CONSTRAINTS              |
+|--------------|--------------------------|
+| id           | SERIAL, PK               |
+| user_id      | integer, FK(users.id)    |
+| entity_id    | integer, FK(entities.id) |
+
 
 ## Routes
-### Frontend Routes
-
-| GET | `/` | Splash/Home |
-| GET | `/tales/create` | Creation form for tales | -- +characters, locations, materials, threads, choices, abilities, actions, traits, statuses,
-| GET | `/tales | 
-
-
 ### Backend Routes
-`/users/<int:uid>/
+* `/auth`
+* `/users`
+* `/chronicles`
+* `/entities`
+* `/tales`
+* `/threads`
+* `/choices`
+* `/effects`
+* `/locks`
+
+#### `/auth`
+| METHOD | ROUTE           | EFFECT |
+|--------|-----------------|--------|
+| GET    | `/`             | Authenticates user, returns user dict |
+| GET    | `/login`        | Logs user in, returns user dict and all user chronicles/tales/threads/choices... |
+| GET    | `/logout`       | Logs user out |
+| POST   | `/signup`       | Creates new user and their first chronicle->tale->thread, then logs them in |
+| GET    | `/unauthorized` | Returns 'unauthorized' JSON error when flask-login auth fails |
+> **NOTE** May want to create second option, or revert option, for /signup for users who just want to play, not make
+
+#### `/users`
+| METHOD | ROUTE                          | EFFECT                     |
+|--------|--------------------------------|----------------------------|
+| GET    | `/`                            | Returns list of user dicts |
+| GET    | `/<int:uid>`                   | Returns a user's dict      |
+| GET    | `/<int:uid>/library`           | Returns chronicles joined by a user |
+| GET    | `/<int:uid>/library/<int:cid>` | Returns user's game data for a joined chronicle |
+> **NOTE** This may be the place to effect game state for players
+
+#### `/chronicles`
+| METHOD | ROUTE                                      | EFFECT |
+|--------|-------------------------------------------|--------|
+| GET    | `/order-by/<str:order>/limit/<int:limit>` | Return chronicles, ordered by 'order' type, limit count to 'limit' |
+| GET    | `/creators/<int:uid>`                     | Return chronicles by creator |
+| GET    | `/<int:cid>`                              | Return a chronicle and all its direct dependents |
+| GET    | `/<int:cid>/players`                      | Return the users and their characters that have joined a chronicles |
+| GET    | `/<int:cid>/players/<int:uid>`            | Return game state details of a player for a chronicle |
+| GET    | `/<int:cid>/entities/<str:type>`          | Return entities of 'type' belonging to a chronicle |
+<!-- | GET    | `/tags/<int:tag>/limit/<int:limit>`       | Return random articles of 'tag' type, limit amount to 'limit' | -->
+| POST   | `/create`                                 | Create new chronicle |
+| PATCH  | `/<int:cid>/edit`                         | Edit chronicle details |
+| DELETE | `/<int:cid>/delete`                       | Delete chronicle and all dependents |
+| POST   | `/<int:cid>/tales/create`                 | Create a new tale belonging to chronicle, return tale dict |
+| POST   | `/<int:cid>/entities/create`              | Create a new entity belonging to a chronicle, return entity dict |
+| POST   | `/<int:cid>/conditions/create`            | Create a new condition belonging to chronicle, return condition dict |
+| POST   | `/<int:cid>/ranks/create`                 | Create a new rank belonging to chronicle, return rank dict |
+> **NOTE** On create, auto-generate first tale and thread too?
+> **NOTE** Perhaps have conditions/ranks categorized by entity type?
+> **NOTE** Chronicles can be public/private, active/archived/complete, playable to all or just account-holders?
+> **NOTE** order-by: newest, updated, discovered, complete, popular, trending, followed, alphabetical, wordcount
+> **NOTE** Can fragments/queries/something be used for lists, like tags?
+
+#### `/entities`
+| METHOD | ROUTE                    | EFFECT |
+|--------|-------------------------|--------|
+| PATCH  | `/<int:eid>/edit`       | Edit entity and entity-owned details, return dicts |
+| DELETE | `/<int:eid>/delete`     | Delete entity and its dependents |
+| POST   | `/<int:eid>/assets`     | ... |
+| POST   | `/<int:eid>/conditions` | ... |
+| POST   | `/<int:eid>/ranks`      | ... |
+| GET    | `/<int:eid>/assets`     | ... |
+| GET    | `/<int:eid>/conditions` | ... |
+| GET    | `/<int:eid>/ranks`      | ... |
+> **NOTE** Not sure on details yet. Essentially, CRUD on entity-owned properties
+
+#### `/tales`
+| METHOD | ROUTE                        | EFFECT |
+|--------|-----------------------------|--------|
+| GET    | `/<int:tid>`                | Return tale and all its dependents |
+| PATCH  | `/<int:tid>/edit`           | Edit tale details              |
+| DELETE | `/<int:tid>/delete`         | Delete tale and its dependents |
+| POST   | `/<int:tid>/threads/create` | Create a thread and thread choices/effects/locks, belonging to tale, return dicts of all three |
+
+#### `/threads`
+| METHOD | ROUTE                         | EFFECT |
+|--------|------------------------------|--------|
+| GET    | `/<int:thid>`                | Return thread and all its dependents |
+| PATCH  | `/<int:thid>/edit`           | Edit thread details and thread choices/effects/locks, return dicts of all |
+| DELETE | `/<int:thid>/delete`         | Delete thread and its dependents |
+| POST   | `/<int:thid>/choices/create` | Create choice and choice locks belonging to thread, return choice/lock dicts |
+| POST   | `/<int:thid>/effects/create` | Creat effect belonging to thread, return effect dict |
+
+#### `/choices`
+| METHOD | ROUTE                     | EFFECT |
+|--------|--------------------------|--------|
+| GET    | `/<int:chid>`            | Return choice and all its locks |
+| PATCH  | `/<int:chid>/edit`       | Edit choice and choice lock details, return choice/lock dicts |
+| DELETE | `/<int:chid>/delete`     | Delete choice and dependents |
+| POST   | `/<int:id>/locks/create` | Create lock belonging to choice, return lock dict |
+
+#### `/effects`
+| METHOD | ROUTE | EFFECT |
+|--------|------|--------|
+| PATCH  | `/<int:efid>/edit`   | Edit effect details, return effect dict |
+| DELETE | `/<int:efid>/delete` | Delete effect belonging to thread       |
+
+#### `/locks`
+| METHOD | ROUTE | EFFECT |
+|--------|------|--------|
+| PATCH  | `/<int:loid>/edit`   | Edit lock details, return lock dict |
+| DELETE | `/<int:loid>/delete` | Delete lock belonging to choice     |
+
+
+### Frontend Routes
+* `/`
+* `/gallery`
+* `/chronicles`
+* `/worldweaver`
+
+#### `/`
+| METHOD | ROUTE | COMPONENT   |
+|--------|-------|-------------|
+| GET    | `/`           | Splash login/signup + gallery / Home |
+| GET    | `/login`      | login page    |
+| GET    | `/sign-up`    | signup page   |
+| GET    | `/users`      | List of users |
+| GET    | `/users/:uid` | User profile page, includes their creations / chronicles joined |
+| GET    | `/library`    | Gallery of joined Chronicles for a user |
+| GET    | `/contact`    | My contact info/about |
+| GET    | `/faq`        | How to make, how to play, etc. |
+
+#### `/gallery
+| METHOD | ROUTE | COMPONENT   |
+|--------|-------|-------------|
+| GET    | `/`   | Home gallery of published Chronicles users can play |
+
+#### `/chronicles`
+| GET    | `/:cid/welcome`         | Chronicle's splash page for new players |
+| GET    | `/:cid/play`            | Player's dashboard showing game/character status, available tales, etc. |
+| GET    | `/:cid/profile`         | Character details, location, tales finished/started/available |
+| GET    | `/:cid/inventory`       |  |
+| GET    | `/:cid/map`             |  |
+| GET    | `/:cid/tales`           | List of available tales to continue or start |
+| GET    | `/:cid/tales/:tid`      | Tale 'start' page |
+| GET    | `/:cid/tales/:tid/play` | Tale play mode, dynamically changes according to player actions |
+| GET    | `/:cid/settings`        |  |
+
+#### `/worldweaver`
+| METHOD | ROUTE                          | COMPONENT   |
+|--------|--------------------------------|-------------|
+| GET    | `/`                            | Chronicle creation, explanations |
+| GET    | `/:cid`                        | Chronicle summary, content lists (collapsible, tabs...), CRUD options |
+| GET    | `/:cid/tales`                  | List of created tales sorted by status (wip, complete, private/public) |
+| GET    | `/:cid/tales/:tid/talespinner` | TaleSpinner |
+| GET    | `/:cid/characters`             |  |
+| GET    | `/:cid/characters/:id`         |  |
+| GET    | `/:cid/places`                 |  |
+| GET    | `/:cid/assets`                 |  |
+| GET    | `/:cid/conditions`             |  |
+| GET    | `/:cid/ranks`                  |  |
+| GET    | `/:cid/info`                   |  |
+| GET    | `/:cid/players`                |  |
+
 
 
 ## Wireframes, Templates, Components, Styling
-### Theme & Style
-
+### Theme & Style Ideas (scratchpad)
+Clean, minimal, expressionless - allow creators to impose their flavor to the content
+1-2 color icons, svgs, outlines, etc.
+Generic pre-made assets to choose from for all options, convenience-focused
+Simple theme options - think love nikki frames
+Background can be customized to change based on LOCATION, TIME, CHRONICLE/TALE/THREAD - layer logic to prioritize?
+Big-stretch-idea-only: Dialogue, character portraits and speech bubble presentation
 
 ### Wireframe Thumbnails
-
-
+Splash - signup/login, elevator pitch, random/popular gallery ribbon/carousel, full explanation, tag-based gallery board
+Gallery - Public gallery of playable chronicles, various sorting algorithms/spotlights, explanation of play-rules and anon/account holder
+Chronicle Splash - Chronicle's public page for players - summary, join option, announcements, tales/etc./full content after join, comments
+Tale Splash - Tale's public page for players - summary, start option, locks if applicable
+Play Mode - Dynamic page content and effects based on player's game state
+Library - Gallery of player's joined chronicles
+WorldWeaver - CRUD for Chronicles, navigation to Chronicle 'creator' pages
+Chronicle Creator - link for public page, CRUD for Chronicle elements, gallery of contents, separated by tabs/accordians, ideally sortable
+TaleSpinner - Gallery and CRUD for a chronicle's tales navigation to individual tale charts
+TaleSpinner Web - Node chart plus text list and forms for a single tale
+Forms - Generic, AddToList, Edit list items, 
+Contact
+Help
 
 ## User Story
-User sees splash page describing the purpose, functionality and how to use the app. Can login or signup.
-Starts with a default 'Tale'. 
-Can choose to create new: location, character, etc..
-Any entities can have custom fields added. The field can have a label and a body. The body can be text, number, boolean, image, link, ability
-Can create threads and actions, then link threads and actions together. Can add effects to threads and locks to actions.
+Splash explains concept for players and creators, geared toward creators.
 
+Gallery explains concept again briefly with link to learn more, geared towards
+potential players.
 
+Click on interesting Chronicle, get taken to Chronicle intro page. Option to 
+'start' with explanation that joining is optional is prominant. Save data only
+to store for now, until user creates account. Ideally, perhaps to local storage
+or something a pinch more long-term than a refresh.
 
+User creates their first character via an 'entry tale', then can go back to the
+chronicle 'hub page' to see further tale options to continue. Should be able to
+work so that creators who only want one sequential tale can have this work fine
+for them too.
 
+Have a sign-up or login option always visibly available for players, make clear
+that their status will be saved with it.
 
-| COLUMN | CONSTRAINTS |
-|--------|-------------|
-| id     | SERIAL, PK  |
-| story_id |  
-| title  |
-| body   |
-| type   | 
-| image  |
-| prev   | |
-| trial_level |
+With account creation, show saved content and welcome message, the relevant page
+for the saved content if after startingh a chronicle first.
 
+For true fresh accounts, show message and gallery page perhaps.
 
-| effects |
-| requirements |
+Have clear distinction between creator portal with worldweaver and player portal
+with access to library and current state.
 
-
-
-* User accounts
-* Can create and save:
-  * associations
-  * characters
-  * locations
-  * assets
-  * events
-  * trials
-  * creature - beastiary
-  * plant - 
-  * dictionary
-  * job
-  * spell
-  * history
-  * threads
-* Can designate details of a thing's 'dynamic state'
-* Create a 'Thread'. One single scene/event description, with potential prev state and following states. The Thread can grant certain changes in state, assets, etc.
-* Create a 'Tale'. A tale comes with
-* Create 'Experiences', milestones of story that can then be checked for and used as conditionals for other things happening or not.
-
-
-
-category name - types of books like biography, map, spellbook, dictionary, beastiary, etc., tarot cards
-user
-story
-name
-tag words
-appearance
-description
-image
-links
-
-
-# users
-| COLUMN | CONSTRAINTS |
-|--------|-------------|
-| id     | SERIAL, PK  |
-| username | |
-| email    |
-| hashword |
-| birthday |
-
-
-### characters
-| 
+Ideal: A manual tutorial system built into the first auto-generated chronicle for potential creators
+Ideal: A pre-made sample for creators to learn from
 
 
 ## Required Seeder Data
+### users
+* creator demo
+* player demo
+
+### chronicles
+* Fully built game
+* Default starter for newbies crafting their first
+* places: overworld, beginning room, red room, blue room, joined room
+* characters: fairy, player
+* assets: candy, red key
+* conditions: angry, sad, happy
+* ranks: affection
+* fairy: place joined room, asset ball, condition angry, rank affection 50
+* red room: asset 5 candies
+* blue room: asset 1 red key
+
+### tales, threads, choices, locks, effects
+* MVP one tale, starter, the doors and the fairy sample
+* locks: red room locked, give fairy candy
+* effect: get candy, get red key, fairy happy, fairy sad, fairy affection +-, get ball

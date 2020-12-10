@@ -86,26 +86,6 @@ def seed_threads():
 
 
     # Adding choices with unique titles
-    new_choice1 = ThreadChoice(
-    title="Go back",
-    current_thread=threads[1],
-    choice_thread=threads[0])
-    
-    new_choice2 = ThreadChoice(
-    title="Go back",
-    current_thread=threads[2],
-    choice_thread=threads[0])
-    
-    new_choice3 = ThreadChoice(
-    title="Go back to blue room",
-    current_thread=threads[3],
-    choice_thread=threads[2])
-    
-    new_choice4 = ThreadChoice(
-    title="Go back to red room",
-    current_thread=threads[3],
-    choice_thread=threads[1])
-    
     new_choice5 = ThreadChoice(
     title="Go through second red door",
     current_thread=threads[1],
@@ -116,10 +96,6 @@ def seed_threads():
     current_thread=threads[2],
     choice_thread=threads[3])
     
-    db.session.add(new_choice1)
-    db.session.add(new_choice2)
-    db.session.add(new_choice3)
-    db.session.add(new_choice4)
     db.session.add(new_choice5)
     db.session.add(new_choice6)
     db.session.commit()
