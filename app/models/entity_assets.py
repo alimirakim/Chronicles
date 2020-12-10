@@ -16,7 +16,7 @@ class EntityAsset(db.Model):
         """Convert to dictionary."""
         return {
             "id": self.id,
-            # "entity_id": self.entity_id,
+            "entity_id": self.entity_id,
             "asset_id": self.asset_id,
             "quantity": self.quantity,
         }

@@ -17,9 +17,29 @@ const NavBar = ({ authenticated, setAuthenticated }) => {
         </li>
 
       {authenticated && <>
+      
         <li>
-          <NavLink to={`/talespinner${tid}`} exact={true} activeClassName="active">
+          <NavLink to={`/worldweaver`} exact={true} activeClassName="active">
+            WorldWeaver
+          </NavLink>
+        </li>
+      
+        <li>
+          <NavLink to={`/talespinner`} exact={true} activeClassName="active">
             TaleSpinner
+          </NavLink>
+        </li>
+        
+        <li>
+          <NavLink to={`/gallery`} exact={true} activeClassName="active">
+            Games 
+            {/* Spotlight, discovery, find, new, latest, by your followed, by tag, popular */}
+          </NavLink>
+        </li>
+        
+        <li>
+          <NavLink to={`/library`} exact={true} activeClassName="active">
+            Library
           </NavLink>
         </li>
         

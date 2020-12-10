@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Route } from "react-router-dom";
-import {useDispatch, useSelector} from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 // COMPONENTS
 import LoginForm from "./components/auth/LoginForm";
@@ -10,16 +10,21 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 import UsersList from "./components/UsersList";
 import User from "./components/User";
 import Home from './components/Home'
+import PlayGallery from './components/PlayGallery'
+import Library from './components/Library'
+import ChroniclePage from './components/ChroniclePage.js'
+import TalePage from './components/TalePage'
+import CurrentThread from './components/CurrentThread'
+import WorldWeaver from './components/WorldWeaver'
 import TaleSpinner from './components/TaleSpinner'
-import TaleStart from './components/play/TaleStart'
-import CurrentThread from './components/play/CurrentThread'
+
 
 
 // ACTIONS
-import {getChronicles} from './actions/chronicleActions'
-import {getTales} from './actions/taleActions'
-import {getThreads} from './actions/threadActions'
-import {getChoices} from './actions/choiceActions'
+import { getChronicles } from './actions/chronicleActions'
+import { getTales } from './actions/taleActions'
+import { getThreads } from './actions/threadActions'
+import { getChoices } from './actions/choiceActions'
 
 
 function App() {
@@ -32,13 +37,13 @@ function App() {
   // const choices = useSelector(state => state.choices)
 
   useEffect(() => {
-    (async() => {
+    (async () => {
       const res = await fetch('/api/auth/', {
         headers: { 'Content-Type': 'application/json' }
-    });
-    const content =  await res.json();
-    console.log("App content", content)
-    if (!content.errors) {
+      });
+      const content = await res.json();
+      console.log("App content", content)
+      if (!content.errors) {
         setAuthenticated(true)
         dispatch(getChronicles(content.chronicles))
         dispatch(getTales(content.tales))
@@ -48,14 +53,14 @@ function App() {
       setLoaded(true)
     })()
   }, [])
-  
+
   if (!loaded) return null
 
   return (
     <BrowserRouter>
-      
+
       <NavBar authenticated={authenticated} setAuthenticated={setAuthenticated} />
-      
+
       {/* Login and Signup forms */}
       <Route path="/login" exact={true}>
         <LoginForm
@@ -64,32 +69,50 @@ function App() {
         />
       </Route>
       <Route path="/sign-up" exact={true}>
-        <SignUpForm 
+        <SignUpForm
           authenticated={authenticated}
           setAuthenticated={setAuthenticated}
         />
       </Route>
-      
+      <Route path="/" exact={true}>
+        <Home
+          authenticated={authenticated}
+          setAuthenticated={setAuthenticated}
+        />
+      </Route>
+
+      <Route path="/gallery" exact={true}>
+        <PlayGallery />
+      </Route>
+
+      <Route path="/chronicles/:cid" exact={true}>
+        <ChroniclePage />
+      </Route>
       <Route path="/chronicles/:cid/tales/:tid" exact={true}>
-        <TaleStart />
+        <TalePage />
       </Route>
       <Route path="/chronicles/:cid/tales/:tid/play">
         <CurrentThread />
       </Route>
-      
-      {/* Homepage */}
-      <ProtectedRoute path="/" exact={true} authenticated={authenticated}>
-        <Home />
+
+      {/* User's Library of joined chronicles/games */}
+      <ProtectedRoute path="/library" exact={true} authenticated={authenticated}>
+        <Library />
+      </ProtectedRoute>
+
+      {/* WorldWeaver*/}
+      <ProtectedRoute path="/worldweaver" exact={true} authenticated={authenticated}>
+        <WorldWeaver />
       </ProtectedRoute>
 
       {/* TaleSpinner */}
-      <ProtectedRoute path="/talespinner/tales/:tid" exact={true} authenticated={authenticated}>
+      <ProtectedRoute path="/talespinner" exact={true} authenticated={authenticated}>
         <TaleSpinner threads={threads} />
       </ProtectedRoute>
 
       {/* User list and individual user profiles */}
       <ProtectedRoute path="/users" exact={true} authenticated={authenticated}>
-        <UsersList/>
+        <UsersList />
       </ProtectedRoute>
       <ProtectedRoute path="/users/:uid" exact={true} authenticated={authenticated}>
         <User />

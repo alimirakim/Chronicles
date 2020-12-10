@@ -21,6 +21,7 @@ class Character(db.Model):
         """Convert to dictionary."""
         return {
             "id": self.id,
+            "chronicle_id": self.entity.chronicle_id,
             "user_id": self.user_id,
             "title": self.entity.title,
             "description": self.entity.description,

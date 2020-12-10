@@ -1,37 +1,14 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Link } from 'react-router-dom'
-
-// YOUR COMPONENTS
-import YourCreations from './YourCreations'
-
-// FORM COMPONENTS
-import ChronicleForm from './forms/ChronicleForm'
-import TaleForm from './forms/TaleForm'
-import ThreadForm from './forms/ThreadForm'
-import ChoiceForm from './forms/ChoiceForm'
-import CharacterForm from './forms/CharacterForm'
-import PlaceForm from './forms/PlaceForm'
-import AssetForm from './forms/AssetForm'
-import ConditionForm from './forms/ConditionForm'
-import RankForm from './forms/RankForm'
-
-// ACTION CREATORS
-import { deleteChronicle } from '../actions/chronicleActions'
-import { deleteTale } from '../actions/taleActions'
-import { deleteThread } from '../actions/threadActions'
-import { deleteChoice } from '../actions/choiceActions'
-import {deleteCharacter } from '../actions/characterActions'
-import {deletePlace } from '../actions/placeActions'
-import {deleteAsset } from '../actions/assetActions'
-import {deleteCondition } from '../actions/conditionActions'
-import {deleteRank } from '../actions/rankActions'
 import { updateSelections, wipeSelections } from '../actions/selectionActions'
 
+// COMPONENTS
+import LoginForm from "./auth/LoginForm";
+import SignUpForm from "./auth/SignUpForm";
 
-export default function Home() {
+export default function Home({authenticated, setAuthenticated}) {
   const dispatch = useDispatch()
-  const { chronicles, tales, threads, choices, selected, characters, assets, places, conditions, ranks } = useSelector(state => ({
+  const { chronicles, tales, threads, choices, selected, characters, assets, places } = useSelector(state => ({
     chronicles: state.chronicles,
     tales: state.tales,
     threads: state.threads,
@@ -40,8 +17,8 @@ export default function Home() {
     characters: state.characters,
     assets: state.assets,
     places: state.places,
-    conditions: state.conditions,
-    ranks: state.ranks,
+    // conditions: state.conditions,
+    // ranks: state.ranks,
   }))
 
   // Select a user's first chronicle and its tales/content upon initialization
@@ -68,97 +45,50 @@ export default function Home() {
 
   return (
     <main>
-      {/* <p>Welcome, {user.username}...</p> */}
+      <h1>Welcome to TaleSpinner</h1>
+      <p>Discover and play free text adventures made by users like you, or spin your own tale or three and share it to the world!</p>
 
-      <YourCreations
-        creationType="Chronicle"
-        active={selected.chronicle}
-        creations={chronicles}
-        creationForm={ChronicleForm}
-        deleteActionCreator={deleteChronicle}
+      <SignUpForm
+        authenticated={authenticated}
+        setAuthenticated={setAuthenticated}
+      />
+      <LoginForm
+        authenticated={authenticated}
+        setAuthenticated={setAuthenticated}
       />
 
-      <Link to={`/talespinner/tales/${selected.tale.id}`}>Go to TaleSpinner</Link>
-      <YourCreations
-        pid={selected.chronicle.id}
-        creationType="Tale"
-        creations={tales}
-        active={selected.tale}
-        filterBySelect={(tales, cid) => Object.values(tales).filter(tale => tale.chronicle_id === cid)}
-        deleteActionCreator={deleteTale}
-        creationForm={TaleForm}
-      />
-
-      <YourCreations
-        pid={selected.tale.id}
-        creationType="Thread"
-        creations={threads}
-        active={selected.thread}
-        filterBySelect={(threads, tid) => Object.values(threads).filter(thread => thread.tale_id === tid)}
-        deleteActionCreator={deleteThread}
-        creationForm={ThreadForm}
-      />
-
-      <YourCreations
-        pid={selected.thread.id}
-        creationType="Choice"
-        creations={choices}
-        active={selected.choice}
-        filterBySelect={(choices, thid) => Object.values(choices).filter(choice => choice.current_thread_id === thid)}
-        deleteActionCreator={deleteChoice}
-        creationForm={ChoiceForm}
-      />
-
-      <YourCreations
-        pid={selected.chronicle.id}
-        creationType="Character"
-        creations={characters}
-        active={selected.character}
-        filterBySelect={(characters, cid) => Object.values(characters).filter(tale => tale.chronicle.id === cid)}
-        deleteActionCreator={deleteCharacter}
-        creationForm={CharacterForm}
-      />
-
-      <YourCreations
-        pid={selected.chronicle.id}
-        creationType="Place"
-        creations={places}
-        active={selected.place}
-        filterBySelect={(places, cid) => Object.values(places).filter(tale => tale.chronicle.id === cid)}
-        deleteActionCreator={deletePlace}
-        creationForm={PlaceForm}
-      />
-
-      <YourCreations
-        pid={selected.chronicle.id}
-        creationType="Asset"
-        creations={assets}
-        active={selected.asset}
-        filterBySelect={(assets, cid) => Object.values(assets).filter(tale => tale.chronicle.id === cid)}
-        deleteActionCreator={deleteAsset}
-        creationForm={AssetForm}
-      />
-
-      <YourCreations
-        pid={selected.chronicle.id}
-        creationType="Condition"
-        creations={conditions}
-        active={selected.condition}
-        filterBySelect={(conditions, cid) => Object.values(conditions).filter(tale => tale.chronicle.id === cid)}
-        deleteActionCreator={deleteCondition}
-        creationForm={ConditionForm}
-      />
-
-      <YourCreations
-        pid={selected.chronicle.id}
-        creationType="Rank"
-        creations={ranks}
-        active={selected.rank}
-        filterBySelect={(ranks, cid) => Object.values(ranks).filter(tale => tale.chronicle.id === cid)}
-        deleteActionCreator={deleteRank}
-        creationForm={RankForm}
-      />
+      <GalleryRibbon items={chronicles} />
 
     </main>
+  )
+}
+
+function GalleryRibbon({ items }) {
+
+  return (
+    <aside>
+      <h2>Discover Your Next Adventure!</h2>
+      <small>No account? No problem! Play now and if you enjoy the tale you've started but haven't finished, you can make an account to save your progress any time before you leave!</small>
+      <ul>
+        {Object.values(items).map(item => (
+          <li key={item.id}>
+            {/* <img src={`/images/${item.image}.svg`} alt={`Splash image for "${item.title}" by ${item.creator}`} /> */}
+            <dl>
+              <dt>Title</dt>
+              <dd>{item.title}</dd>
+              <dt>Creator</dt>
+              <dd><address>{item.creator}</address></dd>
+              {/* <dt>Latest Update</dt>
+            <dd><datetime>{item.updated_at}</datetime></dd>
+            <dt>Tags</dt>
+            <dd>{item.tags}</dd>
+            <dt>Description</dt> */}
+              <dd>{item.description}</dd>
+              {/* TODO Notes like how many tales, how many users, wordcount, hearts/stars */}
+            </dl>
+          </li>
+        ))}
+      </ul>
+    </aside>
   )
 }

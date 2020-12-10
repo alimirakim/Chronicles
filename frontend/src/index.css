@@ -25,12 +25,12 @@ dt {
 dd {
   margin: 0;
 }
-dl {
+dl.cards {
   display: flex;
   flex-flow: row wrap;
   /* flex-direction: column-reverse; */
 }
-dl > * {
+dl.cards > * {
   width: 12%;
   height: 5rem;
   overflow: hidden;
@@ -48,7 +48,7 @@ button {
   cursor: pointer;
   background-color: rgba(0,0,0,0);
   border-radius: 5px;
-  border-width: 0;
+  border-width: 2;
   font: bold 0.8rem Calibri;
   text-transform: uppercase;
 }

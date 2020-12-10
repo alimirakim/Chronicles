@@ -7,5 +7,5 @@ from app.utils import within_length_limit
 
 class AssetForm(FlaskForm):
     """Maps form inputs to apply backend validations."""
-    name = StringField(validators=[DataRequired(), within_length_limit], default="Untitled")
+    title = StringField(validators=[DataRequired(), within_length_limit], default="Untitled")
     description = StringField()

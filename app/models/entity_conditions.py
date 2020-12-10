@@ -8,7 +8,7 @@ class EntityCondition(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     entity_id = db.Column(db.Integer, db.ForeignKey("entities.id"), nullable=False)
     condition_id = db.Column(db.Integer, db.ForeignKey("conditions.id"), nullable=False)
-    expiry = db.Column(db.DateTime, nullable=False, default=datetime.now()+timedelta(hours=1, minutes=0, seconds=0))
+    expiry = db.Column(db.DateTime, nullable=False, default=datetime.now())
     
     entity = db.relationship("Entity", back_populates="entity_conditions")
     condition = db.relationship("Condition", back_populates="entity_conditions")

@@ -135,7 +135,7 @@ def create_place(cid):
             # image=form["image"].data,
             )
         place = Place(
-            entity=entity
+            entity=entity,
         )
         db.session.add(place)
         db.session.commit()
@@ -162,8 +162,8 @@ def create_asset(cid):
             )
         asset = Asset(
             entity=entity,
-            type=form["type"].data,
-            is_unique=form["is_unique"].data,
+            # type=form["type"].data,
+            # is_unique=form["is_unique"].data,
         )
         db.session.add(asset)
         db.session.commit()

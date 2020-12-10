@@ -52,13 +52,13 @@ def create_thread(tid):
         db.session.commit()
         
         # Creates effects for thread in database
-        effects = createEffects(request.json["effects"], thread)
+        # effects = createEffects(request.json["effects"], thread)
         
         # Creates choices for thread in database
         choices = createChoices(request.json["choices"], thread)
         
         # Create locks for choices in database
-        locks = createLocks(request.json["locks"], thread)
+        # locks = createLocks(request.json["locks"], thread)
         
         return jsonify(thread=thread.to_dict(), choices=choices)
     else:

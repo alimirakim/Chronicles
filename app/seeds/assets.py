@@ -6,21 +6,21 @@ def seed_assets():
     
     asset1 = Entity(
         chronicle_id=1,
-        name="Red Key",
+        title="Red Key",
         description="A tiny red key found in the blue room. It probably unlocks red doors, because why not?",
         color="red")
     asset1b = Asset(entity=asset1, is_unique=True)
     
     asset2 = Entity(
         chronicle_id=1,
-        name="Candy",
+        title="Candy",
         description="Colorful pieces of candy wrapped in crinkly celophane. They look delicious.",
         color="pink")
     asset2b = Asset(entity=asset2)
     
     asset3 = Entity(
         chronicle_id=1,
-        name="Took Candy",
+        title="Took Candy",
         description="A candy has been taken.")
     asset3b = Asset(entity=asset3, type="state")
 

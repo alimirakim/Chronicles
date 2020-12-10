@@ -14,18 +14,23 @@ class Chronicle(db.Model):
     user = db.relationship("User", back_populates="chronicles")
     entities = db.relationship("Entity", back_populates="chronicle", cascade="all,delete", passive_deletes=True)
     tales = db.relationship("Tale", back_populates="chronicle", cascade="all,delete", passive_deletes=True)
+    conditions = db.relationship("Condition", back_populates="chronicle", cascade="all,delete", passive_deletes=True)
+    ranks = db.relationship("Rank", back_populates="chronicle", cascade="all,delete", passive_deletes=True)
     
     def to_dict(self):
         """Convert to jsonifyable dictionary."""
         return {
             "id": self.id,
             "user_id": self.user_id,
+            "creator": self.user.username,
             "title": self.title,
             "description": self.description,
             "tale_ids": [tale.id for tale in self.tales],
             "character_eids": [entity.id for entity in self.entities if entity.type == "character"],
             "place_eids": [entity.id for entity in self.entities if entity.type == "place"],
             "asset_eids": [entity.id for entity in self.entities if entity.type == "asset"],
+            "condition_ids": [cond.id for cond in self.conditions],
+            "rank_ids": [rank.id for rank in self.ranks],
             "color": self.color,
             "image": self.image,
         }
