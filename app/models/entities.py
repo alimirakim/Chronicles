@@ -37,7 +37,7 @@ class Entity(db.Model):
             "description": self.description,
             "color": self.color,
             "image": self.image,
-            "meters": self.meters,
+            "meters": [meter.to_dict() for meter in self.meters],
             "assets": [asset.to_dict() for asset in self.assets],
             "is_unique": self.is_unique,
             "created_at": self.created_at,
@@ -54,7 +54,7 @@ class BearerAsset(db.Model):
     quantity = db.Column(db.Integer, nullable=False, default=1)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
 
-    def to_dict():
+    def to_dict(self):
         """Returns a dictionary of an entity's asset"""
         return {
             "bearer_id": self.bearer_id,
@@ -77,8 +77,8 @@ class EntityMeter(db.Model): # NOTE Rule against meters for non-unique entities?
     entity = db.relationship("Entity", back_populates="meters")
     meter = db.relationship("Meter")
     
-    def to_dict():
-        """Returns a dictionary of an entity's asset"""
+    def to_dict(self):
+        """Returns a dictionary of an entity's meter"""
         return {
             "entity_id": self.entity_id,
             "meter_id": self.meter_id,

@@ -6,6 +6,7 @@ import {
 } from '../actions/characterActions'
 import { GET_CREATIONS, DELETE_CHRONICLE } from '../actions/chronicleActions'
 
+
 export default function charactersReducer(state = {}, action) {
   const newState = { ...state }
   switch (action.type) {

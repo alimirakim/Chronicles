@@ -21,11 +21,7 @@ import TaleSpinner from './components/TaleSpinner'
 
 
 // ACTIONS
-import { getChronicles } from './actions/chronicleActions'
-import { getTales } from './actions/taleActions'
-import { getThreads } from './actions/threadActions'
-import { getChoices } from './actions/choiceActions'
-
+import { getCreations } from './actions/chronicleActions'
 
 function App() {
   const dispatch = useDispatch()
@@ -45,10 +41,7 @@ function App() {
       console.log("App content", content)
       if (!content.errors) {
         setAuthenticated(true)
-        dispatch(getChronicles(content.chronicles))
-        dispatch(getTales(content.tales))
-        dispatch(getThreads(content.threads))
-        dispatch(getChoices(content.choices))
+        dispatch(getCreations(content))
       }
       setLoaded(true)
     })()

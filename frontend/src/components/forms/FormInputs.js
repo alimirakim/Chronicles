@@ -36,6 +36,20 @@ export function SelectInput({ label, values, value, setValue }) {
   )
 }
 
+export function SelectInputVanilla({ label, values, value, setValue }) {
+  const handleChange = (e) => setValue(e.target.value)
+
+  console.log("values", values)
+  return (
+    <label>{label}
+      <select value={value} onChange={handleChange}>
+        <option value="">--</option>
+        {values[0].map(val => (<option key={val} value={val}>{val}</option>))}
+      </select>
+    </label>
+  )
+}
+
 
 export function AddToList({
     creationType,

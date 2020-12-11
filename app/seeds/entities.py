@@ -99,7 +99,7 @@ def seed_entities():
         max=1,
         base=100,
     )
-    meter1 = Meter(
+    meter2 = Meter(
         chronicle_id=1,
         type="bond",
         title="Perception",
@@ -137,5 +137,5 @@ def seed_entities():
     
     
 def undo_entities():
-    db.session.execute('TRUNCATE assets RESTART IDENTITY CASCADE;')
+    db.session.execute('TRUNCATE entities RESTART IDENTITY CASCADE;')
     db.session.commit()

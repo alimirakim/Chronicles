@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import ErrorMessages from '../ErrorMessages'
-import { TextInput, TextAreaInput, SelectInput } from './FormInputs'
+import { TextInput, TextAreaInput, SelectInputVanilla } from './FormInputs'
 import { getErrors, wipeErrors } from '../../actions/errorActions'
 import { updateSelection } from '../../actions/selectionActions'
 
@@ -35,14 +35,14 @@ const image_choices = [
 
 
 export default function CreationFormWrapper({
-  edit,
-  path,
-  creationType,
-  actionCreator,
-  uniqueContent,
-  resetUniqueContent,
-  uniqueForm: UniqueForm,
-}) {
+    edit,
+    path,
+    creationType,
+    actionCreator,
+    uniqueContent,
+    resetUniqueContent,
+    uniqueForm: UniqueForm,
+  }) {
   const dispatch = useDispatch()
   const errors = useSelector(state => state.errors)
   const [open, setOpen] = useState(false)
@@ -89,6 +89,8 @@ export default function CreationFormWrapper({
     }
   }
 
+  console.log("colors, images", colors, images)
+  
   return (<>
     <button type="button" onClick={handleOpen} disabled={open}>{edit ? `Edit` : `+${creationType}`}</button>
       <form onSubmit={submitCreation} className={`${open ? "is-popped" : "is-hidden"}`}>
@@ -103,8 +105,8 @@ export default function CreationFormWrapper({
           {/* Generic inputs */}
           <TextInput label="Title" value={title} setValue={setTitle} />
           <TextAreaInput label="Description" value={description} setValue={setDescription} />
-          <SelectInput label="Color" values={colors} value={color} setValue={setColor} />
-          <SelectInput label="Image" values={images} value={image} setValue={setImage} />
+          <SelectInputVanilla label="Color" values={colors} value={color} setValue={setColor} />
+          <SelectInputVanilla label="Image" values={images} value={image} setValue={setImage} />
 
           <UniqueForm />
 
