@@ -3,7 +3,6 @@ from app.models import db, Tale, Thread, ThreadChoice
 from app.forms import TaleForm, ThreadForm
 from app.utils import validation_errors_to_messages, createChoices, createEffects, createLocks
 
-
 tale_routes = Blueprint("tales", __name__)
 
 
@@ -17,8 +16,8 @@ def edit_tale(tid):
         tale = Tale.query.get(tid)
         tale.title = form["title"].data
         tale.description = form["description"].data
-        # tale.color = form["color"].data
-        # tale.image = form["image"].data
+        tale.color = form["color"].data
+        tale.image = form["image"].data
         db.session.commit()
         return tale.to_dict()
     else:
@@ -45,8 +44,8 @@ def create_thread(tid):
             tale_id=tid,
             title=form["title"].data,
             description=form["description"].data,
-            # color=form["color"].data,
-            # image=form["image"].data,
+            color=form["color"].data,
+            image=form["image"].data,
             )
         db.session.add(thread)
         db.session.commit()

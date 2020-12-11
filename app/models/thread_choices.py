@@ -1,4 +1,6 @@
 from .db import db
+from datetime import datetime
+
 
 
 # thread_choices = db.Table(
@@ -21,6 +23,7 @@ class ThreadChoice(db.Model):
     choice_thread_id = db.Column(db.Integer, db.ForeignKey("threads.id", ondelete="cascade"), nullable=False)
     color = db.Column(db.String(50), default="gray")
     image = db.Column(db.String(250), default="default_choice")
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
 
     current_thread = db.relationship("Thread", foreign_keys=[current_thread_id], passive_deletes=True)
     choice_thread = db.relationship("Thread", foreign_keys=[choice_thread_id], passive_deletes=True)
@@ -38,6 +41,7 @@ class ThreadChoice(db.Model):
             "locks": [lock.to_dict() for lock in self.locks],
             "color": self.color,
             "image": self.image,
+            "created_at": self.created_at,
         }
         
         

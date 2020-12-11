@@ -14,7 +14,7 @@ import CharacterForm from './forms/CharacterForm'
 import PlaceForm from './forms/PlaceForm'
 import AssetForm from './forms/AssetForm'
 import ConditionForm from './forms/ConditionForm'
-import RankForm from './forms/RankForm'
+import MeterForm from './forms/MeterForm'
 
 // ACTION CREATORS
 import { deleteChronicle } from '../actions/chronicleActions'
@@ -25,7 +25,7 @@ import {deleteCharacter } from '../actions/characterActions'
 import {deletePlace } from '../actions/placeActions'
 import {deleteAsset } from '../actions/assetActions'
 import {deleteCondition } from '../actions/conditionActions'
-import {deleteRank } from '../actions/rankActions'
+import {deleteMeter } from '../actions/meterActions'
 import { updateSelections, wipeSelections } from '../actions/selectionActions'
 
 
@@ -41,7 +41,7 @@ export default function Home() {
     assets: state.assets,
     places: state.places,
     // conditions: state.conditions,
-    // ranks: state.ranks,
+    // meters: state.meters,
   }))
 
   // Select a user's first chronicle and its tales/content upon initialization
@@ -151,12 +151,12 @@ export default function Home() {
 
       <YourCreations
         pid={selected.chronicle.id}
-        creationType="Rank"
-        creations={ranks}
-        active={selected.rank}
-        filterBySelect={(ranks, cid) => Object.values(ranks).filter(chronicle => chronicle.chronicle_id === cid)}
-        deleteActionCreator={deleteRank}
-        creationForm={RankForm}
+        creationType="Meter"
+        creations={meters}
+        active={selected.meter}
+        filterBySelect={(meters, cid) => Object.values(meters).filter(chronicle => chronicle.chronicle_id === cid)}
+        deleteActionCreator={deleteMeter}
+        creationForm={MeterForm}
       /> */}
 
     </main>

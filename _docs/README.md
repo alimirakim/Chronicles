@@ -48,7 +48,7 @@ manipulating 'entities' like characters and places, and manipulating their
 * Character state is effected by Threads and effects the state of Locks.
 * Locks can deplete Assets and Effects can bestow Assets.
 * MAJOR: Character, Asset, Place CRUD
-* MAJOR: Condition, Rank CRUD
+* MAJOR: Condition, Meter CRUD
 
 ### Stretch Goals: Miscellaneous
 * Theme modes (dark, light)
@@ -86,22 +86,23 @@ manipulating 'entities' like characters and places, and manipulating their
 * thread_choices 
 * effects 
 * locks 
-* entities (characters, assets, places)
-* player_characters [note: join]
-* entity_assets, entity_conditions, entity_ranks, entity_equipped
-* conditions
-* ranks
+* entities (characters, assets, places, conditions, ranks)
+* bearer_assets
+* meters
+* modifiers
+* player_characters (join)
 <!-- * tags -->
 
 > **NOTE** Join tables!
 
 ### users
-| COLUMN | CONSTRAINTS |
-|--------|-------------|
-| id     | SERIAL, PK  |
-| username | varchar(50), unique |
-| email    | varchar(250), unique |
-| hashword | varchar(250) |
+| COLUMN     | CONSTRAINTS                                 |
+|------------|---------------------------------------------|
+| id         | SERIAL, PK                                  |
+| username   | varchar(50), not null, unique               |
+| email      | varchar(250), not null, unique              |
+| hashword   | varchar(250), not null                      |
+| created_at | datetime, not null, default(datetime.now()) |
 
 ### chronicles
 | COLUMN      | CONSTRAINTS                                          |
@@ -112,6 +113,22 @@ manipulating 'entities' like characters and places, and manipulating their
 | description | varchar                                              |
 | color       | varchar(50), not null, default("gray")               |
 | image       | varchar(250), not null, default("default_chronicle") |
+| created_at  | datetime, not null, default(datetime.now())          |
+
+### entities (characters, places, assets)
+| COLUMN       | CONSTRAINTS                                       |
+|--------------|---------------------------------------------------|
+| id           | SERIAL, PK                                        |
+| chronicle_id | integer, FK(chronicles.id)                        |
+| title        | varchar(250), not null, default("Untitled")       |
+| description  | varchar                                           |
+| color        | varchar(50), not null, default("gray")            |
+| image        | varchar(250), not null, default("default_entity") |
+| type         | enum("character", "asset", "place", "condition")  |
+| subtype      | enum("item", "bond", "deed", "title", "idea", "shop", "skill", "knowledge", "..."), not null | 
+| is_unique    | boolean, not null, default(true)                  |
+| created_at   | datetime, not null, default(datetime.now())       |
+> **NOTE** Consider that subtype can have custom types for user-creator, like "royalty", "officer", "hostile", "dragon-related"
 
 ### tales
 | COLUMN          | CONSTRAINTS                                     |
@@ -123,6 +140,7 @@ manipulating 'entities' like characters and places, and manipulating their
 | color           | varchar(50), not null, default("gray")          |
 | image           | varchar(250), not null, default("default_tale") |
 | first_thread_id | integer                                         |
+| created_at      | datetime, not null, default(datetime.now())     |
 
 ### threads
 | COLUMN      | CONSTRAINTS                                       |
@@ -135,6 +153,7 @@ manipulating 'entities' like characters and places, and manipulating their
 | image       | varchar(250), not null, default("default_thread") |
 | x           | integer, not null, default(0)                     |
 | y           | integer, not null, default(0)                     |
+| created_at  | datetime, not null, default(datetime.now())       |
 
 ### thread_choices
 | COLUMN            | CONSTRAINTS                                       |
@@ -145,16 +164,18 @@ manipulating 'entities' like characters and places, and manipulating their
 | title             | varchar(250), not null                            |
 | color             | varchar(50), not null, default("gray")            |
 | image             | varchar(250), not null, default("default_choice") |
+| created_at        | datetime, not null, default(datetime.now())       |
 > **NOTE** Thread Choice defaults to \`Go to: ${self.choice_thread.title}\`
 
-### effects (parent to asset_effects... place_effects, condition_effects, rank_effects)
-| COLUMN    | CONSTRAINTS                                       |
-|-----------|---------------------------------------------------|
-| id        | SERIAL, PK                                        |
-| thread_id | integer, FK(threads.id)                           |
-| color     | varchar(50), not null, default("gray")            |
-| image     | varchar(250), not null, default("default_thread") |
-| type      | enum("asset", "location", "time", "condition", "rank"), not null, default("asset") |
+### effects (parent to asset_effects... place_effects, condition_effects, meter_effects)
+| COLUMN     | CONSTRAINTS                                       |
+|------------|---------------------------------------------------|
+| id         | SERIAL, PK                                        |
+| thread_id  | integer, FK(threads.id)                           |
+| color      | varchar(50), not null, default("gray")            |
+| image      | varchar(250), not null, default("default_thread") |
+| type       | enum("asset", "location", "time", "condition", "meter"), not null, default("asset") |
+| created_at | datetime, not null, default(datetime.now())       |
 
 ### asset_effects
 | COLUMN    | CONSTRAINTS                                       |
@@ -165,14 +186,15 @@ manipulating 'entities' like characters and places, and manipulating their
 | quantity  | integer, not null, default(1)                     |
 | is_gained | boolean, not null, default(true)                  |
 
-### locks (parent to asset_locks... place_locks, time_locks, attire_locks, condition_locks, rank_locks)
-| COLUMN    | CONSTRAINTS                                       |
-|-----------|---------------------------------------------------|
-| id        | SERIAL, PK                                        |
-| choice_id | integer, FK(thread_choices.id)                    |
-| color     | varchar(50), not null, default("gray")            |
-| image     | varchar(250), not null, default("default_thread") |
-| type      | enum("asset", "location", "time", "attire", "condition", "trial") |
+### locks (parent to asset_locks... place_locks, time_locks, attire_locks, condition_locks, meter_locks)
+| COLUMN     | CONSTRAINTS                                       |
+|------------|---------------------------------------------------|
+| id         | SERIAL, PK                                        |
+| choice_id  | integer, FK(thread_choices.id)                    |
+| color      | varchar(50), not null, default("gray")            |
+| image      | varchar(250), not null, default("default_thread") |
+| type       | enum("asset", "location", "time", "attire", "condition", "trial") |
+| created_at | datetime, not null, default(datetime.now())       |
 
 ### asset_locks
 | COLUMN    | CONSTRAINTS                                            |
@@ -181,29 +203,44 @@ manipulating 'entities' like characters and places, and manipulating their
 | lock_id   | integer, FK(locks.id), not null                        |
 | entity_id | integer, FK(entities.id), not null                     |
 | quantity  | integer, not null, default(1)                          |
-| type      | enum("price", "proof", "prohibited"), default("price") |
+| type      | enum("price", "proof", "prohibited"), not null, default("price") |
 
-### entities (characters, places, assets)
-| COLUMN       | CONSTRAINTS                                       |
-|--------------|---------------------------------------------------|
-| id           | SERIAL, PK                                        |
-| chronicle_id | integer, FK(chronicles.id)                        |
-| title        | varchar(250), not null, default("Untitled")       |
-| description  | varchar                                           |
-| color        | varchar(50), not null, default("gray")            |
-| image        | varchar(250), not null, default("default_entity") |
-| type         | enum("character", "asset", "place")               |
-| subtype      | enum("item", "bond", "deed", "title", "idea", "shop", ), not null | 
-| is_unique    | boolean, not null, default(true)                  |
-> **NOTE** Consider that subtype can have custom types for user-creator, like "royalty", "officer", "hostile", "dragon-related"
+### meters
+| COLUMN    | CONSTRAINTS                        |
+|-----------|------------------------------------|
+| id        | SERIAL, PK                         |
+| entity_id | integer, FK(entities.id), not null |
+| min       | integer, not null, default(0)      |
+| max       | integer, not null, default(20)     |
+| mod       | integer, not null, default(1)      |
+| base      | integer, not null, default(1)      |
+| algorithm | enum("constant", "log", "linear", "loglinear", "polynomial", "exponential", "factorial"), not null, default("constant") |
 
-### player_characters
-| COLUMN       | CONSTRAINTS              |
-|--------------|--------------------------|
-| id           | SERIAL, PK               |
-| user_id      | integer, FK(users.id)    |
-| entity_id    | integer, FK(entities.id) |
+### bearer_assets
+| COLUMN       | CONSTRAINTS                                 |
+|--------------|---------------------------------------------|
+| id           | SERIAL, PK                                  |
+| bearer_id    | integer, FK(entities.id), not null          |
+| asset_id     | integer, FK(entities.id), not null          |
+| total        | integer, not null, default=1                |
+| meter_points | integer                                     |
+| created_at   | datetime, not null, default(datetime.now()) |
 
+### modifiers
+| COLUMN             | CONSTRAINTS                        |
+|--------------------|------------------------------------|
+| id                 | SERIAL, PK                         |
+| modifier_entity_id | integer, FK(entities.id), not null |
+| modified_entity_id | integer, FK(entities.id), not null |
+| mod                | integer, not null, default(1)      |
+
+
+### player_characters (pure join)
+| COLUMN    | CONSTRAINTS              |
+|-----------|--------------------------|
+| id        | SERIAL, PK               |
+| user_id   | integer, FK(users.id)    |
+| entity_id | integer, FK(entities.id) |
 
 ## Routes
 ### Backend Routes
@@ -252,28 +289,24 @@ manipulating 'entities' like characters and places, and manipulating their
 | POST   | `/<int:cid>/tales/create`                 | Create a new tale belonging to chronicle, return tale dict |
 | POST   | `/<int:cid>/entities/create`              | Create a new entity belonging to a chronicle, return entity dict |
 | POST   | `/<int:cid>/conditions/create`            | Create a new condition belonging to chronicle, return condition dict |
-| POST   | `/<int:cid>/ranks/create`                 | Create a new rank belonging to chronicle, return rank dict |
+| POST   | `/<int:cid>/meters/create`                 | Create a new meter belonging to chronicle, return meter dict |
 > **NOTE** On create, auto-generate first tale and thread too?
-> **NOTE** Perhaps have conditions/ranks categorized by entity type?
+> **NOTE** Perhaps have conditions/meters categorized by entity type?
 > **NOTE** Chronicles can be public/private, active/archived/complete, playable to all or just account-holders?
 > **NOTE** order-by: newest, updated, discovered, complete, popular, trending, followed, alphabetical, wordcount
 > **NOTE** Can fragments/queries/something be used for lists, like tags?
 
 #### `/entities`
-| METHOD | ROUTE                    | EFFECT |
-|--------|-------------------------|--------|
-| PATCH  | `/<int:eid>/edit`       | Edit entity and entity-owned details, return dicts |
-| DELETE | `/<int:eid>/delete`     | Delete entity and its dependents |
-| POST   | `/<int:eid>/assets`     | ... |
-| POST   | `/<int:eid>/conditions` | ... |
-| POST   | `/<int:eid>/ranks`      | ... |
-| GET    | `/<int:eid>/assets`     | ... |
-| GET    | `/<int:eid>/conditions` | ... |
-| GET    | `/<int:eid>/ranks`      | ... |
+| METHOD | ROUTE                      | EFFECT |
+|--------|----------------------------|--------|
+| PATCH  | `/<int:eid>/edit`          | Edit entity and entity-owned details, return dicts |
+| DELETE | `/<int:eid>/delete`        | Delete entity and its dependents |
+| POST   | `/<int:eid>/assets/create` | Create a new bearer asset associated to the entity. |
+| GET    | `/<int:eid>`               | Get all details for an entity |
 > **NOTE** Not sure on details yet. Essentially, CRUD on entity-owned properties
 
 #### `/tales`
-| METHOD | ROUTE                        | EFFECT |
+| METHOD | ROUTE                       | EFFECT |
 |--------|-----------------------------|--------|
 | GET    | `/<int:tid>`                | Return tale and all its dependents |
 | PATCH  | `/<int:tid>/edit`           | Edit tale details              |
@@ -356,7 +389,7 @@ manipulating 'entities' like characters and places, and manipulating their
 | GET    | `/:cid/places`                 |  |
 | GET    | `/:cid/assets`                 |  |
 | GET    | `/:cid/conditions`             |  |
-| GET    | `/:cid/ranks`                  |  |
+| GET    | `/:cid/meters`                  |  |
 | GET    | `/:cid/info`                   |  |
 | GET    | `/:cid/players`                |  |
 
@@ -364,27 +397,27 @@ manipulating 'entities' like characters and places, and manipulating their
 
 ## Wireframes, Templates, Components, Styling
 ### Theme & Style Ideas (scratchpad)
-Clean, minimal, expressionless - allow creators to impose their flavor to the content
-1-2 color icons, svgs, outlines, etc.
-Generic pre-made assets to choose from for all options, convenience-focused
-Simple theme options - think love nikki frames
-Background can be customized to change based on LOCATION, TIME, CHRONICLE/TALE/THREAD - layer logic to prioritize?
-Big-stretch-idea-only: Dialogue, character portraits and speech bubble presentation
+* Clean, minimal, expressionless - allow creators to impose their flavor to the content
+* 1-2 color icons, svgs, outlines, etc.
+* Generic pre-made assets to choose from for all options, convenience-focused
+* Simple theme options - think love nikki frames
+* Background can be customized to change based on LOCATION, TIME, CHRONICLE/TALE/THREAD - layer logic to prioritize?
+* Big-stretch-idea-only: Dialogue, character portraits and speech bubble presentation
 
 ### Wireframe Thumbnails
-Splash - signup/login, elevator pitch, random/popular gallery ribbon/carousel, full explanation, tag-based gallery board
-Gallery - Public gallery of playable chronicles, various sorting algorithms/spotlights, explanation of play-rules and anon/account holder
-Chronicle Splash - Chronicle's public page for players - summary, join option, announcements, tales/etc./full content after join, comments
-Tale Splash - Tale's public page for players - summary, start option, locks if applicable
-Play Mode - Dynamic page content and effects based on player's game state
-Library - Gallery of player's joined chronicles
-WorldWeaver - CRUD for Chronicles, navigation to Chronicle 'creator' pages
-Chronicle Creator - link for public page, CRUD for Chronicle elements, gallery of contents, separated by tabs/accordians, ideally sortable
-TaleSpinner - Gallery and CRUD for a chronicle's tales navigation to individual tale charts
-TaleSpinner Web - Node chart plus text list and forms for a single tale
-Forms - Generic, AddToList, Edit list items, 
-Contact
-Help
+* Splash - signup/login, elevator pitch, random/popular gallery ribbon/carousel, full explanation, tag-based gallery board
+* Gallery - Public gallery of playable chronicles, various sorting algorithms/spotlights, explanation of play-rules and anon/account holder
+* Chronicle Splash - Chronicle's public page for players - summary, join option, announcements, tales/etc./full content after join, comments
+* Tale Splash - Tale's public page for players - summary, start option, locks if applicable
+* Play Mode - Dynamic page content and effects based on player's game state
+* Library - Gallery of player's joined chronicles
+* WorldWeaver - CRUD for Chronicles, navigation to Chronicle 'creator' pages
+* Chronicle Creator - link for public page, CRUD for Chronicle elements, gallery of contents, separated by tabs/accordians, ideally sortable
+* TaleSpinner - Gallery and CRUD for a chronicle's tales navigation to individual tale charts
+* TaleSpinner Web - Node chart plus text list and forms for a single tale
+* Forms - Generic, AddToList, Edit list items, 
+* Contact
+* Help
 
 ## User Story
 Splash explains concept for players and creators, geared toward creators.
@@ -429,8 +462,8 @@ Ideal: A pre-made sample for creators to learn from
 * characters: fairy, player
 * assets: candy, red key
 * conditions: angry, sad, happy
-* ranks: affection
-* fairy: place joined room, asset ball, condition angry, rank affection 50
+* meters: affection
+* fairy: place joined room, asset ball, condition angry, meter affection 50
 * red room: asset 5 candies
 * blue room: asset 1 red key
 

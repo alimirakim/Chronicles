@@ -64,7 +64,7 @@ def upgrade():
     sa.ForeignKeyConstraint(['entity_id'], ['entities.id'], ondelete='cascade'),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('ranks',
+    op.create_table('meters',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('chronicle_id', sa.Integer(), nullable=False),
     sa.Column('title', sa.String(length=50), nullable=False),
@@ -110,13 +110,13 @@ def upgrade():
     sa.ForeignKeyConstraint(['entity_id'], ['entities.id'], ondelete='cascade'),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('entity_ranks',
+    op.create_table('entity_meters',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('entity_id', sa.Integer(), nullable=False),
-    sa.Column('rank_id', sa.Integer(), nullable=False),
+    sa.Column('meter_id', sa.Integer(), nullable=False),
     sa.Column('progress', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['entity_id'], ['entities.id'], ondelete='cascade'),
-    sa.ForeignKeyConstraint(['rank_id'], ['ranks.id'], ondelete='cascade'),
+    sa.ForeignKeyConstraint(['meter_id'], ['meters.id'], ondelete='cascade'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('threads',
@@ -201,14 +201,14 @@ def downgrade():
     op.drop_table('thread_choices')
     op.drop_table('threads')
     op.drop_table('entity_assets')
-    op.drop_table('entity_ranks')
+    op.drop_table('entity_meters')
     op.drop_table('entity_conditions')
     op.drop_table('characters')
     op.drop_table('assets')
     op.drop_table('tales')
     op.drop_table('places')
     op.drop_table('entities')
-    op.drop_table('ranks')
+    op.drop_table('meters')
     op.drop_table('conditions')
     op.drop_table('chronicles')
     op.drop_table('users')

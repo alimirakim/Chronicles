@@ -1,4 +1,5 @@
 from .db import db
+from datetime import datetime
 
 
 class Chronicle(db.Model):
@@ -10,12 +11,11 @@ class Chronicle(db.Model):
     description = db.Column(db.String)
     color = db.Column(db.String(50), default="gray")
     image = db.Column(db.String(250), default="default_chronicle")
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
     
     user = db.relationship("User", back_populates="chronicles")
     entities = db.relationship("Entity", back_populates="chronicle", cascade="all,delete", passive_deletes=True)
     tales = db.relationship("Tale", back_populates="chronicle", cascade="all,delete", passive_deletes=True)
-    conditions = db.relationship("Condition", back_populates="chronicle", cascade="all,delete", passive_deletes=True)
-    ranks = db.relationship("Rank", back_populates="chronicle", cascade="all,delete", passive_deletes=True)
     
     def to_dict(self):
         """Convert to jsonifyable dictionary."""
@@ -29,10 +29,10 @@ class Chronicle(db.Model):
             "character_eids": [entity.id for entity in self.entities if entity.type == "character"],
             "place_eids": [entity.id for entity in self.entities if entity.type == "place"],
             "asset_eids": [entity.id for entity in self.entities if entity.type == "asset"],
-            "condition_ids": [cond.id for cond in self.conditions],
-            "rank_ids": [rank.id for rank in self.ranks],
+            "condition_eids": [cond.id for cond in self.entities if entity.type == "condition"],
             "color": self.color,
             "image": self.image,
+            "created_at": self.created_at,
         }
       
 
@@ -40,5 +40,5 @@ class Chronicle(db.Model):
 
 
 # Tag
-# Rank
+# Meter
 # Status

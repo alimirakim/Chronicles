@@ -50,6 +50,11 @@ def seed_threads():
         tale_id=1,
         title="Lecture Sweet Fairy About a Healthy Diet",
         description="You give the little fairy a stern talking-to about eating its vegetables to grow up healthy and strong. It seems very unhappy with you, and lapses into silence, throwing its ball with even more gusto."),
+    Thread( # 10
+        tale_id=1,
+        title="Look around",
+        description="You look around. Nice.",
+        is_sequitur=False,),
     ]
     # thread10 = Thread(
     #     tale_id=1,

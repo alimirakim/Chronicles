@@ -1,4 +1,5 @@
 from .db import db
+from datetime import datetime
 
 
 class Tale(db.Model):
@@ -11,6 +12,7 @@ class Tale(db.Model):
     first_thread_id = db.Column(db.Integer)
     color = db.Column(db.String(50), default="gray")
     image = db.Column(db.String(250), default="default_tale")
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
     
     chronicle = db.relationship("Chronicle", back_populates="tales")
     threads = db.relationship("Thread", back_populates="tale", cascade="all, delete", passive_deletes=True)
@@ -27,4 +29,5 @@ class Tale(db.Model):
             "thread_ids": [thread.id for thread in self.threads],
             "color": self.color,
             "image": self.image,
+            "created_at": self.created_at,
         }

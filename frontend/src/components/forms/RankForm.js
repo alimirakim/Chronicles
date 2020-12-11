@@ -1,16 +1,16 @@
 import React from 'react'
 import CreationFormWrapper from './CreationFormWrapper'
-import {addRank, updateRank} from '../../actions/rankActions'
+import {addMeter, updateMeter} from '../../actions/meterActions'
 
-export default function RankForm({ id, edit }) {
+export default function MeterForm({ id, edit }) {
   const resetUniqueContent = () => console.log("No unique content to reset")
   
   return (<>
       <CreationFormWrapper
         edit={edit}
-        path={edit ? `/api/ranks/${id}/edit` : `/api/chronicles/${id}/create` }
-        creationType="Rank"
-        actionCreator={edit ? updateRank : addRank}
+        path={edit ? `/api/meters/${id}/edit` : `/api/chronicles/${id}/create` }
+        creationType="Meter"
+        actionCreator={edit ? updateMeter : addMeter}
         uniqueContent={{}}
         resetUniqueContent={resetUniqueContent}
         uniqueForm={"span"}

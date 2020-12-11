@@ -12,13 +12,18 @@ auth_routes = Blueprint('auth', __name__)
 def authenticate():
     """Authenticates a user."""
     if current_user.is_authenticated:
-        chronicles, tales, threads, choices = get_and_normalize_all_data_for_user(current_user.id)
+        chronicles, tales, threads, choices, characters, places, assets, conditions = get_and_normalize_all_data_for_user(current_user.id)
         return jsonify(
             user=current_user.to_dict(), 
             chronicles=chronicles, 
             tales=tales, 
             threads=threads, 
-            choices=choices,)
+            choices=choices,
+            characters=characters,
+            places=places,
+            assets=assets,
+            conditions=conditions,
+            )
     return {'errors': ['Unauthorized']}, 401
 
 
@@ -36,13 +41,17 @@ def login():
         user = User.query.filter(User.email == form.data['email']).first()
         login_user(user)
         
-        chronicles, tales, threads, choices = get_and_normalize_all_data_for_user(user.id)
+        chronicles, tales, threads, choices, characters, places, assets, conditions = get_and_normalize_all_data_for_user(current_user.id)
         return jsonify(
             user=current_user.to_dict(), 
             chronicles=chronicles, 
             tales=tales, 
             threads=threads, 
-            choices=choices,)
+            choices=choices,
+            characters=characters,
+            places=places,
+            assets=assets,
+            conditions=conditions,)
     return {'errors': validation_errors_to_messages(form.errors)}, 401
 
 
@@ -60,6 +69,7 @@ def sign_up():
     form['csrf_token'].data = request.cookies['csrf_token']
 
     if form.validate_on_submit():
+        # TODO Idea: Populate an entire sample demo for new users?
         user = User(
             username=form.data['username'],
             email=form.data['email'],

@@ -18,7 +18,7 @@ export default function Home({authenticated, setAuthenticated}) {
     assets: state.assets,
     places: state.places,
     // conditions: state.conditions,
-    // ranks: state.ranks,
+    // meters: state.meters,
   }))
 
   // Select a user's first chronicle and its tales/content upon initialization

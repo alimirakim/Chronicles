@@ -1,8 +1,8 @@
 from flask import Blueprint, jsonify, request
 from flask_login import current_user
-from app.models import db, Chronicle, Tale, Thread, ThreadChoice, Entity, Character, Place, Asset, Condition, Rank
+from app.models import db, Chronicle, Tale, Thread, ThreadChoice, Entity, Condition, Meter
 from app.utils import validation_errors_to_messages
-from app.forms import ChronicleForm, TaleForm, CharacterForm, PlaceForm, AssetForm, ConditionForm, RankForm
+from app.forms import ChronicleForm, TaleForm, EntityForm, ConditionForm, MeterForm
 
 chronicle_routes = Blueprint("chronicles", __name__)
 
@@ -18,8 +18,8 @@ def create_chronicle():
             user_id=current_user.id,
             title=form["title"].data,
             description=form["description"].data
-            # color=form["color"].data
-            # image=form["image"].data
+            color=form["color"].data
+            image=form["image"].data
             )
         tale = Tale(
             chronicle=chronicle,
@@ -51,8 +51,8 @@ def edit_chronicle(cid):
         chronicle = Chronicle.query.get(cid)
         chronicle.title = form["title"].data
         chronicle.description = form["description"].data
-        # chronicle.color = form["color"].data
-        # chronicle.image = form["image"].data
+        chronicle.color = form["color"].data
+        chronicle.image = form["image"].data
         db.session.commit()
         return chronicle.to_dict()
     else:
@@ -61,14 +61,14 @@ def edit_chronicle(cid):
 
 @chronicle_routes.route("/<int:cid>/delete", methods=["DELETE"])
 def delete_chronicle(cid):
-    """Delete a chronicle and all its dependents like characters, places, assets, tales, threads, etc."""
+    """Delete a chronicle and all its dependents like entities, tales, etc."""
     chronicle = Chronicle.query.get(cid)
     db.session.delete(chronicle)
     db.session.commit()
     return "Chronicle successfully deleted! ;B"
 
 
-# Creation routes for Tales, Characters, Places, Assets, Conditions, Ranks...
+# Creation routes for Tales, Characters, Places, Assets, Conditions, Meters...
 @chronicle_routes.route("/<int:cid>/tales/create", methods=["POST"])
 def create_tale(cid):
     """Create a new tale that belongs to a chronicle"""
@@ -80,8 +80,8 @@ def create_tale(cid):
             chronicle_id=cid,
             title=form["title"].data,
             description=form["description"].data
-            # color=form["color"].data
-            # image=form["image"].data
+            color=form["color"].data
+            image=form["image"].data
             )
         db.session.add(tale)
         db.session.commit()
@@ -90,127 +90,50 @@ def create_tale(cid):
         return {"errors": validation_errors_to_messages(form.errors)}, 401
 
 
-# Create character entity
-@chronicle_routes.route("/<int:cid>/characters/create", methods=["POST"])
-def create_character(cid):
-    """Create a new character that belongs to a chronicle"""
-    form = CharacterForm()
+# Create entity
+@chronicle_routes.route("/<int:cid>/<entity>/create", methods=["POST"])
+def create_entity(cid, entity):
+    """Create a new entity that belongs to a chronicle"""
+    form = EntityForm()
     form["csrf_token"].data = request.cookies["csrf_token"]
     
     if form.validate_on_submit():
         entity = Entity(
             chronicle_id=cid,
-            type="character",
+            type=entity,
+            subtype=form["subtype"].data
             title=form["title"].data,
             description=form["description"].data,
-            # color=form["color"].data,
-            # image=form["image"].data,
+            is_unique=form["is_unique"].data,
+            color=form["color"].data,
+            image=form["image"].data,
             )
-        character = Character(
-            entity=entity,
-            user=current_user,
-        )
-        # TODO Option to add character assets, ranks, conditions?
-        db.session.add(character)
+
+        # TODO Option to add entity assets, meters, conditions?
+        db.session.add(entity)
         db.session.commit()
-        return character.to_dict()
+        return entity.to_dict()
     else:
         return {"errors": validation_errors_to_messages(form.errors)}, 401
 
 
-# Create place entity
-@chronicle_routes.route("/<int:cid>/places/create", methods=["POST"])
-def create_place(cid):
-    """Create a new place that belongs to a chronicle"""
-    form = PlaceForm()
-    form["csrf_token"].data = request.cookies["csrf_token"]
-    
-    if form.validate_on_submit():
-        entity = Entity(
-            chronicle_id=cid,
-            type="place",
-            title=form["title"].data,
-            description=form["description"].data,
-            # color=form["color"].data,
-            # image=form["image"].data,
-            )
-        place = Place(
-            entity=entity,
-        )
-        db.session.add(place)
-        db.session.commit()
-        return place.to_dict()
-    else:
-        return {"errors": validation_errors_to_messages(form.errors)}, 401
+# Create a type of progressable meter, like 'levels' or 'skills'
+# @chronicle_routes.route("/<int:cid>/meters/create", methods=["POST"])
+# def create_meter(cid):
+#     """Create a new meter that belongs to a chronicle"""
+#     form = MeterForm()
+#     form["csrf_token"].data = request.cookies["csrf_token"]
 
-
-# Create asset entity
-@chronicle_routes.route("/<int:cid>/assets/create", methods=["POST"])
-def create_asset(cid):
-    """Create a new asset entity that belongs to a chronicle"""
-    form = AssetForm()
-    form["csrf_token"].data = request.cookies["csrf_token"]
-    
-    if form.validate_on_submit():
-        entity = Entity(
-            chronicle_id=cid,
-            type="asset",
-            title=form["title"].data,
-            description=form["description"].data,
-            # color=form["color"].data,
-            # image=form["image"].data,
-            )
-        asset = Asset(
-            entity=entity,
-            # type=form["type"].data,
-            # is_unique=form["is_unique"].data,
-        )
-        db.session.add(asset)
-        db.session.commit()
-        return asset.to_dict()
-    else:
-        return {"errors": validation_errors_to_messages(form.errors)}, 401
-
-
-# Create a type of boolean-like, optionally time-limited condition
-@chronicle_routes.route("/<int:cid>/conditions/create", methods=["POST"])
-def create_condition(cid):
-    """Create a new condition that belongs to a chronicle"""
-    form = ConditionForm()
-    form["csrf_token"].data = request.cookies["csrf_token"]
-    
-    if form.validate_on_submit():
-        condition = Condition(
-            chronicle_id=cid,
-            title=form["title"].data,
-            description=form["description"].data,
-            # color=form["color"].data,
-            # image=form["image"].data,
-            )
-        db.session.add(condition)
-        db.session.commit()
-        return condition.to_dict()
-    else:
-        return {"errors": validation_errors_to_messages(form.errors)}, 401
-
-
-# Create a type of progressable rank, like 'levels' or 'skills'
-@chronicle_routes.route("/<int:cid>/ranks/create", methods=["POST"])
-def create_rank(cid):
-    """Create a new rank that belongs to a chronicle"""
-    form = RankForm()
-    form["csrf_token"].data = request.cookies["csrf_token"]
-    
-    if form.validate_on_submit():
-        rank = Rank(
-            chronicle_id=cid,
-            title=form["title"].data,
-            description=form["description"].data,
-            # color=form["color"].data,
-            # image=form["image"].data,
-            )
-        db.session.add(rank)
-        db.session.commit()
-        return rank.to_dict()
-    else:
-        return {"errors": validation_errors_to_messages(form.errors)}, 401
+#     if form.validate_on_submit():
+#         meter = Meter(
+#             chronicle_id=cid,
+#             title=form["title"].data,
+#             description=form["description"].data,
+#             color=form["color"].data,
+#             image=form["image"].data,
+#             )
+#         db.session.add(meter)
+#         db.session.commit()
+#         return meter.to_dict()
+#     else:
+#         return {"errors": validation_errors_to_messages(form.errors)}, 401

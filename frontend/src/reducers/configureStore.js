@@ -7,7 +7,7 @@ import choicesReducer from './choicesReducer'
 import chroniclesReducer from './chroniclesReducer'
 import conditionsReducer from './conditionsReducer'
 import placesReducer from './placesReducer'
-import ranksReducer from './ranksReducer'
+import metersReducer from './metersReducer'
 import selectionsReducer from './selectionsReducer'
 import talesReducer from './talesReducer'
 import threadsReducer from './threadsReducer'
@@ -25,7 +25,7 @@ const rootReducer = combineReducers({
     conditions: conditionsReducer,
     errors: errorsReducer,
     places: placesReducer,
-    ranks: ranksReducer,
+    meters: metersReducer,
     selections: selectionsReducer,
     tales: talesReducer,
     threads: threadsReducer,

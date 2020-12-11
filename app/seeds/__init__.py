@@ -3,7 +3,7 @@ from .users import seed_users, undo_users
 from .chronicles import seed_chronicles, undo_chronicles
 from .tales import seed_tales, undo_tales
 from .threads import seed_threads, undo_threads
-from .assets import seed_assets, undo_assets
+from .entities import seed_assets, undo_entities
 from .effects import seed_effects, undo_effects
 from .locks import seed_locks, undo_locks
 # from .characters import seed_characters, undo_characters
@@ -21,7 +21,7 @@ def seed():
     seed_chronicles()
     seed_tales()
     seed_threads()
-    seed_assets()
+    seed_entities()
     seed_effects()
     seed_locks()
 
@@ -32,7 +32,7 @@ def undo():
     """Add undo functions here"""
     undo_locks()
     undo_effects()
-    undo_assets()
+    undo_entities()
     undo_threads()
     undo_tales()
     undo_chronicles()

@@ -57,7 +57,7 @@ def downgrade():
     # op.create_foreign_key('thread_choices_choice_thread_id_fkey', 'thread_choices', 'threads', ['choice_thread_id'], ['id'])
     # op.drop_constraint(None, 'tales', type_='foreignkey')
     # op.create_foreign_key('tales_chronicle_id_fkey', 'tales', 'chronicles', ['chronicle_id'], ['id'])
-    # op.alter_column('ranks', 'description',
+    # op.alter_column('meters', 'description',
     #            existing_type=sa.VARCHAR(),
     #            nullable=False)
     # op.drop_constraint(None, 'places', type_='foreignkey')

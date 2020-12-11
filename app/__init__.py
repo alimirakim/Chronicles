@@ -6,15 +6,12 @@ from flask_wtf.csrf import CSRFProtect, generate_csrf
 from flask_login import LoginManager
 
 from .models import db, User
-from .api.asset_routes import asset_routes
 from .api.auth_routes import auth_routes
-from .api.character_routes import character_routes
 from .api.chronicle_routes import chronicle_routes
-from .api.condition_routes import condition_routes
 from .api.lock_routes import lock_routes
 from .api.effect_routes import effect_routes
-from .api.place_routes import place_routes
-from .api.rank_routes import rank_routes
+from .api.entity_routes import entity_routes
+from .api.meter_routes import meter_routes
 from .api.tale_routes import tale_routes
 from .api.thread_routes import thread_routes
 from .api.user_routes import user_routes
@@ -39,15 +36,12 @@ def load_user(id):
 app.cli.add_command(seed_commands)
 
 app.config.from_object(Config)
-app.register_blueprint(asset_routes, url_prefix="/api/assets")
 app.register_blueprint(auth_routes, url_prefix='/api/auth')
-app.register_blueprint(character_routes, url_prefix="/api/characters")
 app.register_blueprint(chronicle_routes, url_prefix="/api/chronicles")
-app.register_blueprint(condition_routes, url_prefix="/api/conditions")
 app.register_blueprint(effect_routes, url_prefix="/api/effects")
+app.register_blueprint(entity_routes, url_prefix="/api/entities")
 app.register_blueprint(lock_routes, url_prefix="/api/locks")
-app.register_blueprint(place_routes, url_prefix="/api/places")
-app.register_blueprint(rank_routes, url_prefix="/api/ranks")
+app.register_blueprint(meter_routes, url_prefix="/api/meters")
 app.register_blueprint(tale_routes, url_prefix="/api/tales")
 app.register_blueprint(thread_routes, url_prefix="/api/threads")
 app.register_blueprint(user_routes, url_prefix='/api/users')

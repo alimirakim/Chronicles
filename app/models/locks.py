@@ -1,4 +1,5 @@
 from .db import db
+from datetime import datetime
 
 # location, trial, status, time, attire
 
@@ -11,6 +12,7 @@ class Lock(db.Model):
     choice_id = db.Column(db.Integer, db.ForeignKey("thread_choices.id"), nullable=False)
     color = db.Column(db.String(50), default="gray")
     image = db.Column(db.String(250), default="default_lock")
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
     
     choice = db.relationship("ThreadChoice", back_populates="locks")
     asset_lock = db.relationship("AssetLock", back_populates="lock")
@@ -22,6 +24,7 @@ class Lock(db.Model):
             "choice_id": self.choice_id,
             "color": self.color,
             "image": self.image,
+            "created_at": self.created_at,
         }
         
     # TODO Consider making custom dicts per lock type?
@@ -32,13 +35,12 @@ class AssetLock(db.Model):
     __tablename__ = "asset_locks"
     id = db.Column(db.Integer, primary_key=True)
     lock_id = db.Column(db.Integer, db.ForeignKey("locks.id"), nullable=False)
-    asset_id = db.Column(db.Integer, db.ForeignKey("assets.id"), nullable=False)
+    asset_id = db.Column(db.Integer, db.ForeignKey("entities.id"), nullable=False)
     quantity = db.Column(db.Integer, nullable=False, default=1)
     type = db.Column(db.String, nullable=False, default="price") #proof, prohibited
     
-    
     lock = db.relationship("Lock", back_populates="asset_lock")
-    asset = db.relationship("Asset", back_populates="locks")
+    asset = db.relationship("Entity", back_populates="asset_locks")
     
     def to_dict(self):
         """Convert into dictionary."""

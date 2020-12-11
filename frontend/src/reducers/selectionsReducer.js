@@ -18,7 +18,7 @@ const initialState = {
   // place: "",
   // asset: "",
   // condition: "",
-  // rank: "",
+  // meter: "",
 }
 
 export default function selectionsReducer(state = initialState, action) {
