@@ -81,15 +81,16 @@ manipulating 'entities' like characters and places, and manipulating their
 ## Models & Schema
 * users
 * chronicles
+* entities (characters, assets, places, conditions, ranks)
+* bearer_assets
+* meters (knowledge, skills, abilities, levels, size, etc.)
+* entity_meters
+* modifiers 
 * tales
 * threads
 * thread_choices 
 * effects 
 * locks 
-* entities (characters, assets, places, conditions, ranks)
-* bearer_assets
-* meters
-* modifiers
 * player_characters (join)
 <!-- * tags -->
 
@@ -115,7 +116,7 @@ manipulating 'entities' like characters and places, and manipulating their
 | image       | varchar(250), not null, default("default_chronicle") |
 | created_at  | datetime, not null, default(datetime.now())          |
 
-### entities (characters, places, assets)
+### entities (characters, places, assets, conditions)
 | COLUMN       | CONSTRAINTS                                       |
 |--------------|---------------------------------------------------|
 | id           | SERIAL, PK                                        |
@@ -206,15 +207,21 @@ manipulating 'entities' like characters and places, and manipulating their
 | type      | enum("price", "proof", "prohibited"), not null, default("price") |
 
 ### meters
-| COLUMN    | CONSTRAINTS                        |
-|-----------|------------------------------------|
-| id        | SERIAL, PK                         |
-| entity_id | integer, FK(entities.id), not null |
-| min       | integer, not null, default(0)      |
-| max       | integer, not null, default(20)     |
-| mod       | integer, not null, default(1)      |
-| base      | integer, not null, default(1)      |
-| algorithm | enum("constant", "log", "linear", "loglinear", "polynomial", "exponential", "factorial"), not null, default("constant") |
+| COLUMN       | CONSTRAINTS                                       |
+|--------------|---------------------------------------------------|
+| id           | SERIAL, PK                                        |
+| chronicle_id | integer, FK(chronicles.id)                        |
+| title        | varchar(250), not null, default("Untitled")       |
+| description  | varchar                                           |
+| color        | varchar(50), not null, default("gray")            |
+| image        | varchar(250), not null, default("default_entity") |
+| type         | varchar(50), not null, default=("level")          |
+| min          | integer, not null, default(0)                     |
+| max          | integer, not null, default(20)                    |
+| mod          | integer, not null, default(1)                     |
+| base         | integer, not null, default(1)                     |
+| algorithm    | enum("constant", "log", "linear", "loglinear", "polynomial", "exponential", "factorial", "random"), not null, default("constant") |
+| created_at   | datetime, not null, default(datetime.now())       |
 
 ### bearer_assets
 | COLUMN       | CONSTRAINTS                                 |
@@ -222,18 +229,26 @@ manipulating 'entities' like characters and places, and manipulating their
 | id           | SERIAL, PK                                  |
 | bearer_id    | integer, FK(entities.id), not null          |
 | asset_id     | integer, FK(entities.id), not null          |
-| total        | integer, not null, default=1                |
-| meter_points | integer                                     |
+| quantity     | integer, not null, default=1                |
 | created_at   | datetime, not null, default(datetime.now()) |
 
-### modifiers
-| COLUMN             | CONSTRAINTS                        |
-|--------------------|------------------------------------|
-| id                 | SERIAL, PK                         |
-| modifier_entity_id | integer, FK(entities.id), not null |
-| modified_entity_id | integer, FK(entities.id), not null |
-| mod                | integer, not null, default(1)      |
+### entity_meters
+| COLUMN    | CONSTRAINTS                        |
+|-----------|------------------------------------|
+| id        | SERIAL, PK                         |
+| entity_id | integer, FK(entities.id), not null |
+| meter_id  | integer, FK(meters.id), not null   |
+| progress  | integer, not null, default(0)      |
+| total     | integer, not null, default(0)      |
 
+### modifiers
+| COLUMN    | CONSTRAINTS                        |
+|-----------|------------------------------------|
+| id        | SERIAL, PK                         |
+| entity_id | integer, FK(entities.id), not null |
+| meter_id  | integer, FK(meters.id), not null   |
+| mod       | integer, not null, default(1)      |
+> **NOTE** Modifier will be treated as percentage if float number.
 
 ### player_characters (pure join)
 | COLUMN    | CONSTRAINTS              |
@@ -241,6 +256,8 @@ manipulating 'entities' like characters and places, and manipulating their
 | id        | SERIAL, PK               |
 | user_id   | integer, FK(users.id)    |
 | entity_id | integer, FK(entities.id) |
+
+
 
 ## Routes
 ### Backend Routes

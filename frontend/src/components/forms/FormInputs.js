@@ -2,22 +2,22 @@ import React, { useState } from 'react'
 
 
 export function TextInput({ label, value, setValue }) {
-  const handleChange = (setFieldValue) => (e) => setFieldValue(e.target.value)
+  const handleChange = (e) => setValue(e.target.value)
 
   return (
     <label>{label}
-      <input type="text" onChange={handleChange(setValue)} value={value} />
+      <input type="text" onChange={handleChange} value={value} />
     </label>
   )
 }
 
 
 export function TextAreaInput({ label, value, setValue }) {
-  const handleChange = (setFieldValue) => (e) => setFieldValue(e.target.value)
+  const handleChange = (e) => setValue(e.target.value)
 
   return (
     <label>{label}
-      <textarea onChange={handleChange(setValue)} value={value} />
+      <textarea onChange={handleChange} value={value} />
     </label>
   )
 }

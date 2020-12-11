@@ -1,6 +1,6 @@
 from wtforms.validators import ValidationError
 from pprint import pprint
-from app.models import db, Chronicle, Tale, Thread, ThreadChoice
+from app.models import db, Chronicle, Tale, Thread, ThreadChoice, Entity
 
 
 def validation_errors_to_messages(validation_errors):
@@ -27,13 +27,15 @@ def get_and_normalize_all_data_for_user(uid):
     tales, threads, choices, characters, etc., then normalize into dictionaries.
     """
     # Query all a user's chronicles
-    chronicles = Chronicle.query.filter(Chronicle.user_id == uid).options(db \
-        .joinedload(Chronicle.tales) \
+    chronicles = Chronicle.query.filter(Chronicle.user_id == uid).options( \
+        db.joinedload(Chronicle.tales) \
         .joinedload(Tale.threads) \
         .joinedload(Thread.effects) \
+        , db.joinedload(Chronicle.tales) \
+        .joinedload(Tale.threads) \
         .joinedload(Thread.choices) \
-        .joinedload(Choice.locks) \
-        , joinedload(Chronicle.entities) \
+        .joinedload(ThreadChoice.locks) \
+        , db.joinedload(Chronicle.entities) \
         .joinedload(Entity.assets)) \
         .all()
 
@@ -161,6 +163,9 @@ def createLocks(locks_data, thread):
     
 
 color_choices = [
+    "gray",
+    "black",
+    "white",
     "red", 
     "orange", 
     "yellow", 
@@ -168,9 +173,6 @@ color_choices = [
     "blue", 
     "purple", 
     "pink", 
-    "black", 
-    "gray", 
-    "white", 
     "brown"
 ]
 image_choices = [
@@ -179,6 +181,7 @@ image_choices = [
     "default_chronicle",
     "default_entity",
     "default_asset",
+    "default_condition",
     "default_meter",
     "default_tale",
     "default_thread",

@@ -1,13 +1,11 @@
 import React, { useState } from "react";
-import {useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { Redirect } from "react-router-dom";
 import { login } from "../../services/auth";
-import {getChronicles} from '../../actions/chronicleActions'
-import {getTales} from '../../actions/taleActions'
-import {getThreads} from '../../actions/threadActions'
+import { getCreations } from '../../actions/chronicleActions'
 import ErrorMessages from '../ErrorMessages'
 
-const LoginForm = ({ authenticated, setAuthenticated }) => {
+export default function LoginForm({ authenticated, setAuthenticated }) {
   const dispatch = useDispatch()
   const [errors, setErrors] = useState([]);
   const [email, setEmail] = useState("demo@aa.io");
@@ -18,10 +16,9 @@ const LoginForm = ({ authenticated, setAuthenticated }) => {
     const content = await login(email, password);
     if (!content.errors) {
       setAuthenticated(true)
-      dispatch(getChronicles(content.chronicles))
-      dispatch(getTales(content.tales))
-      dispatch(getThreads(content.threads))
-    } else { 
+      // TODO Refactor this into one dispatch!
+      dispatch(getCreations(content))
+    } else {
       setErrors(content.errors);
     }
   };
@@ -29,11 +26,10 @@ const LoginForm = ({ authenticated, setAuthenticated }) => {
   const updateEmail = (e) => setEmail(e.target.value)
   const updatePassword = (e) => setPassword(e.target.value)
 
-  if (authenticated) return <Redirect to="/" /> 
+  if (authenticated) return <Redirect to="/" />
 
-
-  
-  return (
+  return (<>
+    <h2>Login</h2>
     <form onSubmit={onLogin}>
       <ErrorMessages errors={errors} />
       <div>
@@ -58,7 +54,5 @@ const LoginForm = ({ authenticated, setAuthenticated }) => {
         <button type="submit">Login</button>
       </div>
     </form>
-  );
-};
-
-export default LoginForm;
+  </>)
+}

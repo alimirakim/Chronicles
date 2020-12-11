@@ -4,18 +4,21 @@ import {
   UPDATE_EFFECT,
   DELETE_EFFECT,
 } from '../actions/effectActions'
-import {
-  ADD_THREAD,
-  UPDATE_THREAD,
-  DELETE_THREAD
-} from '../actions/threadActions'
-import { DELETE_TALE } from '../actions/taleActions'
-import { DELETE_CHRONICLE } from '../actions/chronicleActions'
+// import {
+//   ADD_THREAD,
+//   UPDATE_THREAD,
+//   DELETE_THREAD
+// } from '../actions/threadActions'
+// import { DELETE_TALE } from '../actions/taleActions'
+// import { GET_CREATIONS, DELETE_CHRONICLE } from '../actions/chronicleActions'
 
 export default function effectsReducer(state = {}, action) {
   let newState = { ...state }
   switch (action.type) {
 
+    // case GET_CREATIONS:
+      // return action.content.effects
+    
     case GET_EFFECTS:
       return action.effects
     case ADD_EFFECT:

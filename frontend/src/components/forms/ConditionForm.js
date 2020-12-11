@@ -8,7 +8,7 @@ export default function ChronicleForm({ id, edit }) {
   return (<>
       <CreationFormWrapper
         edit={edit}
-        path={edit ? `/api/conditions/${id}/edit` : `/api/chronicles/${id}/create` }
+        path={edit ? `/api/entities/${id}/edit` : `/api/chronicles/${id}/create` }
         creationType="Condition"
         actionCreator={edit ? updateCondition : addCondition}
         uniqueContent={{}}

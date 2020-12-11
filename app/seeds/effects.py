@@ -30,6 +30,12 @@ def seed_effects():
     asseteffect2b = AssetEffect(
       effect=effect2,
       asset_id=3)
+    
+    # Changes Sweet Fairy's Mood Condition from Angry to Happy
+    # Adds ball to player's inventory state
+    # Adds points to affection meter for sweet fairy.
+    # Lowers points to affection meter for sweet fairy.
+    # Adds points to perception meter for player.
 
     db.session.add(effect1)
     db.session.add(effect1b)

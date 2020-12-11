@@ -12,12 +12,12 @@ const initialState = {
   tale: "",
   thread: "",
   choice: "",
+  character: "",
+  place: "",
+  asset: "",
+  condition: "",
   // effect: "",
   // lock: "",
-  // character: "",
-  // place: "",
-  // asset: "",
-  // condition: "",
   // meter: "",
 }
 

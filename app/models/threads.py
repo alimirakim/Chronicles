@@ -26,7 +26,7 @@ class Thread(db.Model):
     x = db.Column(db.Integer, nullable=False, default=0)
     y = db.Column(db.Integer, nullable=False, default=0)
     is_sequitur = db.Column(db.Boolean, nullable=False, default=True)
-    is_returnable = db.Column(db.Booolean, nullable=False, default=True)
+    is_returnable = db.Column(db.Boolean, nullable=False, default=True)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
     
     tale = db.relationship("Tale", back_populates="threads")

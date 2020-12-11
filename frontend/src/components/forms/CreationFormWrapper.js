@@ -1,9 +1,37 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import ErrorMessages from '../ErrorMessages'
-import { TextInput, TextAreaInput } from './FormInputs'
+import { TextInput, TextAreaInput, SelectInput } from './FormInputs'
 import { getErrors, wipeErrors } from '../../actions/errorActions'
 import { updateSelection } from '../../actions/selectionActions'
+
+const color_choices = [
+  "gray",
+  "black",
+  "white",
+  "red", 
+  "orange", 
+  "yellow", 
+  "green", 
+  "blue", 
+  "purple", 
+  "pink", 
+  "brown"
+]
+const image_choices = [
+  "default",
+  "default_user",
+  "default_chronicle",
+  "default_entity",
+  "default_asset",
+  "default_condition",
+  "default_meter",
+  "default_tale",
+  "default_thread",
+  "default_effect",
+  "default_choice",
+  "default_lock",
+]
 
 
 export default function CreationFormWrapper({
@@ -20,10 +48,10 @@ export default function CreationFormWrapper({
   const [open, setOpen] = useState(false)
   const [title, setTitle] = useState(edit ? edit.title : "")
   const [description, setDescription] = useState(edit ? edit.description : "")
-  // const [color, setColor] = useState(edit ? edit.color : 1)
-  // const [image, setImage] = useState(edit ? edit.image : 1)
-  // const colors = useState(useSelector(state => state.colors))
-  // const images = useState(useSelector(state => state.images))
+  const [color, setColor] = useState(edit ? edit.color : 1)
+  const [image, setImage] = useState(edit ? edit.image : 1)
+  const colors = useState(color_choices)
+  const images = useState(image_choices)
 
   const handleSelection = (selection) => {
     if (creationType === "Thread") return dispatch(updateSelection(creationType.toLowerCase(), selection.thread))
@@ -75,8 +103,8 @@ export default function CreationFormWrapper({
           {/* Generic inputs */}
           <TextInput label="Title" value={title} setValue={setTitle} />
           <TextAreaInput label="Description" value={description} setValue={setDescription} />
-          {/* <SelectInput label="Color" values={colors} value={color} setValue={setColor} /> */}
-          {/* <SelectInput label="Image" values={images} value={image} setValue={setImage} /> */}
+          <SelectInput label="Color" values={colors} value={color} setValue={setColor} />
+          <SelectInput label="Image" values={images} value={image} setValue={setImage} />
 
           <UniqueForm />
 

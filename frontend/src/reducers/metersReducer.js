@@ -4,17 +4,20 @@ import {
   UPDATE_METER,
   DELETE_METER,
 } from '../actions/meterActions'
-import {
-  ADD_THREAD,
-  UPDATE_THREAD,
-  DELETE_THREAD
-} from '../actions/threadActions'
-import { DELETE_TALE } from '../actions/taleActions'
-import { DELETE_CHRONICLE } from '../actions/chronicleActions'
+// import {
+//   ADD_THREAD,
+//   UPDATE_THREAD,
+//   DELETE_THREAD
+// } from '../actions/threadActions'
+// import { DELETE_TALE } from '../actions/taleActions'
+// import { DELETE_CHRONICLE } from '../actions/chronicleActions'
 
 export default function metersReducer(state = {}, action) {
   let newState = { ...state }
   switch (action.type) {
+    
+    // case GET_CREATIONS:
+      // return action.content.meters
 
     case GET_METERS:
       return action.meters

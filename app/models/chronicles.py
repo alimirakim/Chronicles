@@ -16,6 +16,7 @@ class Chronicle(db.Model):
     user = db.relationship("User", back_populates="chronicles")
     entities = db.relationship("Entity", back_populates="chronicle", cascade="all,delete", passive_deletes=True)
     tales = db.relationship("Tale", back_populates="chronicle", cascade="all,delete", passive_deletes=True)
+    meters = db.relationship("Meter", back_populates="chronicle", cascade="all,delete", passive_deletes=True)
     
     def to_dict(self):
         """Convert to jsonifyable dictionary."""
@@ -25,20 +26,13 @@ class Chronicle(db.Model):
             "creator": self.user.username,
             "title": self.title,
             "description": self.description,
-            "tale_ids": [tale.id for tale in self.tales],
-            "character_eids": [entity.id for entity in self.entities if entity.type == "character"],
-            "place_eids": [entity.id for entity in self.entities if entity.type == "place"],
-            "asset_eids": [entity.id for entity in self.entities if entity.type == "asset"],
-            "condition_eids": [cond.id for cond in self.entities if entity.type == "condition"],
             "color": self.color,
             "image": self.image,
+            "tale_ids": [tale.id for tale in self.tales],
+            "character_eids": [e.id for e in self.entities if e.type == "character"],
+            "place_eids": [e.id for e in self.entities if e.type == "place"],
+            "asset_eids": [e.id for e in self.entities if e.type == "asset"],
+            "condition_eids": [e.id for e in self.entities if e.type == "condition"],
+            "meter_ids": [meter.id for meter in self.meters],
             "created_at": self.created_at,
         }
-      
-
-
-
-
-# Tag
-# Meter
-# Status

@@ -10,12 +10,15 @@ import {
   DELETE_THREAD,
 } from '../actions/threadActions'
 import { DELETE_TALE } from '../actions/taleActions'
-import { DELETE_CHRONICLE } from '../actions/chronicleActions'
+import { GET_CREATIONS, DELETE_CHRONICLE } from '../actions/chronicleActions'
 
 export default function choicesReducer(state = {}, action) {
   let newState = { ...state }
   switch (action.type) {
-
+    
+    case GET_CREATIONS:
+      return action.content.choices
+      
     case GET_CHOICES:
       return action.choices
     case ADD_CHOICE:

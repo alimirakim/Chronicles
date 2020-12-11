@@ -75,7 +75,7 @@ def create_choice(thid):
         return {"errors": validation_errors_to_messages}
 
 
-@choice_routes.route("/<int:chid>/edit", methods=["PATCH"])
+@thread_routes.route("/<int:chid>/edit", methods=["PATCH"])
 def edit_choice(chid):
     """Edit a choice."""
     form = ThreadForm()
@@ -93,7 +93,7 @@ def edit_choice(chid):
         return {"errors": validation_errors_to_messages}
 
 
-@choice_routes.route("/<int:chid>/delete", methods=["DELETE"])
+@thread_routes.route("/<int:chid>/delete", methods=["DELETE"])
 def delete_choice(thid):
     """Delete a choice and its dependents like locks."""
     choice = Choice.query.get(thid)

@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, BooleanField
+from wtforms import StringField, BooleanField, SelectField
 from wtforms.validators import DataRequired, ValidationError
 from app.models import Chronicle
 from app.utils import within_length_limit, color_choices, image_choices

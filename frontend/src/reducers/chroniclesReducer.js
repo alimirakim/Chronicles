@@ -1,4 +1,5 @@
 import {
+  GET_CREATIONS,
   GET_CHRONICLES,
   ADD_CHRONICLE,
   UPDATE_CHRONICLE,
@@ -9,7 +10,11 @@ import {
 export default function chroniclesReducer(state = {}, action) {
   const newState = { ...state }
   switch (action.type) {
-    case GET_CHRONICLES:
+    
+    case GET_CREATIONS:
+      return action.content.chronicles
+      
+      case GET_CHRONICLES:
       return action.chronicles
     case ADD_CHRONICLE:
       newState[action.chronicle.id] = action.chronicle
@@ -20,6 +25,7 @@ export default function chroniclesReducer(state = {}, action) {
     case DELETE_CHRONICLE:
       delete newState[action.chronicle.id]
       return newState
+      
     default:
       return state
   }

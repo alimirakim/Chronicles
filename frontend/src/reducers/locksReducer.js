@@ -4,19 +4,22 @@ import {
   UPDATE_LOCK,
   DELETE_LOCK,
 } from '../actions/lockActions'
-import {
-  ADD_CHOICE,
-  UPDATE_CHOICE,
-  DELETE_CHOICE,
-} from '../actions/choiceActions'
-import { DELETE_THREAD } from '../actions/threadActions'
-import { DELETE_TALE } from '../actions/taleActions'
-import { DELETE_CHRONICLE } from '../actions/chronicleActions'
+// import {
+//   ADD_CHOICE,
+//   UPDATE_CHOICE,
+//   DELETE_CHOICE,
+// } from '../actions/choiceActions'
+// import { DELETE_THREAD } from '../actions/threadActions'
+// import { DELETE_TALE } from '../actions/taleActions'
+// import { GET_CREATIONS, DELETE_CHRONICLE } from '../actions/chronicleActions'
 
 export default function locksReducer(state = {}, action) {
   let newState = { ...state }
   switch (action.type) {
 
+    // case GET_CREATIONS:
+      // return action.content.locks
+    
     case GET_LOCKS:
       return action.locks
     case ADD_LOCK:

@@ -1,6 +1,5 @@
 from .auth_routes import auth_routes
 from .chronicle_routes import chronicle_routes
-from .condition_routes import condition_routes
 from .effect_routes import effect_routes
 from .entity_routes import entity_routes
 from .lock_routes import lock_routes

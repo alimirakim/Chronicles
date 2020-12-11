@@ -8,7 +8,7 @@ export default function CharacterForm({ id, edit }) {
   return (<>
       <CreationFormWrapper
         edit={edit}
-        path={edit ? `/api/characters/${id}/edit` : `/api/chronicles/${id}/characters/create` }
+        path={edit ? `/api/entities/${id}/edit` : `/api/chronicles/${id}/characters/create` }
         creationType="Character"
         actionCreator={edit ? updateCharacter : addCharacter}
         uniqueContent={{}}

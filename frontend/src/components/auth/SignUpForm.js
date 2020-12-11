@@ -1,13 +1,12 @@
 import React, { useState } from "react";
-import {useDispatch, useSelector} from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { Redirect } from 'react-router-dom';
 import { signUp } from '../../services/auth';
-import {getChronicles} from '../../actions/chronicleActions'
-import {getTales} from '../../actions/taleActions'
+import { getCreations } from '../../actions/chronicleActions'
 import ErrorMessages from '../ErrorMessages'
 
 
-const SignUpForm = ({authenticated, setAuthenticated}) => {
+const SignUpForm = ({ authenticated, setAuthenticated }) => {
   const dispatch = useDispatch()
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("@gmail.com");
@@ -15,21 +14,19 @@ const SignUpForm = ({authenticated, setAuthenticated}) => {
   const [repeatPassword, setRepeatPassword] = useState("password");
   const [errors, setErrors] = useState([])
 
-const onSignUp = async (e) => {
+  const onSignUp = async (e) => {
     e.preventDefault();
     if (password === repeatPassword) {
       const content = await signUp(username, email, password);
       if (!content.errors) {
         setAuthenticated(true);
-        console.log("we signed up? user:", content.chronicles)
-        dispatch(getChronicles(content.chronicles))
-        dispatch(getTales(content.tales))
+        dispatch(getCreations(content))
       } else {
         setErrors(content.errors)
       }
     }
   }
-  
+
   if (authenticated) return <Redirect to="/" />
 
   const updateUsername = (e) => setUsername(e.target.value);

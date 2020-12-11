@@ -8,7 +8,7 @@ export default function AssetForm({ id, edit }) {
   return (<>
       <CreationFormWrapper
         edit={edit}
-        path={edit ? `/api/places/${id}/edit` : `/api/chronicles/${id}/places/create` }
+        path={edit ? `/api/entities/${id}/edit` : `/api/chronicles/${id}/places/create` }
         creationType="Place"
         actionCreator={edit ? updatePlace : addPlace}
         uniqueContent={{}}

@@ -3,7 +3,7 @@ from .users import seed_users, undo_users
 from .chronicles import seed_chronicles, undo_chronicles
 from .tales import seed_tales, undo_tales
 from .threads import seed_threads, undo_threads
-from .entities import seed_assets, undo_entities
+from .entities import seed_entities, undo_entities
 from .effects import seed_effects, undo_effects
 from .locks import seed_locks, undo_locks
 # from .characters import seed_characters, undo_characters

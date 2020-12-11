@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: f0b3fd8636d9
+Revision ID: 689e05c95d7d
 Revises: 
-Create Date: 2020-12-06 00:28:46.281803
+Create Date: 2020-12-11 00:53:46.223900
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'f0b3fd8636d9'
+revision = '689e05c95d7d'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -23,6 +23,7 @@ def upgrade():
     sa.Column('username', sa.String(length=40), nullable=False),
     sa.Column('email', sa.String(length=255), nullable=False),
     sa.Column('hashword', sa.String(length=255), nullable=False),
+    sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email'),
     sa.UniqueConstraint('username')
@@ -34,44 +35,39 @@ def upgrade():
     sa.Column('description', sa.String(), nullable=True),
     sa.Column('color', sa.String(length=50), nullable=True),
     sa.Column('image', sa.String(length=250), nullable=True),
-    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='cascade'),
+    sa.Column('created_at', sa.DateTime(), nullable=False),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('entities',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('chronicle_id', sa.Integer(), nullable=False),
     sa.Column('type', sa.String(length=50), nullable=False),
-    sa.Column('name', sa.String(length=50), nullable=False),
-    sa.Column('description', sa.String(), nullable=True),
-    sa.Column('color', sa.String(length=50), nullable=True),
-    sa.Column('image', sa.String(length=250), nullable=True),
-    sa.ForeignKeyConstraint(['chronicle_id'], ['chronicles.id'], ondelete='cascade'),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('conditions',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('chronicle_id', sa.Integer(), nullable=False),
+    sa.Column('subtype', sa.String(length=50), nullable=True),
     sa.Column('title', sa.String(length=50), nullable=False),
     sa.Column('description', sa.String(), nullable=True),
     sa.Column('color', sa.String(length=50), nullable=True),
     sa.Column('image', sa.String(length=250), nullable=True),
-    sa.ForeignKeyConstraint(['chronicle_id'], ['chronicles.id'], ondelete='cascade'),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('places',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('entity_id', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['entity_id'], ['entities.id'], ondelete='cascade'),
+    sa.Column('is_unique', sa.Boolean(), nullable=False),
+    sa.Column('created_at', sa.DateTime(), nullable=False),
+    sa.ForeignKeyConstraint(['chronicle_id'], ['chronicles.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('meters',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('chronicle_id', sa.Integer(), nullable=False),
+    sa.Column('type', sa.String(length=50), nullable=True),
     sa.Column('title', sa.String(length=50), nullable=False),
-    sa.Column('description', sa.String(), nullable=False),
+    sa.Column('description', sa.String(), nullable=True),
     sa.Column('color', sa.String(length=50), nullable=True),
     sa.Column('image', sa.String(length=250), nullable=True),
-    sa.ForeignKeyConstraint(['chronicle_id'], ['chronicles.id'], ondelete='cascade'),
+    sa.Column('min', sa.Integer(), nullable=False),
+    sa.Column('max', sa.Integer(), nullable=False),
+    sa.Column('algorithm', sa.String(), nullable=False),
+    sa.Column('base', sa.Integer(), nullable=False),
+    sa.Column('mod', sa.String(), nullable=False),
+    sa.Column('created_at', sa.DateTime(), nullable=False),
+    sa.ForeignKeyConstraint(['chronicle_id'], ['chronicles.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('tales',
@@ -82,32 +78,18 @@ def upgrade():
     sa.Column('first_thread_id', sa.Integer(), nullable=True),
     sa.Column('color', sa.String(length=50), nullable=True),
     sa.Column('image', sa.String(length=250), nullable=True),
+    sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['chronicle_id'], ['chronicles.id'], ondelete='cascade'),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('assets',
+    op.create_table('bearer_assets',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('entity_id', sa.Integer(), nullable=False),
-    sa.Column('type', sa.String(length=50), nullable=False),
-    sa.Column('is_unique', sa.Boolean(), nullable=False),
-    sa.ForeignKeyConstraint(['entity_id'], ['entities.id'], ondelete='cascade'),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('characters',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('entity_id', sa.Integer(), nullable=False),
-    sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['entity_id'], ['entities.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='cascade'),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('entity_conditions',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('entity_id', sa.Integer(), nullable=False),
-    sa.Column('condition_id', sa.Integer(), nullable=False),
-    sa.Column('expiry', sa.DateTime(), nullable=False),
-    sa.ForeignKeyConstraint(['condition_id'], ['conditions.id'], ondelete='cascade'),
-    sa.ForeignKeyConstraint(['entity_id'], ['entities.id'], ondelete='cascade'),
+    sa.Column('bearer_id', sa.Integer(), nullable=False),
+    sa.Column('asset_id', sa.Integer(), nullable=False),
+    sa.Column('quantity', sa.Integer(), nullable=False),
+    sa.Column('created_at', sa.DateTime(), nullable=False),
+    sa.ForeignKeyConstraint(['asset_id'], ['entities.id'], ),
+    sa.ForeignKeyConstraint(['bearer_id'], ['entities.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('entity_meters',
@@ -115,38 +97,41 @@ def upgrade():
     sa.Column('entity_id', sa.Integer(), nullable=False),
     sa.Column('meter_id', sa.Integer(), nullable=False),
     sa.Column('progress', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['entity_id'], ['entities.id'], ondelete='cascade'),
-    sa.ForeignKeyConstraint(['meter_id'], ['meters.id'], ondelete='cascade'),
+    sa.Column('total', sa.Integer(), nullable=False),
+    sa.Column('created_at', sa.DateTime(), nullable=False),
+    sa.ForeignKeyConstraint(['entity_id'], ['entities.id'], ),
+    sa.ForeignKeyConstraint(['meter_id'], ['meters.id'], ),
     sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('modifiers',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('entity_id', sa.Integer(), nullable=False),
+    sa.Column('meter_id', sa.Integer(), nullable=False),
+    sa.Column('mod', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['entity_id'], ['entities.id'], ),
+    sa.ForeignKeyConstraint(['meter_id'], ['meters.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('player_characters',
+    sa.Column('player_id', sa.Integer(), nullable=False),
+    sa.Column('character_id', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['character_id'], ['entities.id'], ),
+    sa.ForeignKeyConstraint(['player_id'], ['users.id'], ),
+    sa.PrimaryKeyConstraint('player_id', 'character_id')
     )
     op.create_table('threads',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('tale_id', sa.Integer(), nullable=False),
     sa.Column('title', sa.String(length=250), nullable=False),
-    sa.Column('description', sa.String(), nullable=False),
+    sa.Column('description', sa.String(), nullable=True),
+    sa.Column('color', sa.String(length=50), nullable=True),
+    sa.Column('image', sa.String(length=250), nullable=True),
     sa.Column('x', sa.Integer(), nullable=False),
     sa.Column('y', sa.Integer(), nullable=False),
-    sa.Column('color', sa.String(length=50), nullable=True),
-    sa.Column('image', sa.String(length=250), nullable=True),
-    sa.ForeignKeyConstraint(['tale_id'], ['tales.id'], ondelete='cascade'), 
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('effects',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('type', sa.String(length=50), nullable=False),
-    sa.Column('thread_id', sa.Integer(), nullable=False),
-    sa.Column('color', sa.String(length=50), nullable=True),
-    sa.Column('image', sa.String(length=250), nullable=True),
-    sa.ForeignKeyConstraint(['thread_id'], ['threads.id'], ondelete='cascade'),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('entity_assets',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('entity_id', sa.Integer(), nullable=False),
-    sa.Column('asset_id', sa.Integer(), nullable=False),
-    sa.Column('quantity', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['asset_id'], ['assets.id'], ondelete='cascade'),
-    sa.ForeignKeyConstraint(['entity_id'], ['entities.id'], ondelete='cascade'),
+    sa.Column('is_sequitur', sa.Boolean(), nullable=False),
+    sa.Column('is_returnable', sa.Boolean(), nullable=False),
+    sa.Column('created_at', sa.DateTime(), nullable=False),
+    sa.ForeignKeyConstraint(['tale_id'], ['tales.id'], ondelete='cascade'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('thread_choices',
@@ -156,8 +141,19 @@ def upgrade():
     sa.Column('choice_thread_id', sa.Integer(), nullable=False),
     sa.Column('color', sa.String(length=50), nullable=True),
     sa.Column('image', sa.String(length=250), nullable=True),
+    sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['choice_thread_id'], ['threads.id'], ondelete='cascade'),
     sa.ForeignKeyConstraint(['current_thread_id'], ['threads.id'], ondelete='cascade'),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('effects',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('type', sa.String(length=50), nullable=False),
+    sa.Column('thread_id', sa.Integer(), nullable=False),
+    sa.Column('color', sa.String(length=50), nullable=True),
+    sa.Column('image', sa.String(length=250), nullable=True),
+    sa.Column('created_at', sa.DateTime(), nullable=False),
+    sa.ForeignKeyConstraint(['thread_id'], ['threads.id'], ondelete='cascade'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('asset_effects',
@@ -166,7 +162,7 @@ def upgrade():
     sa.Column('asset_id', sa.Integer(), nullable=False),
     sa.Column('quantity', sa.Integer(), nullable=0),
     sa.Column('is_gained', sa.Boolean(), nullable=False),
-    sa.ForeignKeyConstraint(['asset_id'], ['assets.id'], ondelete='cascade'),
+    sa.ForeignKeyConstraint(['asset_id'], ['entities.id'], ondelete='cascade'),
     sa.ForeignKeyConstraint(['effect_id'], ['effects.id'], ondelete='cascade'),
     sa.PrimaryKeyConstraint('id')
     )
@@ -176,7 +172,8 @@ def upgrade():
     sa.Column('choice_id', sa.Integer(), nullable=False),
     sa.Column('color', sa.String(length=50), nullable=True),
     sa.Column('image', sa.String(length=250), nullable=True),
-    sa.ForeignKeyConstraint(['choice_id'], ['thread_choices.id'], ondelete='cascade'),
+    sa.Column('created_at', sa.DateTime(), nullable=False),
+    sa.ForeignKeyConstraint(['choice_id'], ['thread_choices.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('asset_locks',
@@ -185,8 +182,8 @@ def upgrade():
     sa.Column('asset_id', sa.Integer(), nullable=False),
     sa.Column('quantity', sa.Integer(), nullable=False),
     sa.Column('type', sa.String(), nullable=False),
-    sa.ForeignKeyConstraint(['asset_id'], ['assets.id'], ondelete='cascade'),
-    sa.ForeignKeyConstraint(['lock_id'], ['locks.id'], ondelete='cascade'),
+    sa.ForeignKeyConstraint(['asset_id'], ['entities.id'], ),
+    sa.ForeignKeyConstraint(['lock_id'], ['locks.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###
@@ -197,19 +194,16 @@ def downgrade():
     op.drop_table('asset_locks')
     op.drop_table('locks')
     op.drop_table('asset_effects')
-    op.drop_table('effects')
     op.drop_table('thread_choices')
+    op.drop_table('effects')
     op.drop_table('threads')
-    op.drop_table('entity_assets')
+    op.drop_table('player_characters')
+    op.drop_table('modifiers')
     op.drop_table('entity_meters')
-    op.drop_table('entity_conditions')
-    op.drop_table('characters')
-    op.drop_table('assets')
+    op.drop_table('bearer_assets')
     op.drop_table('tales')
-    op.drop_table('places')
-    op.drop_table('entities')
     op.drop_table('meters')
-    op.drop_table('conditions')
+    op.drop_table('entities')
     op.drop_table('chronicles')
     op.drop_table('users')
     # ### end Alembic commands ###

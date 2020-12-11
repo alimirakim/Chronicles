@@ -1,8 +1,6 @@
 from .db import db
 from datetime import datetime
 
-# location, status
-
 
 class Effect(db.Model):
     """A change in state to some entity that is applied upon reaching a related Thread."""

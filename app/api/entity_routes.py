@@ -4,7 +4,7 @@ from app.models import db, Entity
 from app.utils import validation_errors_to_messages
 from app.forms import EntityForm
 
-entity_routes = Blueprint("entitys", __name__)
+entity_routes = Blueprint("entities", __name__)
 
 
 @entity_routes.route("/<int:tid>/edit", methods=["PATCH"])
@@ -26,7 +26,7 @@ def edit_entity(tid):
         return {"errors": validation_errors_to_messages(form.errors)}, 401
 
 
-@asset_routes.route("/<int:tid>/delete", methods=["DELETE"])
+@entity_routes.route("/<int:tid>/delete", methods=["DELETE"])
 def delete_entity(tid):
     """Delete an entity and all its dependents like effects, locks joins..."""
     entity = Entity.query.get(tid)

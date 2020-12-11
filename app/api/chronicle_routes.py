@@ -1,8 +1,8 @@
 from flask import Blueprint, jsonify, request
 from flask_login import current_user
-from app.models import db, Chronicle, Tale, Thread, ThreadChoice, Entity, Condition, Meter
+from app.models import db, Chronicle, Tale, Thread, ThreadChoice, Entity, Meter
 from app.utils import validation_errors_to_messages
-from app.forms import ChronicleForm, TaleForm, EntityForm, ConditionForm, MeterForm
+from app.forms import ChronicleForm, TaleForm, EntityForm, MeterForm
 
 chronicle_routes = Blueprint("chronicles", __name__)
 
@@ -17,9 +17,9 @@ def create_chronicle():
         chronicle = Chronicle(
             user_id=current_user.id,
             title=form["title"].data,
-            description=form["description"].data
-            color=form["color"].data
-            image=form["image"].data
+            description=form["description"].data,
+            color=form["color"].data,
+            image=form["image"].data,
             )
         tale = Tale(
             chronicle=chronicle,
@@ -79,9 +79,9 @@ def create_tale(cid):
         tale = Tale(
             chronicle_id=cid,
             title=form["title"].data,
-            description=form["description"].data
-            color=form["color"].data
-            image=form["image"].data
+            description=form["description"].data,
+            color=form["color"].data,
+            image=form["image"].data,
             )
         db.session.add(tale)
         db.session.commit()
@@ -101,7 +101,7 @@ def create_entity(cid, entity):
         entity = Entity(
             chronicle_id=cid,
             type=entity,
-            subtype=form["subtype"].data
+            subtype=form["subtype"].data,
             title=form["title"].data,
             description=form["description"].data,
             is_unique=form["is_unique"].data,
