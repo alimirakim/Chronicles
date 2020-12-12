@@ -1,22 +1,23 @@
-import React, { useState, useEffect } from "react";
-import { BrowserRouter, Route } from "react-router-dom";
+import React, { useState, useEffect } from "react"
+import { BrowserRouter, Route } from "react-router-dom"
 import { useDispatch, useSelector } from 'react-redux'
 
 // COMPONENTS
-import LoginForm from "./components/auth/LoginForm";
-import SignUpForm from "./components/auth/SignUpForm";
-import NavBar from "./components/NavBar";
-import ProtectedRoute from "./components/auth/ProtectedRoute";
-import UsersList from "./components/UsersList";
-import User from "./components/User";
+import ProtectedRoute from "./components/auth/ProtectedRoute"
+import Header from "./components/Header"
+import Footer from "./components/Footer"
 import Home from './components/Home'
+import SignUpForm from "./components/auth/SignUpForm"
+import LoginForm from "./components/auth/LoginForm"
+import UsersList from "./components/UsersList"
+import User from "./components/User"
 import PlayGallery from './components/PlayGallery'
 import Library from './components/Library'
 import ChroniclePage from './components/ChroniclePage.js'
 import TalePage from './components/TalePage'
-import CurrentThread from './components/CurrentThread'
 import WorldWeaver from './components/WorldWeaver'
 import TaleSpinner from './components/TaleSpinner'
+import CurrentThread from './components/CurrentThread'
 
 
 
@@ -52,7 +53,7 @@ function App() {
   return (
     <BrowserRouter>
 
-      <NavBar authenticated={authenticated} setAuthenticated={setAuthenticated} />
+      <Header authenticated={authenticated} setAuthenticated={setAuthenticated} />
 
       {/* Login and Signup forms */}
       <Route path="/login" exact={true}>
@@ -110,6 +111,8 @@ function App() {
       <ProtectedRoute path="/users/:uid" exact={true} authenticated={authenticated}>
         <User />
       </ProtectedRoute>
+
+      <Footer authenticated={authenticated} setAuthenticated={setAuthenticated} />
 
     </BrowserRouter>
   );

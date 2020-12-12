@@ -1,0 +1,14 @@
+
+* {
+  box-sizing: border-box;
+}
+button {
+  cursor: pointer;
+  text-transform: uppercase;
+  border-width: 0;
+  background-color: rgba(0,0,0,0);
+  
+}
+button:active {
+  outline: none;
+}

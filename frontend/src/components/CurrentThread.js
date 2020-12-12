@@ -6,8 +6,8 @@ import { useParams, useLocation, Link } from 'react-router-dom'
 export default function CurrentThread() {
   const {cid, tid} = useParams()
   const { state: { thid } } = useLocation()
-  console.log("thid", thid)
-  const { threads, thread, threadChoices, currentThreadChoices } = useSelector(state => ({
+  const { effects, threads, thread, threadChoices, currentThreadChoices } = useSelector(state => ({
+    effects: state.effects,
     threads: state.threads,
     threadChoices: state.choices,
     thread: state.threads[thid],
@@ -32,15 +32,27 @@ export default function CurrentThread() {
     setCurrentThread(threads[prevThread.id])
     setCurrentChoices(Object.values(threadChoices).filter(choice => choice.current_thread_id == prevThread.id))
   }
+  
+  const checkLocks = (e) => {
+    // TODO Check for locks. On each lock, check requirements, then eventually return final yes/no
+  }
 
   return (<section>
+    <Link to={`/chronicles/${cid}`}>Go back to Chronicle page</Link>
+    
     <h2>{currentThread.title}</h2>
     <p>{currentThread.description}</p>
+    
+    <h3>Effects</h3>
+    <ul>
+    {thread.effects.map(i => <li key={i}>Effect: {effects[i].title}</li>)}
+    </ul>
+    
 
     <h3>Make Your Choice...</h3>
     <ul>
       {history.length ? <li><button onClick={handleGoBack}>Go Back</button></li> : <Link to={`/chronicles/${cid}/tales/${tid}`}>Go Back</Link>}
-      {currentChoices.map(choice => (
+      {currentChoices.filter(choice => checkLocks(choice)).map(choice => (
         <li key={choice.id}><button onClick={handleChoice(choice.choice_thread_id)}>{choice.title}</button></li>
       ))}
     </ul>

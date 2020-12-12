@@ -3,11 +3,12 @@ import {useSelector} from 'react-redux'
 import { NavLink } from 'react-router-dom';
 import LogoutButton from './auth/LogoutButton';
 
-const NavBar = ({ authenticated, setAuthenticated }) => {
-  const tid = useSelector(state => state.selections.tale ? `/tales/${state.selections.tale.id}` : "")
+export default function Header({ authenticated, setAuthenticated }) {
   
-  return (<header>
+  return (<header className="top">
     <h1>TaleSpinner</h1>
+    <i class="fas fa-heart"></i>
+    
     <nav>
       <ul>
         <li>
@@ -97,5 +98,3 @@ const NavBar = ({ authenticated, setAuthenticated }) => {
     </nav>
   </header>);
 }
-
-export default NavBar;

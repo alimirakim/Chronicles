@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 
 // YOUR COMPONENTS
 import YourCreations from './YourCreations'
+import {SelectInputColors, SelectInputImages} from './forms/FormInputs'
 
 // FORM COMPONENTS
 import ChronicleForm from './forms/ChronicleForm'
