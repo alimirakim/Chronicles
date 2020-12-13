@@ -43,7 +43,7 @@ def login():
         
         user, chronicles, tales, threads, choices, characters, places, assets, conditions = get_and_normalize_all_data_for_user(user)
         return jsonify(
-            user={user}, 
+            user=user, 
             chronicles=chronicles, 
             tales=tales, 
             threads=threads, 

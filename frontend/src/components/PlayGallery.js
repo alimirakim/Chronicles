@@ -5,7 +5,8 @@ import { Link } from 'react-router-dom'
 
 export default function PlayGallery() {
   const chronicles = useSelector(state => state.chronicles)
-  const spotlightChronicle = chronicles["1"]
+  const spotlightChronicle = Object.keys(chronicles)[0]
+  console.log("spotlight??", Object.keys(chronicles))
 
   return (
     <main>
