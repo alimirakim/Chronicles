@@ -4,14 +4,15 @@ import {
   UPDATE_CHARACTER,
   DELETE_CHARACTER
 } from '../actions/characterActions'
-import { GET_CREATIONS, DELETE_CHRONICLE } from '../actions/chronicleActions'
+import { DELETE_CHRONICLE } from '../actions/chronicleActions'
+import { GET_USER_CREATIONS } from '../actions/userActions'
 
 
 export default function charactersReducer(state = {}, action) {
   const newState = { ...state }
   switch (action.type) {
     
-    case GET_CREATIONS:
+    case GET_USER_CREATIONS:
         return action.content.characters
         
     case GET_CHARACTERS:
@@ -27,7 +28,7 @@ export default function charactersReducer(state = {}, action) {
       return newState
       
     case DELETE_CHRONICLE:
-        return Object.values(state).filter(char => !action.chronicle.entity_ids.includes(char.id))
+        return Object.values(state).filter(char => !action.chronicle.character_ids.includes(char.id))
       
     default:
       return state

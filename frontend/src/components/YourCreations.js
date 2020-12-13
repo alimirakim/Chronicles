@@ -7,7 +7,6 @@ export default function YourCreations({
   pid, // Parent-path id
   creationType,
   creations,
-  active,
   filterBySelect,
   deleteActionCreator,
   creationForm: CreationForm,
@@ -15,37 +14,83 @@ export default function YourCreations({
   const dispatch = useDispatch()
   const selected = useSelector(state => state.selections)
   const [selectedCreations, setSelectedCreations] = useState(creations)
+  const [openCreate, setOpenCreate] = useState(false)
+  const [openEdit, setOpenEdit] = useState(false)
+  const [openDelete, setOpenDelete] = useState(false)
+  const active = selected[creationType]
 
-  const handleActive = (selection) => (e) => dispatch(updateSelection(creationType.toLowerCase(), selection))
+  const handleActive = (selection) => (e) => dispatch(updateSelection(creationType, selection))
+  const handleOpenCreate = () => setOpenCreate(true)
+  const handleOpenEdit = () => setOpenEdit(true)
+  const handleOpenDelete = () => setOpenDelete(true)
+  const handleCloseCreate = () => setOpenCreate(false)
+  const handleCloseEdit = () => setOpenEdit(false)
+  const handleCloseDelete = () => setOpenDelete(false)
 
   useEffect(() => {
-    console.log("creations", creations)
+    console.log("creations....,!!!!", selectedCreations, creationType)
     if (filterBySelect) setSelectedCreations(filterBySelect(creations, pid))
     else setSelectedCreations(creations)
   }, [creations, selected])
 
-  let isEmpty = true
-  if (Object.keys(selectedCreations).length) isEmpty = false
+  if (!selectedCreations) return null;
+  const isEmpty = (selectedCreations.length) ? false : true
 
   return (
     <article>
-      <h2>Your {creationType}s</h2>
-      <CreationForm id={pid} />
-      {isEmpty ? <p>You have no {creationType} yet! Why not start one? :B</p> : ""}
-      <dl>
-        {Object.values(selectedCreations).map(creation => (
-          <div key={creation.id} onClick={handleActive(creation)} className={active.id === creation.id ? "card active" : "card"}>
-            <img style={{ width: "3rem", height: "3rem", float: "left", margin: "0.5rem 1rem" }} src={`images/${creation.image}.svg`} /> {/* alt={`${creation.title}: ${creation.image}`} /> */}
-            <div style={{ display: "flex", justifyContent: "space-around" }}>
-              <dt>{creation.title}</dt>
-              <DeleteForm creation={creation} creationType={creationType} deleteActionCreator={deleteActionCreator} />
-              <CreationForm id={creation.id} edit={creation} />
-            </div>
-            <dd>
-              <p>{creation.description}</p>
-            </dd>
-          </div>))}
-      </dl>
+
+      <button type="button" onClick={handleOpenCreate} className="lo-wow">
+        Create {creationType} <i className="fas fa-feather-alt"></i>
+      </button>
+
+      <CreationForm
+        open={openCreate}
+        handleClose={handleCloseCreate}
+        id={pid}
+      />
+      {openDelete && <DeleteForm
+        open={openDelete}
+        handleClose={handleCloseDelete}
+        creation={selected[creationType]}
+        creationType={creationType}
+        deleteActionCreator={deleteActionCreator}
+      />}
+      {openEdit && <CreationForm
+        open={openEdit}
+        handleClose={handleCloseEdit}
+        id={selected[creationType].id}
+        edit={selected[creationType]}
+      />}
+
+      <h2 className="lo-center-h" style={{ margin: "0 auto", fontSize: "1rem", opacity: 0.8 }}>Your {creationType}s</h2>
+      {isEmpty ? <p>You have no {creationType}s yet! Why not start one? :B</p> :
+        <>
+          <ul style={{ display: "flex", flexWrap: "wrap-reverse" }}>
+            {Object.values(selectedCreations).map(creation => (
+              <li
+                key={creation.id}
+                onClick={handleActive(creation)}
+                className={active.id === creation.id ? "card active" : "card"}
+                style={active.id === creation.id ? { background: `linear-gradient(240deg, ${creation.color} -50%, rgba(250,250,255,0.8) 20%)` } : {}}
+              >
+                <div style={{ color: creation.color }} className="card-pic">
+                  <i className={`fas fa-${creation.image} lo-center`}></i>
+                </div>
+                <div className="yrc-con lo-center">
+                  {creation.title}
+                  <div>
+                    <button type="button" onClick={handleOpenEdit}>Edit</button>
+                    <button type="button" onClick={handleOpenDelete}>Delete</button>
+                    <i className="tip fas fa-question-circle"></i>
+                    <section className="tip-info"><b>DESCRIPTION</b> <br />{creation.description}</section>
+                  </div>
+                </div>
+
+              </li>
+            ))}
+          </ul>
+        </>
+      }
     </article>
   )
 }

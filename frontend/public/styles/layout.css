@@ -1,8 +1,69 @@
+.lo-screen {
+  z-index: 80;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  pointer-events: all;
+}
 
-.txt-con {
+
+.lo-box-med {
+  /* width: 70%;
+  height: 70%; */
+}
+
+.lo-txt-con {
   display: block;
-  margin: 0.5rem;
-  font: bold italic 1.5rem Cambria;
+  margin: 1rem 0;
+  font-weight: bold;
+  font-style: italic; 
+  font-size: 1.2rem
+}
+
+.lo-txt-con > * {
+  display: block;
+  width: 100%;
+  margin: 0.5rem 0;
+  border-radius: 0.5rem;
+  border-color: lightgray;
+  padding: 0.5rem;
+}
+
+textarea, input {
+  outline: none;
+  border-style: solid;
+}
+
+.lo-txt-con > textarea {
+  height: 5rem;
+}
+
+
+
+.lo-wow {
+  margin: 1rem auto 0;
+  width: 100%;
+  font: bold italic 2rem Cambria;
+  transition: all 0.2s ease-in;
+}
+
+
+button.lo-wow:hover {
+  color: black;
+}
+button.lo-wow > i {
+  transition: all 0.1s ease-in;
+}
+button.lo-wow:hover > i {
+  transform: scale(1.1) rotate(10deg);
+}
+
+.lo-slim {
+  margin: 1rem 0 0.1rem;
+  font-style: italic;
 }
 
 .lo-center {
@@ -10,6 +71,17 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.lo-center-h {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.lo-center-y {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .lo-x {
@@ -23,6 +95,7 @@
   border: 0;
   padding: 0;
   color: gray;
+  background-color: rgba(255,255,255,0.5);
   font: bold 2rem Calibri;
   text-align: center;
   line-height: 0;
@@ -38,7 +111,7 @@
 
 /* Small box container */
 .lo-scrollbox-sml {
-  height: 12rem;
+  height: 10rem;
   overflow-y: scroll;
   padding-right: 2rem;
   /* border-top-left-radius: 0; */

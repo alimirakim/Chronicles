@@ -4,14 +4,15 @@ import {
   UPDATE_TALE,
   DELETE_TALE
 } from '../actions/taleActions'
-import { GET_CREATIONS, DELETE_CHRONICLE } from '../actions/chronicleActions'
+import { DELETE_CHRONICLE } from '../actions/chronicleActions'
+import { GET_USER_CREATIONS } from '../actions/userActions'
 
 
 export default function talesReducer(state = {}, action) {
   const newState = { ...state }
   switch (action.type) {
     
-    case GET_CREATIONS:
+    case GET_USER_CREATIONS:
       return action.content.tales
     
     case GET_TALES:

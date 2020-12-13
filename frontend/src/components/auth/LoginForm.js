@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch } from 'react-redux'
 import { Redirect } from "react-router-dom";
 import { login } from "../../services/auth";
-import { getCreations } from '../../actions/chronicleActions'
+import { getCreations } from '../../actions/userActions'
 import ErrorMessages from '../ErrorMessages'
 
 export default function LoginForm({ authenticated, setAuthenticated }) {
@@ -29,11 +29,11 @@ export default function LoginForm({ authenticated, setAuthenticated }) {
   if (authenticated) return <Redirect to="/" />
 
   return (<>
+    <form onSubmit={onLogin} className="lo-box-med">
     <h2>Login</h2>
-    <form onSubmit={onLogin}>
       <ErrorMessages errors={errors} />
       <div>
-        <label htmlFor="email">Email</label>
+        <label htmlFor="email" className="lo-txt-con">Email
         <input
           name="email"
           type="text"
@@ -41,9 +41,10 @@ export default function LoginForm({ authenticated, setAuthenticated }) {
           value={email}
           onChange={updateEmail}
         />
+        </label>
       </div>
       <div>
-        <label htmlFor="password">Password</label>
+        <label htmlFor="password" className="lo-txt-con">Password
         <input
           name="password"
           type="password"
@@ -51,7 +52,8 @@ export default function LoginForm({ authenticated, setAuthenticated }) {
           value={password}
           onChange={updatePassword}
         />
-        <button type="submit">Login</button>
+        </label>
+        <button type="submit" className="lo-wow">Login</button>
       </div>
     </form>
   </>)

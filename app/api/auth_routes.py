@@ -3,7 +3,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from pprint import pprint
 from app.models import db, User, Chronicle, Tale, Thread
 from app.forms import LoginForm, SignUpForm
-from app.utils import validation_errors_to_messages, get_and_normalize_all_data_for_user
+from app.utils import validation_errors_to_messages, get_and_normalize_all_data_for_user, normalize_user_data
 
 auth_routes = Blueprint('auth', __name__)
 
@@ -12,9 +12,9 @@ auth_routes = Blueprint('auth', __name__)
 def authenticate():
     """Authenticates a user."""
     if current_user.is_authenticated:
-        chronicles, tales, threads, choices, characters, places, assets, conditions = get_and_normalize_all_data_for_user(current_user.id)
+        user, chronicles, tales, threads, choices, characters, places, assets, conditions = get_and_normalize_all_data_for_user(current_user)
         return jsonify(
-            user=current_user.to_dict(), 
+            user=user, 
             chronicles=chronicles, 
             tales=tales, 
             threads=threads, 
@@ -41,9 +41,9 @@ def login():
         user = User.query.filter(User.email == form.data['email']).first()
         login_user(user)
         
-        chronicles, tales, threads, choices, characters, places, assets, conditions = get_and_normalize_all_data_for_user(current_user.id)
+        user, chronicles, tales, threads, choices, characters, places, assets, conditions = get_and_normalize_all_data_for_user(user)
         return jsonify(
-            user=current_user.to_dict(), 
+            user={user}, 
             chronicles=chronicles, 
             tales=tales, 
             threads=threads, 
@@ -97,17 +97,9 @@ def sign_up():
         
         login_user(user)
         
-        chronicles = {chronicle.id: chronicle.to_dict()}
-        tales = {tale.id: tale.to_dict()}
-        threads = {thread.id: tale.to_dict()}
+        norm_user = normalize_user_data(user)
         
-        print("\n\nSIGNED UP: USER CHRONICLES TALES THREADS")
-        pprint(user)
-        pprint(chronicles)
-        pprint(tales)
-        pprint(threads)
-        
-        return jsonify(user=user.to_dict(), chronicles=chronicles, tales=tales, threads=threads)
+        return jsonify(user=norm_user, chronicles=chronicles, tales=tales, threads=threads)
     return {'errors': validation_errors_to_messages(form.errors)}
 
 

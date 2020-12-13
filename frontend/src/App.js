@@ -22,7 +22,7 @@ import CurrentThread from './components/CurrentThread'
 
 
 // ACTIONS
-import { getCreations } from './actions/chronicleActions'
+import { getCreations } from './actions/userActions'
 
 function App() {
   const dispatch = useDispatch()

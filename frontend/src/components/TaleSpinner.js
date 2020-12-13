@@ -141,18 +141,9 @@ export default function TaleSpinner() {
   return (<>
     {/* <button onClick={handleOpen}> +Thread</button>
     <ThreadForm tid={tid} open={open} handleClose={handleClose} handleChange={} /> */}
-
-    <YourCreations
-      creationType="Chronicle"
-      active={selected.chronicle}
-      creations={chronicles}
-      creationForm={ChronicleForm}
-      deleteActionCreator={deleteChronicle}
-    />
-
     <YourCreations
       pid={selected.chronicle.id}
-      creationType="Tale"
+      creationType="tale"
       creations={tales}
       active={selected.tale}
       filterBySelect={(tales, cid) => Object.values(tales).filter(tale => tale.chronicle_id === cid)}

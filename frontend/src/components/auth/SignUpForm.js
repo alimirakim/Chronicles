@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch } from 'react-redux'
 import { Redirect } from 'react-router-dom';
 import { signUp } from '../../services/auth';
-import { getCreations } from '../../actions/chronicleActions'
+import { getCreations } from '../../actions/userActions'
 import ErrorMessages from '../ErrorMessages'
 
 
@@ -37,46 +37,50 @@ const SignUpForm = ({ authenticated, setAuthenticated }) => {
   if (authenticated) return <Redirect to="/" />
 
   return (
-    <form onSubmit={onSignUp}>
+    <form onSubmit={onSignUp} className="lo-box-med">
+    <h2>Create an account!</h2>
       <ErrorMessages errors={errors} />
       <div>
-        <label>User Name</label>
+        <label className="lo-txt-con">User Name
         <input
-          type="text"
-          name="username"
-          onChange={updateUsername}
-          value={username}
-        ></input>
+            type="text"
+            name="username"
+            onChange={updateUsername}
+            value={username}
+          />
+        </label>
       </div>
       <div>
-        <label>Email</label>
+        <label className="lo-txt-con">Email
         <input
-          type="text"
-          name="email"
-          onChange={updateEmail}
-          value={email}
-        ></input>
+            type="text"
+            name="email"
+            onChange={updateEmail}
+            value={email}
+          />
+        </label>
       </div>
       <div>
-        <label>Password</label>
+        <label className="lo-txt-con">Password
         <input
-          type="password"
-          name="password"
-          onChange={updatePassword}
-          value={password}
-        ></input>
+            type="password"
+            name="password"
+            onChange={updatePassword}
+            value={password}
+          />
+        </label>
       </div>
       <div>
-        <label>Repeat Password</label>
+        <label className="lo-txt-con">Repeat Password
         <input
-          type="password"
-          name="repeat_password"
-          onChange={updateRepeatPassword}
-          value={repeatPassword}
-          required={true}
-        ></input>
+            type="password"
+            name="repeat_password"
+            onChange={updateRepeatPassword}
+            value={repeatPassword}
+            required={true}
+          /></label>
       </div>
-      <button type="submit">Sign Up</button>
+      <button type="submit" className="lo-wow">Sign Up <i className="fas fa-signature" style={{marginTop: "0.4rem"}}></i><i className="fas fa-pen-fancy"></i></button>
     </form>
   );
 };

@@ -6,9 +6,10 @@ export default function Footer({ authenticated, setAuthenticated }) {
 
   console.info("stuff", authenticated)
   return (
-    <footer>
+    <div className="btm-wrap">
+    <footer className="btm">
       <nav>
-        <ul>
+        <ul className="btm-con">
           <li><NavLink to="#top">[INSERT LOGO]</NavLink></li>
           <li><NavLink to={`/`} exact={true} activeClassName="active">Home</NavLink></li>
           <li><NavLink to={`/gallery`} exact={true} activeClassName="active">Chronicles Gallery</NavLink></li>
@@ -31,5 +32,6 @@ export default function Footer({ authenticated, setAuthenticated }) {
       </nav>
       <address>&copy; 2020 Alicia Mira Kim</address>
     </footer>
+    </div>
   )
 }

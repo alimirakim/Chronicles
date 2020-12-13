@@ -5,7 +5,8 @@ import {
   DELETE_THREAD
 } from '../actions/threadActions'
 import { DELETE_TALE } from '../actions/taleActions'
-import { GET_CREATIONS, DELETE_CHRONICLE } from '../actions/chronicleActions'
+import { DELETE_CHRONICLE } from '../actions/chronicleActions'
+import { GET_USER_CREATIONS } from '../actions/userActions'
 
 
 export default function threadsReducer(state = {}, action) {
@@ -13,7 +14,7 @@ export default function threadsReducer(state = {}, action) {
 
   switch (action.type) {
     
-    case GET_CREATIONS:
+    case GET_USER_CREATIONS:
       return action.content.threads
     
     case GET_THREADS:

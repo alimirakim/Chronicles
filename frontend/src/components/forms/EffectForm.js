@@ -1,19 +1,21 @@
 import React from 'react'
 import CreationFormWrapper from './CreationFormWrapper'
-import {addEffect, updateEffect} from '../../actions/effectActions'
+import { addEffect, updateEffect } from '../../actions/effectActions'
 
-export default function AssetForm({ id, edit }) {
+export default function EffectForm({ id, edit, open, handleClose }) {
   const resetUniqueContent = () => console.log("No unique content to reset")
-  
+
   return (<>
-      <CreationFormWrapper
-        edit={edit}
-        path={edit ? `/api/effects/${id}/edit` : `/api/chronicles/${id}/effects/create` }
-        creationType="Effect"
-        actionCreator={edit ? updateEffect : addEffect}
-        uniqueContent={{}}
-        resetUniqueContent={resetUniqueContent}
-        uniqueForm={"span"}
-      />
+    <CreationFormWrapper
+      open={open}
+      handleClose={handleClose}
+      edit={edit}
+      path={edit ? `/api/effects/${id}/edit` : `/api/chronicles/${id}/effects/create`}
+      creationType="effect"
+      actionCreator={edit ? updateEffect : addEffect}
+      uniqueContent={{}}
+      resetUniqueContent={resetUniqueContent}
+      uniqueForm={"span"}
+    />
   </>)
 }

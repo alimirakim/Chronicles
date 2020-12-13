@@ -1,50 +1,58 @@
 import React from 'react';
-import {useSelector} from 'react-redux'
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link, Redirect } from 'react-router-dom';
 import LogoutButton from './auth/LogoutButton';
+import { logout } from "../services/auth";
+// import {library} from '@fortawesome/fontawesome-svg-core';
+// import {shoePrint} from "@fortawesome/solid-svg-icons";
+// library.add(
+//   showPrint,
+// )
 
+// 
 export default function Header({ authenticated, setAuthenticated }) {
-  
-  return (<header className="top">
-    <h1>TaleSpinner</h1>
-    <i class="fas fa-heart"></i>
-    
-    <nav>
-      <ul>
-        <li>
-          <NavLink to="/" exact={true} activeClassName="active">
-            Home
-          </NavLink>
-        </li>
+  const onLogout = async (e) => {
+    await logout();
+    setAuthenticated(false)
+    return <Redirect to="/login" />
+  }
 
-      {authenticated && <>
-      
-        <li>
-          <NavLink to={`/worldweaver`} exact={true} activeClassName="active">
-            WorldWeaver
-          </NavLink>
-        </li>
-      
-        <li>
+  return (<header id="top">
+    <Link to="/"><h1 className="top-title">CHRONICLE</h1></Link>
+
+    <nav>
+      <ul className="top-con">
+
+
+        {authenticated && <>
+          <li>
+            <button onClick={onLogout} type="button">
+
+              {/* <FontAwesomeIcon
+                icon={["fas", "shoe-print"]}
+                mask={["fas", "circle"]}
+                transform="shrink-3.5"
+                fixedWith
+              /> */}
+          Logout
+          </button>
+          </li>
+
+
+
           <NavLink to={`/talespinner`} exact={true} activeClassName="active">
-            TaleSpinner
+            <li>TaleSpinner</li>
           </NavLink>
-        </li>
-        
-        <li>
-          <NavLink to={`/gallery`} exact={true} activeClassName="active">
-            Games 
-            {/* Spotlight, discovery, find, new, latest, by your followed, by tag, popular */}
+
+          <NavLink to={`/worldweaver`} exact={true} activeClassName="active">
+            <li>WorldWeaver</li>
           </NavLink>
-        </li>
-        
-        <li>
+
+
           <NavLink to={`/library`} exact={true} activeClassName="active">
-            Library
+            <li>Library</li>
           </NavLink>
-        </li>
-        
-        {/* <li>
+
+          {/* <li>
           <NavLink to="/characters" exact={true} activeClassName="active">
             My Characters
           </NavLink>
@@ -70,31 +78,37 @@ export default function Header({ authenticated, setAuthenticated }) {
           </NavLink>
         </li> */}
 
-        <li>
-          <NavLink to="/users" exact={true} activeClassName="active">
-            Users
-          </NavLink>
-        </li>
-        <li>
-          <LogoutButton setAuthenticated={setAuthenticated} />
-        </li>
-      </>}
-        
-        {/* For Anon Users, show only Login/Signup options: */}
-        {!authenticated && <>
-          <li>
-            <NavLink to="/login" exact={true} activeClassName="active">
-              Login
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/sign-up" exact={true} activeClassName="active">
-              Sign Up
-            </NavLink>
-          </li>
         </>}
         
+        
+        <NavLink to="/users" exact={true} activeClassName="active">
+            <li>Users </li>
+          </NavLink>
+        
+        <NavLink to={`/gallery`} exact={true} activeClassName="active">
+            <li>Gallery</li>
+            {/* Spotlight, discovery, find, new, latest, by your followed, by tag, popular */}
+          </NavLink>
+
+        {/* For Anon Users, show only Login/Signup options: */}
+        {!authenticated && <>
+
+          <NavLink to="/login" exact={true} activeClassName="active" style={{ color: "coral" }}>
+            <li> Login</li>
+          </NavLink>
+
+
+          <NavLink to="/sign-up" exact={true} activeClassName="active" style={{ color: "carmine" }}>
+            <li>Sign Up</li>
+          </NavLink>
+
+        </>}
+        
+        <NavLink to="/" exact={true} activeClassName="active" >
+            <li> Home  </li>
+          </NavLink>
+          
       </ul>
     </nav>
-  </header>);
+  </header >);
 }

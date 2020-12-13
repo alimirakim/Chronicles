@@ -1,19 +1,21 @@
 import React from 'react'
 import CreationFormWrapper from './CreationFormWrapper'
-import {addTale, updateTale} from '../../actions/taleActions'
+import { addTale, updateTale } from '../../actions/taleActions'
 
-export default function TaleForm({ id, edit }) {
+export default function TaleForm({ id, edit, open, handleClose }) {
   const resetUniqueContent = () => console.log("No unique content to reset")
-  
+
   return (<>
-      <CreationFormWrapper
-        edit={edit}
-        path={edit ? `/api/tales/${id}/edit` : `/api/chronicles/${id}/tales/create` }
-        creationType="Tale"
-        actionCreator={edit ? updateTale : addTale}
-        uniqueContent={{}}
-        resetUniqueContent={resetUniqueContent}
-        uniqueForm={"span"}
-      />
+    <CreationFormWrapper
+      open={open}
+      handleClose={handleClose}
+      edit={edit}
+      path={edit ? `/api/tales/${id}/edit` : `/api/chronicles/${id}/tales/create`}
+      creationType="tale"
+      actionCreator={edit ? updateTale : addTale}
+      uniqueContent={{}}
+      resetUniqueContent={resetUniqueContent}
+      uniqueForm={"span"}
+    />
   </>)
 }

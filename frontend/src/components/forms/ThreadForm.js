@@ -10,7 +10,7 @@ import { addThread, updateThread } from '../../actions/threadActions'
 // const editChoiceTitle = (e) => 
 
 
-export default function ThreadForm({ id, edit }) {
+export default function ThreadForm({ id, edit, open, handleClose }) {
   const threads = useSelector(state => state.threads)
   const [choices, setChoices] = useState(edit ? edit.choices : [])
 
@@ -18,7 +18,7 @@ export default function ThreadForm({ id, edit }) {
 
   const addChoicesToThread = () => (
     <AddToList
-      creationType="Choice"
+      creationType="choice"
       allItems={threads}
       addedItems={choices}
       setAddedItems={setChoices}
@@ -27,9 +27,11 @@ export default function ThreadForm({ id, edit }) {
 
   return (<>
     <CreationFormWrapper
+      open={open}
+      handleClose={handleClose}
       edit={edit}
       path={edit ? `/api/threads/${id}/edit` : `/api/tales/${id}/threads/create`}
-      creationType="Thread"
+      creationType="thread"
       actionCreator={edit ? updateThread : addThread}
       uniqueContent={{ choices }}
       resetUniqueContent={resetUniqueContent}

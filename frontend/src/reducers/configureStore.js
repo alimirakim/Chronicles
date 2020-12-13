@@ -14,30 +14,32 @@ import threadsReducer from './threadsReducer'
 import locksReducer from './locksReducer'
 import effectsReducer from './effectsReducer'
 import errorsReducer from './errorsReducer'
+import userReducer from './userReducer'
 
 // const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
 const rootReducer = combineReducers({
-    assets: assetsReducer,
-    choices: choicesReducer,
-    characters: charactersReducer,
-    chronicles: chroniclesReducer,
-    conditions: conditionsReducer,
-    errors: errorsReducer,
-    places: placesReducer,
-    meters: metersReducer,
-    selections: selectionsReducer,
-    tales: talesReducer,
-    threads: threadsReducer,
-    locks: locksReducer,
-    effects: effectsReducer,
+  assets: assetsReducer,
+  choices: choicesReducer,
+  characters: charactersReducer,
+  chronicles: chroniclesReducer,
+  conditions: conditionsReducer,
+  effects: effectsReducer,
+  errors: errorsReducer,
+  places: placesReducer,
+  meters: metersReducer,
+  selections: selectionsReducer,
+  tales: talesReducer,
+  threads: threadsReducer,
+  locks: locksReducer,
+  user: userReducer,
 })
 
 export default function configureStore(preloadedState) {
-    return createStore(
-        rootReducer,
-        preloadedState,
-        // composeEnhancers(),
-        composeWithDevTools(applyMiddleware(logger))
-    )
+  return createStore(
+    rootReducer,
+    preloadedState,
+    // composeEnhancers(),
+    composeWithDevTools(applyMiddleware(logger))
+  )
 }

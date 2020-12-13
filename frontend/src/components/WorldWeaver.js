@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 // YOUR COMPONENTS
 import YourCreations from './YourCreations'
-import {SelectInputColors, SelectInputImages} from './forms/FormInputs'
+import { SelectInputColors, SelectInputImages } from './forms/FormInputs'
 
 // FORM COMPONENTS
 import ChronicleForm from './forms/ChronicleForm'
@@ -22,17 +22,19 @@ import { deleteChronicle } from '../actions/chronicleActions'
 import { deleteTale } from '../actions/taleActions'
 import { deleteThread } from '../actions/threadActions'
 import { deleteChoice } from '../actions/choiceActions'
-import {deleteCharacter } from '../actions/characterActions'
-import {deletePlace } from '../actions/placeActions'
-import {deleteAsset } from '../actions/assetActions'
+import { deleteCharacter } from '../actions/characterActions'
+import { deletePlace } from '../actions/placeActions'
+import { deleteAsset } from '../actions/assetActions'
 import {deleteCondition } from '../actions/conditionActions'
 import {deleteMeter } from '../actions/meterActions'
 import { updateSelections, wipeSelections } from '../actions/selectionActions'
 
 
-export default function Home() {
+export default function WorldWeaver() {
   const dispatch = useDispatch()
-  const { chronicles, tales, threads, choices, selected, characters, assets, places } = useSelector(state => ({
+  // TODO QUESTION Ask, is this less efficient than selecting each individually??
+  const { user, chronicles, tales, threads, choices, selected, characters, assets, places, conditions, meters } = useSelector(state => ({
+    user: state.user,
     chronicles: state.chronicles,
     tales: state.tales,
     threads: state.threads,
@@ -41,8 +43,8 @@ export default function Home() {
     characters: state.characters,
     assets: state.assets,
     places: state.places,
-    // conditions: state.conditions,
-    // meters: state.meters,
+    conditions: state.conditions,
+    meters: state.meters,
   }))
 
   // Select a user's first chronicle and its tales/content upon initialization
@@ -72,9 +74,9 @@ export default function Home() {
       {/* <p>Welcome, {user.username}...</p> */}
 
       <YourCreations
-        creationType="Chronicle"
-        active={selected.chronicle}
+        creationType="chronicle"
         creations={chronicles}
+        creations={Object.values(chronicles).filter(c => user.chronicle_ids.includes(c.id))}
         creationForm={ChronicleForm}
         deleteActionCreator={deleteChronicle}
       />
@@ -82,9 +84,8 @@ export default function Home() {
       <Link to={`/talespinner/tales/${selected.tale.id}`}>Go to TaleSpinner</Link>
       <YourCreations
         pid={selected.chronicle.id}
-        creationType="Tale"
-        creations={tales}
-        active={selected.tale}
+        creationType="tale"
+        creations={Object.values(tales).filter(t => user.tale_ids.includes(t.id))}
         filterBySelect={(tales, cid) => Object.values(tales).filter(tale => tale.chronicle_id === cid)}
         deleteActionCreator={deleteTale}
         creationForm={TaleForm}
@@ -92,9 +93,8 @@ export default function Home() {
 
       <YourCreations
         pid={selected.tale.id}
-        creationType="Thread"
-        creations={threads}
-        active={selected.thread}
+        creationType="thread"
+        creations={Object.values(threads).filter(th => user.thread_ids.includes(th.id))}
         filterBySelect={(threads, tid) => Object.values(threads).filter(thread => thread.tale_id === tid)}
         deleteActionCreator={deleteThread}
         creationForm={ThreadForm}
@@ -102,9 +102,8 @@ export default function Home() {
 
       <YourCreations
         pid={selected.thread.id}
-        creationType="Choice"
-        creations={choices}
-        active={selected.choice}
+        creationType="choice"
+        creations={Object.values(choices).filter(ch => user.choice_ids.includes(ch.id))}
         filterBySelect={(choices, thid) => Object.values(choices).filter(choice => choice.current_thread_id === thid)}
         deleteActionCreator={deleteChoice}
         creationForm={ChoiceForm}
@@ -112,53 +111,53 @@ export default function Home() {
 
       <YourCreations
         pid={selected.chronicle.id}
-        creationType="Character"
-        creations={characters}
-        active={selected.character}
+        creationType="character"
+        creations={Object.values(characters).filter(char => user.character_ids.includes(char.id))}
         filterBySelect={(characters, cid) => Object.values(characters).filter(character => character.chronicle_id === cid)}
         deleteActionCreator={deleteCharacter}
         creationForm={CharacterForm}
       />
 
+      {/* places */}
       <YourCreations
         pid={selected.chronicle.id}
-        creationType="Place"
-        creations={places}
-        active={selected.place}
+        creationType="place"
+        creations={Object.values(places).filter(p => user.place_ids.includes(p.id))}
         filterBySelect={(places, cid) => Object.values(places).filter(place => place.chronicle_id === cid)}
         deleteActionCreator={deletePlace}
         creationForm={PlaceForm}
       />
 
+      {/* assets */}
       <YourCreations
         pid={selected.chronicle.id}
-        creationType="Asset"
-        creations={assets}
-        active={selected.asset}
+        creationType="asset"
+        creations={Object.values(assets).filter(a => user.asset_ids.includes(a.id))}
         filterBySelect={(assets, cid) => Object.values(assets).filter(asset => asset.chronicle_id === cid)}
         deleteActionCreator={deleteAsset}
         creationForm={AssetForm}
       />
-{/* 
+
+      {/* conditions */}
       <YourCreations
         pid={selected.chronicle.id}
-        creationType="Condition"
-        creations={conditions}
-        active={selected.condition}
+        creationType="condition"
+        creations={Object.values(conditions).filter(cond => user.condition_ids.includes(cond.id))}
         filterBySelect={(conditions, cid) => Object.values(conditions).filter(condition => condition.chronicle_id === cid)}
         deleteActionCreator={deleteCondition}
         creationForm={ConditionForm}
       />
-
+      
+      
       <YourCreations
         pid={selected.chronicle.id}
-        creationType="Meter"
-        creations={meters}
-        active={selected.meter}
-        filterBySelect={(meters, cid) => Object.values(meters).filter(chronicle => chronicle.chronicle_id === cid)}
+        creationType="meter"
+        creations={Object.values(meters).filter(m => user.meter_ids.includes(m.id))}
+        filterBySelect={(meters, cid) => Object.values(meters).filter(meter => meter.chronicle_id === cid)}
         deleteActionCreator={deleteMeter}
         creationForm={MeterForm}
-      /> */}
+      />
+
 
     </main>
   )

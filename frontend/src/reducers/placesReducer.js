@@ -4,14 +4,15 @@ import {
   UPDATE_PLACE,
   DELETE_PLACE
 } from '../actions/placeActions'
-import { GET_CREATIONS, DELETE_CHRONICLE } from '../actions/chronicleActions'
+import { DELETE_CHRONICLE } from '../actions/chronicleActions'
+import { GET_USER_CREATIONS } from '../actions/userActions'
 
 
 export default function placesReducer(state = {}, action) {
   const newState = { ...state }
   switch (action.type) {
     
-    case GET_CREATIONS:
+    case GET_USER_CREATIONS:
       return action.content.places
     
     case GET_PLACES:
@@ -27,7 +28,7 @@ export default function placesReducer(state = {}, action) {
       return newState
       
     case DELETE_CHRONICLE:
-      return Object.values(state).filter(place => action.chronicle.entity_ids.includes(place.id))
+      return Object.values(state).filter(place => action.chronicle.place_ids.includes(place.id))
       
     default:
       return state

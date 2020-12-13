@@ -2,24 +2,12 @@
 
 
 /* Development-mode-only helpers */
-
-body {
-  margin: 2rem 0.5rem 10rem;
-  color: rgb(70,60,70);
-  font-family: Calibri, 'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif
-}
 * {
   /* outline: 1px dotted lightblue; */
 }
-.active {
-  background-color: #ffc8dd;
-}
-.card {
-  margin: 0.5rem;
-  border-radius: 0.2rem;
-  box-shadow: 5px 2px 5px gray;
-  padding: 0.2rem;
-}
+
+
+
 dt {
   font-weight: bold;
 }
@@ -38,39 +26,32 @@ dl.cards > * {
   margin: 0.5rem 0.2rem;
 }
 
-
-
-
-button {
-  cursor: pointer;
-  text-transform: uppercase;
-  background-color: rgba(0,0,0,0);
+.tip {
+  position: relative;
+  display: inline-block;
+  padding-left: 1rem;
+  opacity: 0.5;
+  transition: all 0.2s ease;
 }
-button:active {
-  outline: none;
-}
+.tip ~ section {
+  visibility: hidden;
+  z-index: 10;
+  position: absolute;
+  top: -0.8rem;
+  right: 2rem;
 
-.is-hidden {
-  display: none;
-}
-form.is-popped {
-  z-index: 100;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 70%;
+  opacity: 0;
+  padding: 0.5rem 2rem;
+  font: normal 0.8rem Calibri;
   background-color: white;
-  padding: 1rem;
-  box-shadow: 5px 5px 10px rgb(70,70,80);
+  box-shadow: 5px 5px 0 rgba(60,50,50,0.5);
+  transition: opacity 0.5s ease;
 }
-div.is-popped {
-  z-index: 80;
-  position: fixed;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  background-color: rgba(0,0,0,0.5);
-  pointer-events: all;
+
+.tip:hover {
+  opacity: 1;
+}
+.tip:hover ~ section {
+  visibility: visible;
+  opacity: 1;
 }

@@ -4,51 +4,26 @@ import { Link } from 'react-router-dom'
 import { updateSelections, wipeSelections } from '../actions/selectionActions'
 
 // COMPONENTS
-import LoginForm from "./auth/LoginForm";
-import SignUpForm from "./auth/SignUpForm";
+import LoginForm from "./auth/LoginForm"
+import SignUpForm from "./auth/SignUpForm"
 
 export default function Home({ authenticated, setAuthenticated }) {
   const dispatch = useDispatch()
-  const { chronicles, tales, threads, choices, selected, characters, assets, places } = useSelector(state => ({
-    chronicles: state.chronicles,
-    tales: state.tales,
-    threads: state.threads,
-    choices: state.choices,
-    selected: state.selections,
-    characters: state.characters,
-    assets: state.assets,
-    places: state.places,
-    // conditions: state.conditions,
-    // meters: state.meters,
-  }))
+  const chronicles = useSelector(state => state.chronicles)
 
   // Select a user's first chronicle and its tales/content upon initialization
   useEffect(() => {
-    dispatch(updateSelections([
-      { type: "chronicle", selection: Object.keys(chronicles) ? chronicles[Object.keys(chronicles)[0]] : "" },
-    ]))
+    // TODO Refetch chronicle selection
+    if (!chronicles) {
+      
+    }
   }, [])
-  // Upon chronicle-selection, clear dependent selections and refresh tales // TODO Plus charas, places, assets, etc.
-  useEffect(() => {
-    dispatch(wipeSelections(["tale", "thread", "choice", "threads", "choices"]))
-    console.log("tales", tales)
-  }, [selected.chronicle])
-
-  // Upon tale selection, clear dependent selections and refresh threads
-  useEffect(() => {
-    dispatch(wipeSelections(["thread", "choice", "threads", "choices"]))
-  }, [selected.tale])
-
-  // Upon thread selection, clear dependent selections and refresh choices // TODO Plus effects
-  useEffect(() => {
-    dispatch(wipeSelections(["choice", "choices"]))
-  }, [selected.thread])
 
   return (
     <main>
       <h1>Welcome to TaleSpinner</h1>
       <p>Discover and play free text adventures made by users like you, or spin your own tale or three and share it to the world!</p>'
-      
+
       {/* Want to make games but don't know programming?
       Want to tell a story where the player can decide who they are and what they do?
       
@@ -58,18 +33,18 @@ export default function Home({ authenticated, setAuthenticated }) {
       2. Creator. --> kind of story
       3. Both.
       4. Not sure. */}
+      <div >
+        <SignUpForm
+          authenticated={authenticated}
+          setAuthenticated={setAuthenticated}
+        />
+        <LoginForm
+          authenticated={authenticated}
+          setAuthenticated={setAuthenticated}
+        />
 
-      <SignUpForm
-        authenticated={authenticated}
-        setAuthenticated={setAuthenticated}
-      />
-      <LoginForm
-        authenticated={authenticated}
-        setAuthenticated={setAuthenticated}
-      />
-
-      <GalleryRibbon items={chronicles} />
-
+        <GalleryRibbon items={chronicles} />
+      </div>
     </main>
   )
 }
@@ -84,7 +59,7 @@ function GalleryRibbon({ items }) {
         {Object.values(items).map(item => (
           <li key={item.id} className="card">
             <Link to={`/chronicles/${item.id}`}>
-              <img style={{width: "3rem", height: "3rem", float: "left", margin: "0.5rem 1rem" }} src={`/images/${item.image}.svg`} alt={`Splash image for "${item.title}" by ${item.creator}`} />
+              <img style={{ width: "3rem", height: "3rem", float: "left", margin: "0.5rem 1rem" }} src={`/images/${item.image}.svg`} alt={`Splash image for "${item.title}" by ${item.creator}`} />
               <dl>
                 <dt>Title</dt>
                 <dd>{item.title}</dd>

@@ -11,12 +11,13 @@ import {
 // } from '../actions/threadActions'
 // import { DELETE_TALE } from '../actions/taleActions'
 // import { DELETE_CHRONICLE } from '../actions/chronicleActions'
+// import { GET_USER_CREATIONS } from '../actions/userActions'
 
 export default function metersReducer(state = {}, action) {
   let newState = { ...state }
   switch (action.type) {
     
-    // case GET_CREATIONS:
+    // case GET_USER_CREATIONS:
       // return action.content.meters
 
     case GET_METERS:

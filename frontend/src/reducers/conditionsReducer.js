@@ -4,13 +4,15 @@ import {
   UPDATE_CONDITION,
   DELETE_CONDITION,
 } from '../actions/conditionActions'
-import { GET_CREATIONS, DELETE_CHRONICLE } from '../actions/chronicleActions'
+import { DELETE_CHRONICLE } from '../actions/chronicleActions'
+import { GET_USER_CREATIONS } from '../actions/userActions'
+
 
 export default function conditionsReducer(state = {}, action) {
   let newState = { ...state }
   switch (action.type) {
 
-    case GET_CREATIONS:
+    case GET_USER_CREATIONS:
       return action.content.conditions
     
     case GET_CONDITIONS:
@@ -26,7 +28,7 @@ export default function conditionsReducer(state = {}, action) {
       return newState
 
     case DELETE_CHRONICLE:
-      return Object.values(state).filter(cond => !action.chronicle.entity_ids.includes(cond.id))
+      return Object.values(state).filter(cond => !action.chronicle.condition_ids.includes(cond.id))
 
     default:
       return state
