@@ -1,0 +1,10 @@
+
+
+form.pop {
+  z-index: 100;
+  position: fixed;
+  width: 80%;
+  background-color: white;
+  padding: 1rem;
+  box-shadow: 5px 5px 10px rgba(70,70,80,0.5);
+}
