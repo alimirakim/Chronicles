@@ -18,7 +18,8 @@ export default function effectsReducer(state = {}, action) {
   switch (action.type) {
 
     // case GET_USER_CREATIONS:
-      // return action.content.effects
+    // Object.values(action.content.s).forEach( => newState[.id] = )
+    // return newState
     
     case GET_EFFECTS:
       return action.effects

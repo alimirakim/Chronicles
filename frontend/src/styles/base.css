@@ -10,6 +10,11 @@ body {
   color: rgb(70,60,70);
   background-color: #ded6d6;
 }
+
+main {
+  padding: 0 2rem;
+}
+
 button {
   cursor: pointer;
   border-width: 0;

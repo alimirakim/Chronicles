@@ -13,7 +13,8 @@ export default function placesReducer(state = {}, action) {
   switch (action.type) {
     
     case GET_USER_CREATIONS:
-      return action.content.places
+      Object.values(action.content.places).forEach(place => newState[place.id] = place)
+      return newState
     
     case GET_PLACES:
       return action.places

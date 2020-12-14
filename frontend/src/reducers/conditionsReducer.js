@@ -13,7 +13,8 @@ export default function conditionsReducer(state = {}, action) {
   switch (action.type) {
 
     case GET_USER_CREATIONS:
-      return action.content.conditions
+      Object.values(action.content.conditions).forEach(condition => newState[condition.id] = condition)
+      return newState
     
     case GET_CONDITIONS:
       return action.conditions

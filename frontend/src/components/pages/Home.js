@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { updateSelections, wipeSelections } from '../actions/selectionActions'
+import parse from 'html-react-parser'
+
+// import { updateSelections, wipeSelections } from '../actions/selectionActions'
 
 // COMPONENTS
-import LoginForm from "./auth/LoginForm"
-import SignUpForm from "./auth/SignUpForm"
+import LoginForm from "../auth/LoginForm"
+import SignUpForm from "../auth/SignUpForm"
 
 export default function Home({ authenticated, setAuthenticated }) {
   const dispatch = useDispatch()
@@ -70,7 +72,7 @@ function GalleryRibbon({ items }) {
             <dt>Tags</dt>
             <dd>{item.tags}</dd>
             <dt>Description</dt> */}
-                <dd>{item.description}</dd>
+                <dd>{parse(item.description)}</dd>
                 {/* TODO Notes like how many tales, how many users, wordcount, hearts/stars */}
               </dl>
             </Link>

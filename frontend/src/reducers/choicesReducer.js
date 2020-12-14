@@ -19,7 +19,8 @@ export default function choicesReducer(state = {}, action) {
   switch (action.type) {
     
     case GET_USER_CREATIONS:
-      return action.content.choices
+      Object.values(action.content.choices).forEach(choice => newState[choice.id] = choice)
+      return newState
       
     case GET_CHOICES:
       return action.choices

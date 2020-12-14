@@ -2,37 +2,29 @@ import React, { useState, cloneElement, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import Diagram, { createSchema, useSchema } from 'beautiful-react-diagrams'
-import ChronicleForm from './forms/ChronicleForm'
-import ThreadForm from './forms/ThreadForm'
-import TaleForm from './forms/TaleForm'
-import { addThread } from '../actions/threadActions'
-import { deleteChronicle } from '../actions/chronicleActions'
-import { deleteTale } from '../actions/taleActions'
-import YourCreations from './YourCreations'
+import ChronicleForm from '../forms/ChronicleForm'
+import ThreadForm from '../forms/ThreadForm'
+import TaleForm from '../forms/TaleForm'
+import ChoiceForm from '../forms/ChoiceForm'
+import { addThread } from '../../actions/threadActions'
+import { deleteChronicle } from '../../actions/chronicleActions'
+import { deleteTale } from '../../actions/taleActions'
+import { deleteThread } from '../../actions/threadActions'
+import { deleteChoice } from '../../actions/choiceActions'
+import YourCreations from '../YourCreations'
+import {TaleDiagram, CustomNode } from '../TaleDiagram'
 
 
-function CustomNode({ id, content, data, inputs, outputs }) {
-  return (
-    <div style={{ borderRadius: '1rem' }} onClick={() => data.onClickEdit(id)}>
-      <div style={{ padding: '10px' }}>
-        <button onClick={() => data.onClickDelete(id)}>&times;</button>
-        <button onClick={() => data.onClickCreateChoice(id)}>+choice</button>
-        {content}
-      </div>
-      {/* <div style={{ marginTop: '2rem' }}>
-        {inputs.map(port => { cloneElement(port, { style: { width: '1rem', height: '1rem', borderRadius: "50% 0 0 50%", color: 'rgba(255,255,255,0.5)' } }) })}
-        {outputs.map(port => { cloneElement(port, { style: { width: '1rem', height: '1rem', borderRadius: "50% 0 0 50%", color: 'rgba(255,255,255,0.5)' } }) })}
-      </div> */}
-    </div>
-  )
-}
+
 
 
 export default function TaleSpinner() {
+  const user = useSelector(state => state.user)
   const selected = useSelector(state => state.selections)
   const chronicles = useSelector(state => state.chronicles)
   const tales = useSelector(state => Object.values(state.tales).filter(tale => tale.chronicle_id === selected.chronicle.id))
   const threads = useSelector(state => state.threads)
+  const choices = useSelector(state => state.choices)
   const [open, setOpen] = useState(false)
   const [nodes, setNodes] = useState([])
   const [links, setLinks] = useState([])
@@ -138,48 +130,30 @@ export default function TaleSpinner() {
   const handleOpen = (e) => setOpen(true)
   const handleClose = (e) => setOpen(false)
   const [schema, { onChange, addNode, removeNode }] = useSchema(initialSchema)
-  return (<>
+  return (<main>
     {/* <button onClick={handleOpen}> +Thread</button>
     <ThreadForm tid={tid} open={open} handleClose={handleClose} handleChange={} /> */}
     <YourCreations
-      pid={selected.chronicle.id}
-      creationType="tale"
-      creations={tales}
-      active={selected.tale}
-      filterBySelect={(tales, cid) => Object.values(tales).filter(tale => tale.chronicle_id === cid)}
-      deleteActionCreator={deleteTale}
-      creationForm={TaleForm}
-    />
+        pid={selected.tale.id}
+        creationType="thread"
+        creations={Object.values(threads).filter(th => user.thread_ids.includes(th.id))}
+        filterBySelect={(threads, tid) => Object.values(threads).filter(thread => thread.tale_id === tid)}
+        deleteActionCreator={deleteThread}
+        creationForm={ThreadForm}
+      />
+
+      <YourCreations
+        pid={selected.thread.id}
+        creationType="choice"
+        creations={Object.values(choices).filter(ch => user.choice_ids.includes(ch.id))}
+        filterBySelect={(choices, thid) => Object.values(choices).filter(choice => choice.current_thread_id === thid)}
+        deleteActionCreator={deleteChoice}
+        creationForm={ChoiceForm}
+      />
 
     <h2>Your Threads</h2>
     {/* <button onClick={addNewNode}>+Thread</button> */}
     <ThreadForm id={selected.tale.id} />
     <TaleDiagram initialSchema={initialSchema} />
-  </>)
-}
-
-
-function TaleDiagram({ initialSchema }) {
-  // console.log
-  const release = async (e) => {
-    // const res = await fetch(`/api/threads/${}/edit-xy`, {
-    //   method: "PATCH",
-    //   body: JSON.stringify({x: e.screenX, y: e.screenY})
-    // })
-    console.log("RLEASED", e.screenX, e.screenY, e.target)
-    console.log("target value", e.target.value)
-    console.log("target...", e.target.key, e.target.id)
-  }
-
-
-
-  // const [schema, { onChange, addNode, removeNode }] = useSchema(initialSchema)
-  // console.log("what is schema, onChange", onChange)
-
-  const [schema, { onChange, addNode, removeNode }] = useSchema(initialSchema)
-  return (
-    <div style={{ height: "50rem", outline: "3px pink solid" }} onMouseUp={release}>
-      <Diagram schema={schema} onChange={onChange} />
-    </div>
-  )
+  </main>)
 }

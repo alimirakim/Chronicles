@@ -35,6 +35,10 @@ import {
   ADD_CONDITION,
   DELETE_CONDITION,
 } from '../actions/conditionActions'
+import {
+  ADD_METER,
+  DELETE_METER,
+} from '../actions/meterActions'
 // import {
 //   ADD_,
 //   DELETE_,
@@ -125,14 +129,14 @@ export default function userReducer(state = {}, action) {
       newState.condition_ids.splice(i, 1)
       return newState
 
-    // // meters
-    // case ADD_:
-    //   newState._ids.push(action..id)
-    //   return newState
-    // case DELETE_:
-    //   i = newState._ids.indexOf(action..id)
-    //   newState._ids.splice(i, 1)
-    //   return newState
+    // meters
+    case ADD_METER:
+      newState.meter_ids.push(action.meter.id)
+      return newState
+    case DELETE_METER:
+      i = newState.meter_ids.indexOf(action.meter.id)
+      newState.meter_ids.splice(i, 1)
+      return newState
       
     // // effects
     // case ADD_:

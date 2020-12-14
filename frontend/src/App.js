@@ -6,19 +6,20 @@ import { useDispatch, useSelector } from 'react-redux'
 import ProtectedRoute from "./components/auth/ProtectedRoute"
 import Header from "./components/Header"
 import Footer from "./components/Footer"
-import Home from './components/Home'
 import SignUpForm from "./components/auth/SignUpForm"
 import LoginForm from "./components/auth/LoginForm"
-import UsersList from "./components/UsersList"
-import User from "./components/User"
-import PlayGallery from './components/PlayGallery'
-import Library from './components/Library'
-import ChroniclePage from './components/ChroniclePage.js'
-import TalePage from './components/TalePage'
-import WorldWeaver from './components/WorldWeaver'
-import TaleSpinner from './components/TaleSpinner'
-import CurrentThread from './components/CurrentThread'
-
+// PAGE COMPONENTS
+import Home from './components/pages/Home'
+import PlayGallery from './components/pages/PlayGallery'
+import ChroniclePage from './components/pages/ChroniclePage.js'
+import TalePage from './components/pages/TalePage'
+import CurrentThread from './components/pages/CurrentThread'
+import User from "./components/pages/User"
+import UsersList from "./components/pages/UsersList"
+import Library from './components/pages/Library'
+import WorldWeaver from './components/pages/WorldWeaver'
+import TaleSpinner from './components/pages/TaleSpinner'
+import About from './components/pages/About'
 
 
 // ACTIONS
@@ -74,11 +75,14 @@ function App() {
           setAuthenticated={setAuthenticated}
         />
       </Route>
+      <Route path="/about" exact={true}>
+        <About />
+      </Route>
 
+      {/* Public game pages, for all players */}
       <Route path="/gallery" exact={true}>
         <PlayGallery />
       </Route>
-
       <Route path="/chronicles/:cid" exact={true}>
         <ChroniclePage />
       </Route>
@@ -89,17 +93,13 @@ function App() {
         <CurrentThread />
       </Route>
 
-      {/* User's Library of joined chronicles/games */}
+      {/* Private game-library and creator pages, for users */}
       <ProtectedRoute path="/library" exact={true} authenticated={authenticated}>
         <Library />
       </ProtectedRoute>
-
-      {/* WorldWeaver*/}
       <ProtectedRoute path="/worldweaver" exact={true} authenticated={authenticated}>
         <WorldWeaver />
       </ProtectedRoute>
-
-      {/* TaleSpinner */}
       <ProtectedRoute path="/talespinner" exact={true} authenticated={authenticated}>
         <TaleSpinner threads={threads} />
       </ProtectedRoute>

@@ -59,13 +59,11 @@ export default function CreationFormWrapper({
   }
 
   if (!open) return null
-  console.log("create me!", creationType)
   return (<>
-    <form onSubmit={submitCreation} className="pop cfw lo-center">
+    <form onSubmit={submitCreation}>
       <h2>{edit ? `Edit ${creationType}: "${edit.title}"` : `Create a ${creationType}`}</h2>
 
       {/* Hides popup form on click */}
-      <button onClick={handleCloseAndReset} className="lo-x">&times;</button>
 
       {/* Shows error messages on failed submission */}
       <ErrorMessages errors={errors} />
@@ -73,8 +71,8 @@ export default function CreationFormWrapper({
       {/* Generic inputs */}
       <TextInput label="Title" value={title} setValue={setTitle} />
       <TextAreaInput label="Description" value={description} setValue={setDescription} />
-        <SelectInputColors image={image} value={color} setValue={setColor} />
-        <SelectInputImages color={color} value={image} setValue={setImage} />
+      <SelectInputColors image={image} value={color} setValue={setColor} />
+      <SelectInputImages color={color} value={image} setValue={setImage} />
       <UniqueForm />
 
       <button className="lo-wow">
@@ -82,6 +80,5 @@ export default function CreationFormWrapper({
         <i className="fas fa-feather-alt"></i>
       </button>
     </form>
-    <div className="lo-screen"></div>
   </>)
 }

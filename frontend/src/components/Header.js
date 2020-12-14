@@ -2,13 +2,8 @@ import React from 'react';
 import { NavLink, Link, Redirect } from 'react-router-dom';
 import LogoutButton from './auth/LogoutButton';
 import { logout } from "../services/auth";
-// import {library} from '@fortawesome/fontawesome-svg-core';
-// import {shoePrint} from "@fortawesome/solid-svg-icons";
-// library.add(
-//   showPrint,
-// )
 
-// 
+
 export default function Header({ authenticated, setAuthenticated }) {
   const onLogout = async (e) => {
     await logout();
@@ -17,7 +12,7 @@ export default function Header({ authenticated, setAuthenticated }) {
   }
 
   return (<header id="top">
-    <Link to="/"><h1 className="top-title">CHRONICLE</h1></Link>
+    <Link to="/"><h1 className="top-title">THE CHRONICLES</h1></Link>
 
     <nav>
       <ul className="top-con">
@@ -26,18 +21,13 @@ export default function Header({ authenticated, setAuthenticated }) {
         {authenticated && <>
           <li>
             <button onClick={onLogout} type="button">
-
-              {/* <FontAwesomeIcon
-                icon={["fas", "shoe-print"]}
-                mask={["fas", "circle"]}
-                transform="shrink-3.5"
-                fixedWith
-              /> */}
           Logout
           </button>
           </li>
 
-
+          <NavLink to="/about" exact={true} activeClassName="active">
+            <li>About </li>
+          </NavLink>
 
           <NavLink to={`/talespinner`} exact={true} activeClassName="active">
             <li>TaleSpinner</li>
@@ -79,7 +69,6 @@ export default function Header({ authenticated, setAuthenticated }) {
         </li> */}
 
         </>}
-        
         
         <NavLink to="/users" exact={true} activeClassName="active">
             <li>Users </li>

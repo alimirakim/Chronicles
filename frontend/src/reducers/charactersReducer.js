@@ -13,7 +13,8 @@ export default function charactersReducer(state = {}, action) {
   switch (action.type) {
     
     case GET_USER_CREATIONS:
-        return action.content.characters
+      Object.values(action.content.characters).forEach(character => newState[character.id] = character)
+      return newState
         
     case GET_CHARACTERS:
       return action.characters

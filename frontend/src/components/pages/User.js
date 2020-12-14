@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {useSelector} from 'react-redux'
 import { useParams, Link } from "react-router-dom";
+import parse from 'html-react-parser'
 
 function User() {
   const [user, setUser] = useState({});
@@ -44,7 +45,7 @@ function User() {
               <dt>Tags</dt>
               <dd>{chronicle.tags}</dd>
               <dt>Description</dt> */}
-              <dd>{chronicle.description}</dd>
+              <dd>{parse(chronicle.description)}</dd>
               {/* TODO Notes like how many tales, how many users, wordcount, hearts/stars */}
             </dl>
             </Link>

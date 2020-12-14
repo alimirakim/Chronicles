@@ -20,12 +20,11 @@ export default function DeleteForm({open, handleClose, creation, creationType, d
   if (!open) return null
   console.log("heard open delete", creation)
   return (<>
-    <form className={"pop lo-center"}>
+    <form>
       <h3 className="lo-txt-con">Delete {creationType}: "{creation.title}"?</h3>
       <strong>Are you SURE you want to permanently delete the {creationType} "{creation.title}" and everything that depends on it? D:</strong>
       <button type="button" onClick={handleClose} className="lo-wow">Cancel</button>
       <button onClick={handleDelete} className="lo-wow">Delete <i className="fas fa-trash-alt"></i></button>
     </form>
-      <div className={"lo-screen"}></div>
   </>)
 }

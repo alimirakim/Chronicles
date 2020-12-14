@@ -1,4 +1,5 @@
 import {
+  GET_CHRONICLE,
   GET_CHRONICLES,
   ADD_CHRONICLES,
   ADD_CHRONICLE,
@@ -12,10 +13,14 @@ export default function chroniclesReducer(state = {}, action) {
   switch (action.type) {
 
     case GET_USER_CREATIONS:
-      return action.content.chronicles
-
+      Object.values(action.content.chronicles).forEach(chronicle => newState[chronicle.id] = chronicle)
+      return newState
+    case GET_CHRONICLE:
+      newState[action.chronicle.id] = action.chronicle
+      return newState
     case GET_CHRONICLES:
-      return action.chronicles
+      newState[action.chronicle.id] = action.chronicle
+      return newState
     case ADD_CHRONICLES:
       action.chronicles.forEach(chronicle => newState[chronicle.id] = chronicle)
       return newState

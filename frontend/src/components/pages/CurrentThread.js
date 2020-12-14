@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams, useLocation, Link } from 'react-router-dom'
-
+import parse from 'html-react-parser'
 
 export default function CurrentThread() {
   const {cid, tid} = useParams()
@@ -41,7 +41,7 @@ export default function CurrentThread() {
     <Link to={`/chronicles/${cid}`}>Go back to Chronicle page</Link>
     
     <h2>{currentThread.title}</h2>
-    <p>{currentThread.description}</p>
+    <p>{parse(currentThread.description)}</p>
     
     <h3>Effects</h3>
     <ul>

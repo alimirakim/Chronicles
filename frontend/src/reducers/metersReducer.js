@@ -10,18 +10,20 @@ import {
 //   DELETE_THREAD
 // } from '../actions/threadActions'
 // import { DELETE_TALE } from '../actions/taleActions'
-// import { DELETE_CHRONICLE } from '../actions/chronicleActions'
-// import { GET_USER_CREATIONS } from '../actions/userActions'
+import { DELETE_CHRONICLE } from '../actions/chronicleActions'
+import { GET_USER_CREATIONS } from '../actions/userActions'
 
 export default function metersReducer(state = {}, action) {
   let newState = { ...state }
   switch (action.type) {
     
-    // case GET_USER_CREATIONS:
-      // return action.content.meters
+    case GET_USER_CREATIONS:
+      Object.values(action.content.meters).forEach(meter => newState[meter.id] = meter)
+      return newState
 
     case GET_METERS:
-      return action.meters
+      action.meters.forEach(meter => newState[meter.id] = meter)
+      return newState
     case ADD_METER:
       newState[action.meter.id] = action.meter
       return newState
@@ -45,8 +47,8 @@ export default function metersReducer(state = {}, action) {
     // case DELETE_TALE:
     //   return Object.values(state).filter(meter => action.tale.thread_ids.includes(meter.thread_id))
 
-    // case DELETE_CHRONICLE:
-    // return Object.values(state).filter(meter => action.chronicle.tale_ids.includes(...?))
+    case DELETE_CHRONICLE:
+    return Object.values(state).filter(meter => action.chronicle.meter_ids.includes(meter.id))
 
     default:
       return state

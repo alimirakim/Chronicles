@@ -22,6 +22,28 @@ export function TextAreaInput({ label, value, setValue }) {
   const handleChange = (val) => setValue(val)
 
   return (
+    <>
+      <label>{label}
+      </label>
+      <ReactQuill
+        // theme={null}
+        value={value}
+        onChange={handleChange}
+        className="txt"
+        placeholder="Add description here..."
+      />
+    </>)
+}
+
+
+export function TextAreaInput_ALTDELTA({ label, value, setValue }) {
+  const handleChange = (content, delta, source, editor) => {
+    const fullDelta = editor.getContents()
+    console.log("fullDelta", fullDelta)
+    setValue(fullDelta)
+  }
+
+  return (
     <label className="lo-txt-con">{label}
       <ReactQuill
         // theme={null}
@@ -38,16 +60,16 @@ export function TextAreaInput({ label, value, setValue }) {
 export function SelectInput({ label, values, value, setValue }) {
   const handleChange = (e) => setValue(e.target.value)
 
-  return (
-    <label>{label}
-      <select value={value} onChange={handleChange}>
-        <option value="">--</option>
-        {Object.values(values).map(val => (
-          <option key={val.id} value={val.id}>{val.title}</option>
-        ))}
-      </select>
+  return (<>
+    <label className="lo-text-con">{label}
     </label>
-  )
+    <select value={value} onChange={handleChange}>
+      <option value="">--</option>
+      {Object.values(values).map(val => (
+        <option key={val.id} value={val.id}>{val.title}</option>
+      ))}
+    </select>
+  </>)
 }
 
 

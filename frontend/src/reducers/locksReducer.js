@@ -20,7 +20,8 @@ export default function locksReducer(state = {}, action) {
   switch (action.type) {
 
     // case GET_USER_CREATIONS:
-      // return action.content.locks
+    // Object.values(action.content.s).forEach( => newState[.id] = )
+    // return newState
     
     case GET_LOCKS:
       return action.locks

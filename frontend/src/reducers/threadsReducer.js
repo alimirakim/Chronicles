@@ -15,7 +15,8 @@ export default function threadsReducer(state = {}, action) {
   switch (action.type) {
     
     case GET_USER_CREATIONS:
-      return action.content.threads
+      Object.values(action.content.threads).forEach(thread => newState[thread.id] = thread)
+      return newState
     
     case GET_THREADS:
       return action.threads

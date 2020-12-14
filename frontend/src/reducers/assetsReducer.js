@@ -13,8 +13,10 @@ export default function assetsReducer(state = {}, action) {
   switch (action.type) {
     
     case GET_USER_CREATIONS:
-      return action.content.assets
+      Object.values(action.content.assets).forEach(asset => newState[asset.id] = asset)
+      return newState
     
+    // TODO NOTE May need to update all 'GET_BLAH's to 'add' to store rather than replace all
     case GET_ASSETS:
       return action.assets
     case ADD_ASSET:

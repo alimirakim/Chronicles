@@ -16,6 +16,7 @@ const initialState = {
   place: "",
   asset: "",
   condition: "",
+  meter: "",
   // effect: "",
   // lock: "",
   // meter: "",

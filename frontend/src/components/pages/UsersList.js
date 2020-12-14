@@ -22,10 +22,10 @@ function UsersList() {
   });
 
   return (
-    <>
+    <main>
       <h1>User List: </h1>
       <ul>{userComponents}</ul>
-    </>
+    </main>
   );
 }
 

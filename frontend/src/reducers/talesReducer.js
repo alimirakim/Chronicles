@@ -4,7 +4,7 @@ import {
   UPDATE_TALE,
   DELETE_TALE
 } from '../actions/taleActions'
-import { DELETE_CHRONICLE } from '../actions/chronicleActions'
+import { DELETE_CHRONICLE, GET_CHRONICLE } from '../actions/chronicleActions'
 import { GET_USER_CREATIONS } from '../actions/userActions'
 
 
@@ -13,10 +13,12 @@ export default function talesReducer(state = {}, action) {
   switch (action.type) {
     
     case GET_USER_CREATIONS:
-      return action.content.tales
+      Object.values(action.content.tales).forEach(tale => newState[tale.id] = tale)
+      return newState
     
     case GET_TALES:
-      return action.tales
+      action.tales.forEach(tale => newState[tale.id] = tale)
+      return newState
     case ADD_TALE:
       newState[action.tale.id] = action.tale
       return newState
@@ -27,6 +29,9 @@ export default function talesReducer(state = {}, action) {
       delete newState[action.tale.id]
       return newState
     
+    case GET_CHRONICLE:
+      action.tales.forEach(tale => newState[tale.id] = tale)
+      return newState
     case DELETE_CHRONICLE:
       return Object.values(state).filter(tale => tale.chronicle_id !== action.chronicle.id)
       
