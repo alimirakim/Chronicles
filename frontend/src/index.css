@@ -11,6 +11,9 @@
 }
 
 
+.txt {
+  border-radius: 1rem;
+}
 
 dt {
   font-weight: bold;

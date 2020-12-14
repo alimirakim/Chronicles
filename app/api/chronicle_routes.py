@@ -6,6 +6,12 @@ from app.forms import ChronicleForm, TaleForm, EntityForm, MeterForm
 
 chronicle_routes = Blueprint("chronicles", __name__)
 
+@chronicle_routes.route("/<order>/<int:limit>")
+def chronicles(order, limit):
+    """Get a collection of chronicles by 'order' and within 'limit'."""
+    chronicles = Chronicle.query.order_by(Chronicle.created_at.desc()).limit(limit).all()
+    return jsonify([c.to_dict() for c in chronicles])
+
 
 @chronicle_routes.route("/create", methods=["POST"])
 def create_chronicle():

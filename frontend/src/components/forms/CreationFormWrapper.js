@@ -73,9 +73,8 @@ export default function CreationFormWrapper({
       {/* Generic inputs */}
       <TextInput label="Title" value={title} setValue={setTitle} />
       <TextAreaInput label="Description" value={description} setValue={setDescription} />
-      <SelectInputColors image={image} value={color} setValue={setColor} />
-      <SelectInputImages color={color} value={image} setValue={setImage} />
-
+        <SelectInputColors image={image} value={color} setValue={setColor} />
+        <SelectInputImages color={color} value={image} setValue={setImage} />
       <UniqueForm />
 
       <button className="lo-wow">

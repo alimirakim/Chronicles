@@ -92,24 +92,6 @@ export default function WorldWeaver() {
       />
 
       <YourCreations
-        pid={selected.tale.id}
-        creationType="thread"
-        creations={Object.values(threads).filter(th => user.thread_ids.includes(th.id))}
-        filterBySelect={(threads, tid) => Object.values(threads).filter(thread => thread.tale_id === tid)}
-        deleteActionCreator={deleteThread}
-        creationForm={ThreadForm}
-      />
-
-      <YourCreations
-        pid={selected.thread.id}
-        creationType="choice"
-        creations={Object.values(choices).filter(ch => user.choice_ids.includes(ch.id))}
-        filterBySelect={(choices, thid) => Object.values(choices).filter(choice => choice.current_thread_id === thid)}
-        deleteActionCreator={deleteChoice}
-        creationForm={ChoiceForm}
-      />
-
-      <YourCreations
         pid={selected.chronicle.id}
         creationType="character"
         creations={Object.values(characters).filter(char => user.character_ids.includes(char.id))}

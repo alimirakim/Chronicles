@@ -28,12 +28,16 @@ export default function ChroniclePage() {
 
   return (
     <main>
-      <h1>{chronicle.title}</h1>
-      <address>Created by {chronicle.creator}</address>
-      <p>{chronicle.description}</p>
+      <section className="chron-head">
+        <h1>{chronicle.title}</h1>
+        <address>Created by {chronicle.creator}</address>
+        <small><datetime>on {chronicle.created_at.toLocaleString()}</datetime></small>
+        <p>{chronicle.description}</p>
 
-      {!character && <button onClick={play}>Play</button>}
-
+        {!character && <button onClick={play} className="lo-wow">Start <i className="fa-xs fas fa-arrow-right"></i></button>}
+      </section>
+      
+      
       {character && <section>
         <h2>Profile: {character.title}</h2>
         <image src={`/images/${character.image}.svg`} alt={`Character: ${character.title}`} />
@@ -90,8 +94,9 @@ export default function ChroniclePage() {
       {/* TODO Add list of started and finished tales */}
 
       <h2>Tales</h2>
-      <ul>
+      <ul className="gal">
         {chronicleTales.map(tale => (
+          <li key={tale.id} className="th-card">
           <Link to={`/chronicles/${cid}/tales/${tale.id}`}>
             <dl>
               <dt>Title</dt>
@@ -100,6 +105,7 @@ export default function ChroniclePage() {
               <dd>{tale.description}</dd>
             </dl>
           </Link>
+          </li>
         ))}
       </ul>
 

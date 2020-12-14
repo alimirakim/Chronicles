@@ -293,7 +293,7 @@ manipulating 'entities' like characters and places, and manipulating their
 #### `/chronicles`
 | METHOD | ROUTE                                      | EFFECT |
 |--------|-------------------------------------------|--------|
-| GET    | `/order-by/<str:order>/limit/<int:limit>` | Return chronicles, ordered by 'order' type, limit count to 'limit' |
+| GET    | `/<order>/<int:limit>` | Return chronicles, ordered by 'order' type, limit count to 'limit' |
 | GET    | `/creators/<int:uid>`                     | Return chronicles by creator |
 | GET    | `/<int:cid>`                              | Return a chronicle and all its direct dependents |
 | GET    | `/<int:cid>/players`                      | Return the users and their characters that have joined a chronicles |

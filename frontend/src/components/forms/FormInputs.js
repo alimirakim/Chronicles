@@ -1,23 +1,35 @@
 import React, { useState } from 'react'
-
+import ReactQuill from 'react-quill'
+import 'react-quill/dist/quill.snow.css'
 
 export function TextInput({ label, value, setValue }) {
   const handleChange = (e) => setValue(e.target.value)
 
   return (
     <label className="lo-txt-con">{label}
-      <input type="text" onChange={handleChange} value={value} />
+      <input
+        type="text"
+        onChange={handleChange}
+        value={value}
+        placeholder="Untitled"
+      />
     </label>
   )
 }
 
 
 export function TextAreaInput({ label, value, setValue }) {
-  const handleChange = (e) => setValue(e.target.value)
+  const handleChange = (val) => setValue(val)
 
   return (
     <label className="lo-txt-con">{label}
-      <textarea onChange={handleChange} value={value} />
+      <ReactQuill
+        // theme={null}
+        value={value}
+        onChange={handleChange}
+        className="txt"
+        placeholder="Add description here..."
+      />
     </label>
   )
 }
@@ -32,7 +44,7 @@ export function SelectInput({ label, values, value, setValue }) {
         <option value="">--</option>
         {Object.values(values).map(val => (
           <option key={val.id} value={val.id}>{val.title}</option>
-          ))}
+        ))}
       </select>
     </label>
   )
@@ -64,8 +76,6 @@ export function SelectInputColors({ image, value, setValue }) {
   ]
 
   return (<>
-    <h3 className="lo-slim">Choose a Color</h3>
-    <hr className="th-divider" />
 
     <div className="rbc">
       {colors.map(color => (
@@ -78,20 +88,19 @@ export function SelectInputColors({ image, value, setValue }) {
             className="rbc-input"
             onChange={handleChange}
           />
-          <span className="rbc-box rbc-color" style={color !== "#f9fbefff" ? { backgroundColor: color} : {backgroundColor: color, borderColor: "lightgray"}}>
+          <span className="rbc-box rbc-color" style={color !== "#f9fbefff" ? { backgroundColor: color } : { backgroundColor: color, borderColor: "lightgray" }}>
             <i className={`fa fa-${image} rbc-checkmark lo-center`} style={color !== "#f9fbefff" ? { color: "white" } : {}}></i>
           </span>
         </label>))
       }
     </div>
-    <hr className="th-divider" />
   </>)
 }
 
 export function SelectInputImages({ color, value, setValue }) {
   const handleChange = (e) => {
     setValue(e.target.value)
-    
+
     console.log("selecting...", e.target.value, value)
   }
 
@@ -724,7 +733,6 @@ export function SelectInputImages({ color, value, setValue }) {
   }
 
   return (<>
-    <h3 className="lo-slim">Choose an Icon</h3>
     <div className=" th-dark-con lo-scrollbox-sml">
       {Object.keys(images).map(category => (<>
         <h4 className="th-sleek">{category}</h4>
@@ -771,6 +779,7 @@ export function AddToList({
   }
 
   const handleChange = (i) => (e) => {
+    e.stopPropagation()
     console.log("oh", e.target.value)
     const updatedAddedItems = [...addedItems]
     updatedAddedItems[i]["title"] = e.target.value
