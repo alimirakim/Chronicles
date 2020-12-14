@@ -15,10 +15,8 @@ import YourCreations from '../YourCreations'
 import {TaleDiagram, CustomNode } from '../TaleDiagram'
 
 
-
-
-
 export default function TaleSpinner() {
+  const {tid} = useParams()
   const user = useSelector(state => state.user)
   const selected = useSelector(state => state.selections)
   const chronicles = useSelector(state => state.chronicles)
@@ -28,36 +26,36 @@ export default function TaleSpinner() {
   const [open, setOpen] = useState(false)
   const [nodes, setNodes] = useState([])
   const [links, setLinks] = useState([])
-  const [initialSchema, setInitialSchema] = useState({nodes, links})
+  const [initialSchema, setInitialSchema] = useState()
   const coords = [50, 0]
-
-  // const newNodes = []
-  // const newLinks = []
-  // Object.values(threads).filter(thread => thread.tale_id === Number(selected.tale.id)).map((thread, i) => {
-  //   newNodes.push({
-  //     id: String(thread.id),
-  //     content: String(thread.title),
-  //     coordinates: [coords[0], coords[1]],
-  //     inputs: [{ id: `input-${thread.id}`, alignment: 'left' }],
-  //     outputs: [{ id: `output-${thread.id}`, alignment: 'right' }],
-  //     render: CustomNode,
-  //     data: {onClickDelete: deleteThreadNode, onClickCreateChoice: createChoice},
-  //   })
-  //   Object.values(thread.choices).map((choice, i) => {
-  //     // console.log("link", choice)
-  //     newLinks.push({
-  //       input: String(`output-${thread.id}`),
-  //       output: String(`input-${choice.choice_thread_id}`),
-  //       label: choice.title !== threads[choice.choice_thread_id].title ? choice.title : ""
-  //     })
-  //   })
-  //   coords[1] += 50
-  //   coords[0] += 50
-  //   // console.log("nodes, links", nodes, links)
-  // })
-  // coords[0] = 50
-  // coords[1] = 0
-  // if (!initialSchema) setInitialSchema(createSchema({ nodes: newNodes, links: newLinks }))
+console.log("threads", threads)
+  const newNodes = []
+  const newLinks = []
+    Object.values(threads).filter(thread => thread.tale_id === Number(tid)).map((thread, i) => {
+    newNodes.push({
+      id: String(thread.id),
+      content: String(thread.title),
+      coordinates: [coords[0], coords[1]],
+      inputs: [{ id: `input-${thread.id}`, alignment: 'left' }],
+      outputs: [{ id: `output-${thread.id}`, alignment: 'right' }],
+      // render: CustomNode,
+      // data: {onClickDelete: deleteThreadNode, onClickCreateChoice: createChoice},
+    })
+    Object.values(thread.choices).map((choice, i) => {
+      // console.log("link", choice)
+      newLinks.push({
+        input: String(`output-${thread.id}`),
+        output: String(`input-${choice.choice_thread_id}`),
+        label: choice.title !== threads[choice.choice_thread_id].title ? choice.title : ""
+      })
+    })
+    coords[1] += 50
+    coords[0] += 50
+    console.log("nodes, links", newNodes, newLinks)
+  })
+  coords[0] = 50
+  coords[1] = 0
+  if (!initialSchema) setInitialSchema(createSchema({ nodes: newNodes, links: newLinks }))
 
   useEffect(() => {
     console.log("hello", nodes, links)
@@ -70,12 +68,12 @@ export default function TaleSpinner() {
         coordinates: [coords[0], coords[1]],
         inputs: [{ id: `input-${thread.id}`, alignment: 'left' }],
         outputs: [{ id: `output-${thread.id}`, alignment: 'right' }],
-        render: CustomNode,
-        data: { 
-          onClickDelete: deleteThreadNode, 
-          onClickCreateChoice: createChoice, 
-          onClickEdit: editThreadNode,
-        },
+        // render: CustomNode,
+        // data: { 
+        //   onClickDelete: deleteThreadNode, 
+        //   onClickCreateChoice: createChoice, 
+        //   onClickEdit: editThreadNode,
+        // },
       })
       Object.values(thread.choices).map((choice, i) => {
         // console.log("link", choice)
@@ -130,6 +128,8 @@ export default function TaleSpinner() {
   const handleOpen = (e) => setOpen(true)
   const handleClose = (e) => setOpen(false)
   const [schema, { onChange, addNode, removeNode }] = useSchema(initialSchema)
+  
+  
   return (<main>
     {/* <button onClick={handleOpen}> +Thread</button>
     <ThreadForm tid={tid} open={open} handleClose={handleClose} handleChange={} /> */}
@@ -154,6 +154,8 @@ export default function TaleSpinner() {
     <h2>Your Threads</h2>
     {/* <button onClick={addNewNode}>+Thread</button> */}
     <ThreadForm id={selected.tale.id} />
+    
     <TaleDiagram initialSchema={initialSchema} />
+  
   </main>)
 }

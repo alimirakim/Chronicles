@@ -86,10 +86,10 @@ function App() {
       <Route path="/chronicles/:cid" exact={true}>
         <ChroniclePage />
       </Route>
-      <Route path="/chronicles/:cid/tales/:tid" exact={true}>
+      <Route path="/tales/:tid" exact={true}>
         <TalePage />
       </Route>
-      <Route path="/chronicles/:cid/tales/:tid/play">
+      <Route path="/tales/:tid/play">
         <CurrentThread />
       </Route>
 
@@ -100,7 +100,7 @@ function App() {
       <ProtectedRoute path="/worldweaver" exact={true} authenticated={authenticated}>
         <WorldWeaver />
       </ProtectedRoute>
-      <ProtectedRoute path="/talespinner" exact={true} authenticated={authenticated}>
+      <ProtectedRoute path="/talespinner/tales/:tid" exact={true} authenticated={authenticated}>
         <TaleSpinner threads={threads} />
       </ProtectedRoute>
 

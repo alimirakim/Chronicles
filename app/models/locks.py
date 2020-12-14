@@ -10,8 +10,8 @@ class Lock(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     type = db.Column(db.String(50), nullable=False, default="asset") # (db.Enum("asset", "location", "time", "trial", "status", "presentation"), nullable=False, default="proof")
     choice_id = db.Column(db.Integer, db.ForeignKey("thread_choices.id"), nullable=False)
-    color = db.Column(db.String(50), default="gray")
-    image = db.Column(db.String(250), default="default_lock")
+    color = db.Column(db.String(50), default="rgb(70,60,70)")
+    image = db.Column(db.String(250), default="unlock-alt")
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
     
     choice = db.relationship("ThreadChoice", back_populates="locks")

@@ -37,7 +37,7 @@ const SignUpForm = ({ authenticated, setAuthenticated }) => {
   if (authenticated) return <Redirect to="/" />
 
   return (
-    <form onSubmit={onSignUp} className="lo-box-med">
+    <form onSubmit={onSignUp} className="lo-box-med, lo-center-h" style={{width: "50%"}}>
     <h2>Create an account!</h2>
       <ErrorMessages errors={errors} />
       <div>

@@ -19,6 +19,11 @@ def edit_meter(plid):
         meter.description = form["description"].data
         meter.color = form["color"].data
         meter.image = form["image"].data
+        meter.min = form["min"].data
+        meter.max = form["max"].data
+        meter.base = form["base"].data
+        meter.mod = form["mod"].data
+        meter.algo = form["algo"].data
         db.session.commit()
         return meter.to_dict()
     else:

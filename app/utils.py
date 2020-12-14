@@ -36,7 +36,8 @@ def get_and_normalize_all_data_for_user(current_user):
         .joinedload(Thread.choices) \
         .joinedload(ThreadChoice.locks) \
         , db.joinedload(Chronicle.entities) \
-        .joinedload(Entity.assets)) \
+        .joinedload(Entity.assets) \
+        , db.joinedload(Chronicle.meters)) \
         .all()
 
     # Normalize data before returning
@@ -47,6 +48,7 @@ def get_and_normalize_all_data_for_user(current_user):
     places = {}
     assets = {}
     conditions = {}
+    meters = {}
 
     for chronicle in chronicles:
         for entity in chronicle.entities:
@@ -54,12 +56,14 @@ def get_and_normalize_all_data_for_user(current_user):
                 assets[entity.id] = entity.to_dict()
             elif entity.type == "character":
                 characters[entity.id] = entity.to_dict()
+                characters[entity.id]["player"] = [p.id for p in entity.player]
+                
             elif entity.type == "place":
                 places[entity.id] = entity.to_dict()
             elif entity.type == "condition":
                 conditions[entity.id] = entity.to_dict()
-            # elif entity.type == "rank": ???
-            #     ranks[entity.id] = entity.to_dict() ???
+        for meter in chronicle.meters:
+            meters[meter.id] = meter.to_dict()
         for tale in chronicle.tales:
             tales[tale.id] = tale.to_dict()
             for thread in tale.threads:
@@ -77,7 +81,8 @@ def get_and_normalize_all_data_for_user(current_user):
         characters=characters,
         places=places,
         assets=assets,
-        conditions=conditions)
+        conditions=conditions,
+        meters=meters,)
 
     print("\n\nUSER, CHRONICLES, TALES, THREADS, CHOICES")
     pprint(user)
@@ -86,9 +91,9 @@ def get_and_normalize_all_data_for_user(current_user):
     # pprint(threads)
     # pprint(choices)
     
-    return user, chronicles, tales, threads, choices, characters, places, assets, conditions
+    return user, chronicles, tales, threads, choices, characters, places, assets, conditions, meters
 
-def normalize_user_data(user, chronicles=(), tales=(), threads=(), choices=(), characters=(), places=(), assets=(), conditions=()):
+def normalize_user_data(user, chronicles=(), tales=(), threads=(), choices=(), characters=(), places=(), assets=(), conditions=(), meters=()):
     """Return dict suitable for dispatching as user reducer initial state."""
     norm_user = user.to_dict()
     norm_user["tale_ids"] = tuple(tales.keys())
@@ -98,9 +103,11 @@ def normalize_user_data(user, chronicles=(), tales=(), threads=(), choices=(), c
     norm_user["place_ids"] = tuple(places.keys())
     norm_user["asset_ids"] = tuple(assets.keys())
     norm_user["condition_ids"] = tuple(conditions.keys())
-    # norm_user["meter_ids"] = tuple(meters.keys())
+    norm_user["meter_ids"] = tuple(meters.keys())
     # norm_user["lock_ids"] = tuple(locks.keys())
     # norm_user["effect_ids"] = tuple(effects.keys())
+    print("\n\n NORM USER")
+    pprint(norm_user)
     return norm_user
 
 

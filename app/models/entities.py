@@ -14,15 +14,16 @@ class Entity(db.Model):
     subtype = db.Column(db.String(50)) # (db.Enum("item", "bond", "deed", "idea", "title", "human", "skill", "knowledge", "fancy schmancy"))
     title = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String)
-    color = db.Column(db.String(50), default="gray")
-    image = db.Column(db.String(250), default="default_asset")
+    color = db.Column(db.String(50), default="rgb(70,60,70)")
+    image = db.Column(db.String(250), default="id-card")
     is_unique = db.Column(db.Boolean, nullable=False, default=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
     
     chronicle = db.relationship("Chronicle", back_populates="entities")
+    # conditions = db.relationship("BearerCondition", back_populates="entity")
     meters = db.relationship("EntityMeter", back_populates="entity")
-    bearer = db.relationship("BearerAsset", foreign_keys="[BearerAsset.bearer_id]", backref="asset")
-    assets = db.relationship("BearerAsset", foreign_keys="[BearerAsset.asset_id]", backref="bearer")
+    assets = db.relationship("BearerAsset", foreign_keys="[BearerAsset.bearer_id]", backref="asset")
+    # assets = db.relationship("BearerAsset", foreign_keys="[BearerAsset.asset_id]", backref="bearer")
     asset_locks = db.relationship("AssetLock", back_populates="asset")
     asset_effects = db.relationship("AssetEffect", back_populates="asset")
     
@@ -37,12 +38,34 @@ class Entity(db.Model):
             "description": self.description,
             "color": self.color,
             "image": self.image,
+            # "conditions": [condition.to_dict() for condition in self.conditions]
             "meters": [meter.to_dict() for meter in self.meters],
+            # "bearer": [bearer.to_dict() for bearer in self.bearer],
             "assets": [asset.to_dict() for asset in self.assets],
             "is_unique": self.is_unique,
             "created_at": self.created_at,
+            "player": self.player,
         }
 
+
+# class BearerCondition(db.Model):
+#     """A condition that an entity is afflicted with."""
+#     __tablename__ = "bearer_conditions"
+#     id = db.Column(db.Integer, primary_key=True)
+#     bearer_id = db.Column(db.Integer, db.ForeignKey("entities.id"), nullable=False)
+#     condition_id = db.Column(db.Integer, db.ForeignKey("entities.id"), nullable=False)
+#     expiry = db.Column(db.DateTime)
+#     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
+
+#     def to_dict(self):
+#         """Returns a dictionary of an entity's asset"""
+#         return {
+#             "bearer_id": self.bearer_id,
+#             "condition_id": self.condition_id,
+#             "expiry": self.expiry,
+#             "created_at": self.created_at,
+#         }
+        
 
 # NOTE this is a fancy JOIN! Represents: items, conditions, ranks, bonds, deeds, titles, ideas,
 class BearerAsset(db.Model):

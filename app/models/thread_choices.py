@@ -21,8 +21,8 @@ class ThreadChoice(db.Model):
     title = db.Column(db.String(250))
     current_thread_id = db.Column(db.Integer, db.ForeignKey("threads.id", ondelete="cascade"), nullable=False)
     choice_thread_id = db.Column(db.Integer, db.ForeignKey("threads.id", ondelete="cascade"), nullable=False)
-    color = db.Column(db.String(50), default="gray")
-    image = db.Column(db.String(250), default="default_choice")
+    color = db.Column(db.String(50), default="rgb(70,60,70)")
+    image = db.Column(db.String(250), default="map-signs")
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
 
     current_thread = db.relationship("Thread", foreign_keys=[current_thread_id], passive_deletes=True)
@@ -30,8 +30,6 @@ class ThreadChoice(db.Model):
     locks = db.relationship("Lock", back_populates="choice")
 
     def to_dict(self):
-        """Convert to dictionary."""
-        print("\n\nTHREAD DICTIONARY")
         return {
             "id": self.id,
             "tale_id": self.current_thread.tale_id,

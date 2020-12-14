@@ -9,8 +9,8 @@ class Chronicle(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     title = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String)
-    color = db.Column(db.String(50), default="gray")
-    image = db.Column(db.String(250), default="default_chronicle")
+    color = db.Column(db.String(50), default="rgb(70,60,70)")
+    image = db.Column(db.String(250), default="book")
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
     
     user = db.relationship("User", back_populates="chronicles")

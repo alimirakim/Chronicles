@@ -10,8 +10,8 @@ class Tale(db.Model):
     title = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String)
     first_thread_id = db.Column(db.Integer)
-    color = db.Column(db.String(50), default="gray")
-    image = db.Column(db.String(250), default="default_tale")
+    color = db.Column(db.String(50), default="rgb(70,60,70)")
+    image = db.Column(db.String(250), default="scroll")
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
     
     chronicle = db.relationship("Chronicle", back_populates="tales")

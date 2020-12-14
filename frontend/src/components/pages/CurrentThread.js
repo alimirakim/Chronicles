@@ -4,8 +4,9 @@ import { useParams, useLocation, Link } from 'react-router-dom'
 import parse from 'html-react-parser'
 
 export default function CurrentThread() {
-  const {cid, tid} = useParams()
+  const { cid, tid } = useParams()
   const { state: { thid } } = useLocation()
+  const tale = useSelector(state => state.tales[tid])
   const { effects, threads, thread, threadChoices, currentThreadChoices } = useSelector(state => ({
     effects: state.effects,
     threads: state.threads,
@@ -32,28 +33,49 @@ export default function CurrentThread() {
     setCurrentThread(threads[prevThread.id])
     setCurrentChoices(Object.values(threadChoices).filter(choice => choice.current_thread_id == prevThread.id))
   }
-  
+
   const checkLocks = (e) => {
+    return true
     // TODO Check for locks. On each lock, check requirements, then eventually return final yes/no
   }
 
   return (<section>
-    <Link to={`/chronicles/${cid}`}>Go back to Chronicle page</Link>
-    
-    <h2>{currentThread.title}</h2>
-    <p>{parse(currentThread.description)}</p>
-    
+    <div style={{ margin: "1rem" }}><Link to={`/tales/${tid}`}><i className="fas fa-arrow-left" ></i> Go Back</Link></div>
+
+
+    <h1 style={{ margin: "0 4rem" }}>{tale.title}</h1>
+    <section className="chron-head">
+      <h2>{currentThread.title}</h2>
+      <p>{parse(currentThread.description)}</p>
+    </section>
+
+    <hr />
     <h3>Effects</h3>
+    <i>N/A</i>
     <ul>
-    {thread.effects.map(i => <li key={i}>Effect: {effects[i].title}</li>)}
+      {thread.effects.map(i => <li key={i}>Effect: {effects[i].title}</li>)}
     </ul>
-    
+    <hr />
+
 
     <h3>Make Your Choice...</h3>
     <ul>
-      {history.length ? <li><button onClick={handleGoBack}>Go Back</button></li> : <Link to={`/chronicles/${cid}/tales/${tid}`}>Go Back</Link>}
+    {/* TODO Check if 'is_returnable' before allowing Go Back option */}
+      {history.length
+        ? <li className="card" ><button onClick={handleGoBack} className="yrc-con lo-center"><span><i className="fas fa-arrow-left" ></i> Go Back</span></button></li>
+        : <li className="card"><Link to={`/tales/${tid}`}   className="yrc-con lo-center"><span><i className="fas fa-arrow-left" ></i> Go Back</span></Link></li>
+      }
       {currentChoices.filter(choice => checkLocks(choice)).map(choice => (
-        <li key={choice.id}><button onClick={handleChoice(choice.choice_thread_id)}>{choice.title}</button></li>
+        
+
+        <li key={choice.id} className="card" onClick={handleChoice(choice.choice_thread_id)}>
+        <div style={{ backgroundColor: choice.color }} className="card-pic">
+                  <i className={`fas fa-${choice.image} lo-center`}></i>
+                </div>
+                <div className="yrc-con lo-center">
+        {choice.title}
+        </div>
+        </li>
       ))}
     </ul>
   </section>

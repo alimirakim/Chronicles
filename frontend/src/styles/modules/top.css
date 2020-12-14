@@ -9,11 +9,11 @@
   transition: all 0.1s ease-in-out;
 }
 .top-title:hover {
-  transform: scale(0.88);
+  color: black;
 }
 
 .top-title:active {
-  color: black;
+  color: gray;
 }
 
 

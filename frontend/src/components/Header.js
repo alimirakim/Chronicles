@@ -19,28 +19,33 @@ export default function Header({ authenticated, setAuthenticated }) {
 
 
         {authenticated && <>
-          <li>
-            <button onClick={onLogout} type="button">
+          <li style={{marginLeft: "1rem"}}>
+          <button onClick={onLogout} type="button">
           Logout
           </button>
           </li>
+          
 
           <NavLink to="/about" exact={true} activeClassName="active">
             <li>About </li>
           </NavLink>
-
-          <NavLink to={`/talespinner`} exact={true} activeClassName="active">
-            <li>TaleSpinner</li>
+          
+          <NavLink to="/users" exact={true} activeClassName="active">
+            <li>Users </li>
           </NavLink>
+
+          {/* <NavLink to={`/talespinner`} exact={true} activeClassName="active">
+            <li>TaleSpinner</li>
+          </NavLink> */}
 
           <NavLink to={`/worldweaver`} exact={true} activeClassName="active">
             <li>WorldWeaver</li>
           </NavLink>
 
-
+{/* 
           <NavLink to={`/library`} exact={true} activeClassName="active">
             <li>Library</li>
-          </NavLink>
+          </NavLink> */}
 
           {/* <li>
           <NavLink to="/characters" exact={true} activeClassName="active">
@@ -70,9 +75,6 @@ export default function Header({ authenticated, setAuthenticated }) {
 
         </>}
         
-        <NavLink to="/users" exact={true} activeClassName="active">
-            <li>Users </li>
-          </NavLink>
         
         <NavLink to={`/gallery`} exact={true} activeClassName="active">
             <li>Gallery</li>
@@ -82,19 +84,19 @@ export default function Header({ authenticated, setAuthenticated }) {
         {/* For Anon Users, show only Login/Signup options: */}
         {!authenticated && <>
 
-          <NavLink to="/login" exact={true} activeClassName="active" style={{ color: "coral" }}>
+          <NavLink to="/login" exact={true} activeClassName="active">
             <li> Login</li>
           </NavLink>
 
 
-          <NavLink to="/sign-up" exact={true} activeClassName="active" style={{ color: "carmine" }}>
+          <NavLink to="/sign-up" exact={true} activeClassName="active">
             <li>Sign Up</li>
           </NavLink>
 
         </>}
         
         <NavLink to="/" exact={true} activeClassName="active" >
-            <li> Home  </li>
+            <li> Home </li>
           </NavLink>
           
       </ul>

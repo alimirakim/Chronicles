@@ -23,8 +23,6 @@ function User() {
     <main>
       <h1>{user.username}'s Profile</h1>
       <dl>
-        <dt>User Id</dt>
-        <dd>{uid}</dd>
         <dt>Username</dt>
         <dd>{user.username}</dd>
         <dt>Email</dt>
@@ -32,9 +30,9 @@ function User() {
       </dl>
       
       <h2>Published Chronicles</h2>
-      <ul>
+      <ul className="gal">
         {userChronicles.map(chronicle => (
-          <li key={chronicle.id}>
+          <li key={chronicle.id} className="th-card">
             <Link to={`/chronicles/${chronicle.id}`}><dl>
               <dt>Title</dt>
               <dd>{chronicle.title}</dd>

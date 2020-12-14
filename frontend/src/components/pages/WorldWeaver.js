@@ -81,7 +81,7 @@ export default function WorldWeaver() {
         deleteActionCreator={deleteChronicle}
       />
 
-      <Link to={`/talespinner/tales/${selected.tale.id}`}>Go to TaleSpinner</Link>
+
       <YourCreations
         pid={selected.chronicle.id}
         creationType="tale"
@@ -90,6 +90,9 @@ export default function WorldWeaver() {
         deleteActionCreator={deleteTale}
         creationForm={TaleForm}
       />
+            <div className="lo-wow" style={{margin: "2rem 0", padding: "0.5rem", textAlign: "center", backgroundColor: "rgba(70,40,60,0.2)", borderRadius: "1rem 0", transform: "skew(-10deg)"}}>
+      <Link to={`/talespinner/tales/${selected.tale.id}`}>Go to TaleSpinner</Link>
+      </div>
 
       <YourCreations
         pid={selected.chronicle.id}

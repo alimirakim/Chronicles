@@ -29,7 +29,7 @@ export default function LoginForm({ authenticated, setAuthenticated }) {
   if (authenticated) return <Redirect to="/" />
 
   return (<>
-    <form onSubmit={onLogin} className="lo-box-med">
+    <form onSubmit={onLogin} className="lo-box-med, lo-center-h" style={{width: "50%"}}>
     <h2>Login</h2>
       <ErrorMessages errors={errors} />
       <div>

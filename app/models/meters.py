@@ -10,8 +10,8 @@ class Meter(db.Model):
     type = db.Column(db.String(50)) # (db.Enum("skill", "knowledge", "ability", "level"))
     title = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String)
-    color = db.Column(db.String(50), default="gray")
-    image = db.Column(db.String(250), default="default_asset")
+    color = db.Column(db.String(50), default="rgb(70,60,70)")
+    image = db.Column(db.String(250), default="sliders")
     min = db.Column(db.Integer, nullable=False, default=0)
     max = db.Column(db.Integer, nullable=False, default=20)
     algorithm = db.Column(db.String, nullable=False, default="constant") # "constant", "log", "linear", "loglinear", "polynomial", "exponential", "factorial", "random"

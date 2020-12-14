@@ -52,7 +52,7 @@ export default function ChroniclePage() {
       })()
     }
   }, [])
-  
+
 
   if (!chronicles[cid]) return null
   if (Object.keys(tales).filter(t => chronicles[cid].tale_ids.includes(Number(t))).length !== chronicles[cid].tale_ids.length) return null
@@ -83,8 +83,8 @@ export default function ChroniclePage() {
       <section className="chron-head">
         <h1>{chronicles[cid].title}</h1>
         <address>Created by <Link to={`/users/${chronicles[cid].user_id}`}>{chronicles[cid].creator}</Link>
-        </address>
-        <small><datetime>on {chronicles[cid].created_at.toLocaleString()}</datetime></small>
+        </address> <small>on {chronicles[cid].created_at.toLocaleString()}</small>
+        
         {parse(chronicles[cid].description)}
       </section>
 
@@ -94,63 +94,86 @@ export default function ChroniclePage() {
         <PlayerCharacterForm tid={chronicles[cid].first_tale_id} />
       </>}
 
-      
+
       {pc && <section>
-        <h2>Profile: {pc.title}</h2>
-        <i className={`fas fa-${pc.image}`}></i>
-        <h3>About</h3>
-        <p>{parse(pc.description)}</p>
+        <h2>Profile: {pc.title}
+          <i className="tip fas fa-question-circle">
+            <section className="tip-info">Keep track of your character's status, possessions, levels, conditions, and levels.</section></i>
+        </h2>
 
-        <h3>Assets</h3>
-        <p>Your current possessions.</p>
-        <ul>
-          {pc.assets.map(a => <li key={a}>{assets[a].title}</li>)}
-        </ul>
+        <i className={`fa-10x fas fa-${pc.image}`} style={{ color: pc.color }}></i>
 
-        <h3>Conditions</h3>
-        <p>These are conditions that are currently afflicting your character, for good or ill.</p>
+        {/* <h3>About</h3>
+        <p>{parse(pc.description)}</p> */}
+
+        <section style={{ position: "relative" }}>
+          <h3>
+            Assets <i className="tip fas fa-question-circle">
+              <section className="tip-info">Your current possessions.</section>
+            </i>
+          </h3>
+          <ul style={{ paddingLeft: "2rem" }}>
+            {pc.assets.map(a => <li key={a.asset_id} style={{ listStyle: "square" }}><i><b>{assets[a.asset_id].title}</b></i> (Quantity: {a.quantity})</li>)}
+          </ul>
+        </section>
+
+        <hr />
+
+        <h3>Levels
+          <i className="tip fas fa-question-circle">
+            <section className="tip-info">'Levels' can be any number of things, but they are all measured by a number, and are usually able to be improved and leveled up.</section></i>
+        </h3>
+
         <ul>
-          {pc.conditions.map(c => <li key={c}>
+          {pc.meters.map(m => <li key={m.meter_id}>
+            <div className="tip-card" style={{ backgroundColor: meters[m.meter_id].color }}>
+              <i className={`tip fas fa-2x fa-${meters[m.meter_id].image}`} >
+                <section className="tip-info" style={{ color: "black" }}><b>{meters[m.meter_id].title}</b>: <hr />{parse(meters[m.meter_id].description)}</section>
+              </i></div>
             <dl>
-              <dt>Condition</dt>
-              <dd>{conditions[c].title}</dd>
-              <dt>Description</dt>
-              <dd>{parse(conditions[c].description)}</dd>
-              {/* <dt>Effect</dt> */}
-              {/* <dd>{conditions[c].modifiers}</dd> */}
-              {/* <dt>Time Limit</dt> */}
-              {/* <dd>{conditions[c].expiry</dd> */}
-            </dl></li>)}
-        </ul>
-
-        <h3>Ranks</h3>
-        <p>'Ranks' can be any number of things, but they are all measured by a number, and are usually able to be improved and leveled up.</p>
-        <ul>
-          {pc.meters.map(m => <li key={m.id}>
-            <dl>
-              <dt>Rank</dt>
-              <dd>{meters[m.id].title}</dd>
-              <dt>Description</dt>
-              <dd>{parse(meters[m.id].description)}</dd>
-              <dt>Level</dt>
-              <dd>{m.total}</dd>
-              <dt>Progress</dt>
-              <dd>{m.progress}</dd>
+              <li><b>Level Type:</b> {meters[m.meter_id].title}</li>
+              <li><b>Current Level:</b> {m.total}</li>
+              <li><b>Progress:</b> {m.progress} / {meters[m.meter_id].base}</li>
             </dl>
           </li>)}
         </ul>
       </section>}
 
+      <hr />
+
+
+      <h3>Conditions
+        <i className="tip fas fa-question-circle">
+          <section className="tip-info">These are conditions that are currently afflicting your character, for good or ill.</section>
+        </i></h3>
+
+            <p><i>N/A</i></p>
+      <ul>
+        {/* {pc.conditions.map(c => <li key={c}>
+          <dl>
+            <dt>Condition</dt>
+            <dd>{conditions[c].title}</dd>
+            <dt>Description</dt>
+            <dd>{parse(conditions[c].description)}</dd>
+            <dt>Effect</dt>
+            <dd>{conditions[c].modifiers}</dd>
+            <dt>Time Limit</dt>
+            <dd>{conditions[c].expiry</dd>
+          </dl></li>)} */}
+      </ul>
+
+      <hr />
 
       {/* TODO Add bulletin board for announcements, updates, etc. */}
 
       {/* TODO Add clickable map of locations */}
 
-      {/* TODO Add player's character and character state details */}
-
       {/* TODO Add list of started and finished tales */}
 
-      <h2>The Tales of "{chronicles[cid].title}"</h2>
+      <h2>The Tales of "{chronicles[cid].title}" <i className="tip fas fa-question-circle">
+        <section className="tip-info">These are the available stories for "{chronicles[cid].title}" that you can play. Maybe you can unlock more depending on certain circumstances...</section>
+      </i></h2>
+
       <ul className="gal">
         {chronicles[cid].tale_ids.map(tid => (
           <li key={tid} className="th-card">
@@ -159,7 +182,7 @@ export default function ChroniclePage() {
                 <dt>Title</dt>
                 <dd>{tales[tid].title}</dd>
                 <dt>Description</dt>
-                <dd>{parse(tales[tid].description)}</dd>
+                <dd>{tales[tid].description ? parse(tales[tid].description) : "N/A"}</dd>
               </dl>
             </Link>
           </li>

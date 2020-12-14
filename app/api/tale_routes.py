@@ -6,6 +6,13 @@ from app.utils import validation_errors_to_messages, createChoices, createEffect
 tale_routes = Blueprint("tales", __name__)
 
 
+@tale_routes.route("/chronicle/<int:cid>")
+def tales_of_chronicle(cid):
+    """Return a collection of a chronicle's tales."""
+    tales = Tale.query.filter(Tale.chronicle_id == cid).all()
+    tales = [t.to_dict() for t in tales]
+    return jsonify(tales)
+
 @tale_routes.route("/<int:tid>/edit", methods=["PATCH"])
 def edit_tale(tid):
     """Edit a tale."""

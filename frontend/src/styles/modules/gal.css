@@ -8,7 +8,7 @@
 
 .gal {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 32%);
+  grid-template-columns: repeat(auto-fill, 30%);
   grid-gap: 1rem;
 }
 

@@ -51,13 +51,14 @@ input {
   transition: all 0.2s ease-in;
 }
 
-button.lo-wow:hover {
+.lo-wow:hover, .lo-wow > a:hover {
   color: black;
 }
-button.lo-wow > i {
+
+.lo-wow > i {
   transition: all 0.1s ease-in;
 }
-button.lo-wow:hover > i {
+.lo-wow:hover > i {
   transform: scale(1.1) rotate(10deg);
 }
 

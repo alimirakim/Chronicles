@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import {Link} from 'react-router-dom'
 import parse from 'html-react-parser'
 
 import {wipeErrors} from '../actions/errorActions'
@@ -110,15 +111,19 @@ export default function YourCreations({
                   <i className={`fas fa-${creation.image} lo-center`}></i>
                 </div>
                 <div className="yrc-con lo-center">
-                  {creation.title}
+                
+                  <Link to={`/${creationType}s/${creation.id}`}>{creation.title}</Link>
+                  
                   <div>
+                  
                     <button type="button" onClick={handleOpenEdit}>Edit</button>
                     <button type="button" onClick={handleOpenDelete}>Delete</button>
+                    
                     <i className="tip fas fa-question-circle"></i>
                     <section className="tip-info">
-                    {console.log("what is desc", creationType, typeof creation.description)}
                     <b>DESCRIPTION</b> <br />{creation.description ? parse(creation.description) : "N/A"}
                     </section>
+                    
                   </div>
                 </div>
 

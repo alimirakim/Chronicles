@@ -8,8 +8,8 @@ class Effect(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     type = db.Column(db.String(50), nullable=False, default="asset") # (db.Enum("asset", "location", "status"), nullable=False, default="asset")
     thread_id = db.Column(db.Integer, db.ForeignKey("threads.id", ondelete="cascade"), nullable=False)
-    color = db.Column(db.String(50), default="gray")
-    image = db.Column(db.String(250), default="default_effect")
+    color = db.Column(db.String(50), default="rgb(70,60,70)")
+    image = db.Column(db.String(250), default="star")
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
     
     thread = db.relationship("Thread", back_populates="effects")

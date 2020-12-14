@@ -1,4 +1,5 @@
 import {
+  GET_GALLERY_CHRONICLES,
   GET_CHRONICLE,
   GET_CHRONICLES,
   ADD_CHRONICLES,
@@ -8,8 +9,9 @@ import {
 } from '../actions/chronicleActions'
 import { GET_USER_CREATIONS } from '../actions/userActions'
 
-export default function chroniclesReducer(state = {}, action) {
+export default function chroniclesReducer(state = {gallery_ids: new Set()}, action) {
   const newState = { ...state }
+  // newState.gallery_ids = new Set(state.gallery_ids)
   switch (action.type) {
 
     case GET_USER_CREATIONS:
@@ -18,8 +20,15 @@ export default function chroniclesReducer(state = {}, action) {
     case GET_CHRONICLE:
       newState[action.chronicle.id] = action.chronicle
       return newState
+      case GET_GALLERY_CHRONICLES:
+      Object.values(action.chronicles).forEach(chronicle => {
+        newState[chronicle.id] = chronicle
+        
+        newState.gallery_ids.add(chronicle.id)
+      })
+      return newState
     case GET_CHRONICLES:
-      newState[action.chronicle.id] = action.chronicle
+      action.chronicles.forEach(chronicle => newState[chronicle.id] = chronicle)
       return newState
     case ADD_CHRONICLES:
       action.chronicles.forEach(chronicle => newState[chronicle.id] = chronicle)

@@ -1,3 +1,4 @@
+from pprint import pprint
 from flask import Blueprint, jsonify, request
 from flask_login import current_user
 from app.models import db, Chronicle, Tale, Thread, ThreadChoice, Entity, Meter
@@ -9,8 +10,21 @@ chronicle_routes = Blueprint("chronicles", __name__)
 @chronicle_routes.route("/<order>/<int:limit>")
 def chronicles(order, limit):
     """Get a collection of chronicles by 'order' and within 'limit'."""
-    chronicles = Chronicle.query.order_by(Chronicle.created_at.desc()).limit(limit).all()
-    return jsonify([c.to_dict() for c in chronicles])
+    chronicles = Chronicle.query \
+        .filter(Chronicle.tales.any()) \
+        .order_by(Chronicle.created_at.desc()) \
+        .limit(limit) \
+        .all()
+    chronicles_data = [c.to_dict() for c in chronicles]
+    return jsonify(chronicles_data)
+
+
+@chronicle_routes.route("/<int:cid>")
+def chronicle(cid):
+    """Return a chronicle ands its tales."""
+    chronicle = Chronicle.query.get(cid)
+    tales = [t.to_dict() for t in chronicle.tales]
+    return jsonify(chronicle=chronicle.to_dict, tales=tales)
 
 
 @chronicle_routes.route("/create", methods=["POST"])
@@ -114,7 +128,7 @@ def create_entity(cid, entity):
             color=form["color"].data,
             image=form["image"].data,
             )
-
+        
         # TODO Option to add entity assets, meters, conditions?
         db.session.add(entity)
         db.session.commit()
@@ -123,23 +137,61 @@ def create_entity(cid, entity):
         return {"errors": validation_errors_to_messages(form.errors)}, 401
 
 
-# Create a type of progressable meter, like 'levels' or 'skills'
-# @chronicle_routes.route("/<int:cid>/meters/create", methods=["POST"])
-# def create_meter(cid):
-#     """Create a new meter that belongs to a chronicle"""
-#     form = MeterForm()
-#     form["csrf_token"].data = request.cookies["csrf_token"]
 
-#     if form.validate_on_submit():
-#         meter = Meter(
-#             chronicle_id=cid,
-#             title=form["title"].data,
-#             description=form["description"].data,
-#             color=form["color"].data,
-#             image=form["image"].data,
-#             )
-#         db.session.add(meter)
-#         db.session.commit()
-#         return meter.to_dict()
-#     else:
-#         return {"errors": validation_errors_to_messages(form.errors)}, 401
+# Create entity
+@chronicle_routes.route("/<int:cid>/player/<int:uid>/create", methods=["POST"])
+def create_player(cid, uid):
+    """Create a new entity that belongs to a chronicle"""
+    form = EntityForm()
+    form["csrf_token"].data = request.cookies["csrf_token"]
+    
+    if form.validate_on_submit():
+        entity = Entity(
+            chronicle_id=cid,
+            type="character",
+            subtype=form["subtype"].data,
+            title=form["title"].data,
+            description=form["description"].data,
+            is_unique=form["is_unique"].data,
+            color=form["color"].data,
+            image=form["image"].data,
+            )
+        
+        # TODO Option to add entity assets, meters, conditions?
+        db.session.add(entity)
+        # current_user.p_characters.append(entity)
+        db.session.commit()
+        # print("\n\nPC PC PC PC PC")
+        # pprint(entity.to_dict())
+        return entity.to_dict()
+    else:
+        return {"errors": validation_errors_to_messages(form.errors)}, 401
+
+
+
+
+# Create a type of progressable meter, like 'levels' or 'skills'
+@chronicle_routes.route("/<int:cid>/meters/create", methods=["POST"])
+def create_meter(cid):
+    """Create a new meter that belongs to a chronicle"""
+    form = MeterForm()
+    form["csrf_token"].data = request.cookies["csrf_token"]
+
+    if form.validate_on_submit():
+        meter = Meter(
+            chronicle_id=cid,
+            title=form["title"].data,
+            description=form["description"].data,
+            color=form["color"].data,
+            image=form["image"].data,
+            min=form["min"].data,
+            max=form["max"].data,
+            base=form["base"].data,
+            mod=form["mod"].data,
+            algorithm=form["algo"].data,
+            )
+        db.session.add(meter)
+        db.session.commit()
+        return meter.to_dict()
+    else:
+        return {"errors": validation_errors_to_messages(form.errors)}, 401
