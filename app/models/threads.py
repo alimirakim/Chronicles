@@ -20,7 +20,7 @@ class Thread(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     tale_id = db.Column(db.Integer, db.ForeignKey("tales.id", ondelete="cascade"), nullable=False)
     title = db.Column(db.String(250), nullable=False)
-    description = db.Column(db.String)
+    description = db.Column(db.String, nullable=False, default="N/A")
     color = db.Column(db.String(50), default="rgb(70,60,70)")
     image = db.Column(db.String(250), default="sign")
     x = db.Column(db.Integer, nullable=False, default=0)

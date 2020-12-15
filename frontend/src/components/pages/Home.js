@@ -23,8 +23,8 @@ export default function Home({ authenticated, setAuthenticated }) {
         dispatch(getGalleryChronicles(chronicles))
       }
     })()
-  }, [gallery_ids])
-  console.log("gallery", gallery_ids)
+  }, [])
+
   if (!gallery_ids.length) return null;
 
   return (

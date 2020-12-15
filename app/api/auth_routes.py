@@ -82,32 +82,30 @@ def sign_up():
             username=form.data['username'],
             email=form.data['email'],
             password=form.data['password'])
-        chronicle = Chronicle(
-            user=user,
-            title=f"{user.username}'s Chronicles",
-            description="Record the details of your story in this Chronicle, including characters, items, locations, and events. Start new Tales and weave them together by making and connecting Threads.")
-        tale = Tale(
-            chronicle=chronicle,
-            title=f"{user.username}'s First Tale",
-            description="Start your very first Tale here. Make a Thread, then add more and start weaving them together.")
-        thread = Thread(
-            tale=tale,
-            title="Start Here!")
+        # chronicle = Chronicle(
+        #     user=user,
+        #     title=f"{user.username}'s Chronicles",
+        #     description="Record the details of your story in this Chronicle, including characters, items, locations, and events. Start new Tales and weave them together by making and connecting Threads.")
+        # tale = Tale(
+        #     chronicle=chronicle,
+        #     title=f"{user.username}'s First Tale",
+        #     description="Start your very first Tale here. Make a Thread, then add more and start weaving them together.")
+        # thread = Thread(
+        #     tale=tale,
+        #     title="Start Here!")
         
         db.session.add(user)
-        db.session.add(chronicle)
-        db.session.add(tale)
-        db.session.add(thread)
-        db.session.commit()
-        
-        tale.first_thread_id = thread.id
-        db.session.commit()
-        
+        # db.session.add(chronicle)
+        # db.session.add(tale)
+        # db.session.add(thread)
+        # db.session.commit()
+        # tale.first_thread_id = thread.id
+        db.session.commit()        
         login_user(user)
         
         norm_user = normalize_user_data(user)
         
-        return jsonify(user=norm_user, chronicles=chronicles, tales=tales, threads=threads)
+        return jsonify(user=norm_user)
     return {'errors': validation_errors_to_messages(form.errors)}
 
 

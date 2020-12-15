@@ -9,7 +9,7 @@ class Meter(db.Model):
     chronicle_id = db.Column(db.Integer, db.ForeignKey("chronicles.id"), nullable=False)
     type = db.Column(db.String(50)) # (db.Enum("skill", "knowledge", "ability", "level"))
     title = db.Column(db.String(50), nullable=False)
-    description = db.Column(db.String)
+    description = db.Column(db.String, nullable=False, default="N/A")
     color = db.Column(db.String(50), default="rgb(70,60,70)")
     image = db.Column(db.String(250), default="sliders")
     min = db.Column(db.Integer, nullable=False, default=0)

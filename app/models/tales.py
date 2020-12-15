@@ -8,7 +8,7 @@ class Tale(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     chronicle_id = db.Column(db.Integer, db.ForeignKey("chronicles.id", ondelete="cascade"), nullable=False)
     title = db.Column(db.String(50), nullable=False)
-    description = db.Column(db.String)
+    description = db.Column(db.String, nullable=False, default="N/A")
     first_thread_id = db.Column(db.Integer)
     color = db.Column(db.String(50), default="rgb(70,60,70)")
     image = db.Column(db.String(250), default="scroll")

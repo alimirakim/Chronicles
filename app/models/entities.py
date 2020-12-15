@@ -13,7 +13,7 @@ class Entity(db.Model):
     type = db.Column(db.String(50), nullable=False, default="asset") # (db.Enum("asset", "character", "place", "condition", "rank"))
     subtype = db.Column(db.String(50)) # (db.Enum("item", "bond", "deed", "idea", "title", "human", "skill", "knowledge", "fancy schmancy"))
     title = db.Column(db.String(50), nullable=False)
-    description = db.Column(db.String)
+    description = db.Column(db.String, nullable=False, default="N/A")
     color = db.Column(db.String(50), default="rgb(70,60,70)")
     image = db.Column(db.String(250), default="id-card")
     is_unique = db.Column(db.Boolean, nullable=False, default=False)
@@ -48,23 +48,23 @@ class Entity(db.Model):
         }
 
 
-# class BearerCondition(db.Model):
-#     """A condition that an entity is afflicted with."""
-#     __tablename__ = "bearer_conditions"
-#     id = db.Column(db.Integer, primary_key=True)
-#     bearer_id = db.Column(db.Integer, db.ForeignKey("entities.id"), nullable=False)
-#     condition_id = db.Column(db.Integer, db.ForeignKey("entities.id"), nullable=False)
-#     expiry = db.Column(db.DateTime)
-#     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
+class BearerCondition(db.Model):
+    """A condition that an entity is afflicted with."""
+    __tablename__ = "bearer_conditions"
+    id = db.Column(db.Integer, primary_key=True)
+    bearer_id = db.Column(db.Integer, db.ForeignKey("entities.id"), nullable=False)
+    condition_id = db.Column(db.Integer, db.ForeignKey("entities.id"), nullable=False)
+    expiry = db.Column(db.DateTime)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
 
-#     def to_dict(self):
-#         """Returns a dictionary of an entity's asset"""
-#         return {
-#             "bearer_id": self.bearer_id,
-#             "condition_id": self.condition_id,
-#             "expiry": self.expiry,
-#             "created_at": self.created_at,
-#         }
+    def to_dict(self):
+        """Returns a dictionary of an entity's asset"""
+        return {
+            "bearer_id": self.bearer_id,
+            "condition_id": self.condition_id,
+            "expiry": self.expiry,
+            "created_at": self.created_at,
+        }
         
 
 # NOTE this is a fancy JOIN! Represents: items, conditions, ranks, bonds, deeds, titles, ideas,

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch } from 'react-redux'
 import { Redirect } from 'react-router-dom';
 import { signUp } from '../../services/auth';
-import { getCreations } from '../../actions/userActions'
+import { createUser } from '../../actions/userActions'
 import ErrorMessages from '../ErrorMessages'
 
 
@@ -17,12 +17,12 @@ const SignUpForm = ({ authenticated, setAuthenticated }) => {
   const onSignUp = async (e) => {
     e.preventDefault();
     if (password === repeatPassword) {
-      const content = await signUp(username, email, password);
-      if (!content.errors) {
+      const user = await signUp(username, email, password);
+      if (!user.errors) {
         setAuthenticated(true);
-        dispatch(getCreations(content))
+        dispatch(createUser(user))
       } else {
-        setErrors(content.errors)
+        setErrors(user.errors)
       }
     }
   }
@@ -33,8 +33,6 @@ const SignUpForm = ({ authenticated, setAuthenticated }) => {
   const updateEmail = (e) => setEmail(e.target.value);
   const updatePassword = (e) => setPassword(e.target.value);
   const updateRepeatPassword = (e) => setRepeatPassword(e.target.value);
-
-  if (authenticated) return <Redirect to="/" />
 
   return (
     <form onSubmit={onSignUp} className="lo-box-med, lo-center-h" style={{width: "50%"}}>

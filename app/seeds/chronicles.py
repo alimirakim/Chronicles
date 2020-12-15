@@ -6,27 +6,45 @@ def seed_chronicles():
     chronicle1 = Chronicle(
         user_id=1,
         title="Demo Chronicle",
-        description="A demonstration of the Iris Isle tale-spinner.")
+        description="A demonstration of the Iris Isle tale-spinner.",
+        color="rgb(70,60,70)",
+        image="book",
+        )
     chronicle2 = Chronicle(
         user_id=1,
         title="Romantic Sphinx",
-        description="Two sphinx in love.")
+        description="Two sphinx in love.",
+        color="rgb(70,60,70)",
+        image="heart",
+        )
     chronicle3 = Chronicle(
         user_id=1,
         title="The Three Atlamillia",
-        description="Travel to the past and future to find your mom and discover the true secret of the great Emperor Grippin.")
+        description="Travel to the past and future to find your mom and discover the true secret of the great Emperor Grippin.",
+        color="rgb(70,60,70)",
+        image="gem",
+        )
     chronicle4 = Chronicle(
         user_id=1,
         title="A Modern Tale of Capitalist Glory",
-        description="Win big. Crush your competition. Become the Boss. Or die trying.")
+        description="Win big. Crush your competition. Become the Boss. Or die trying.",
+        color="rgb(70,60,70)",
+        image="coins",
+        )
     chronicle5 = Chronicle(
         user_id=1,
         title="Sophie's Adventures",
-        description="A family-friendly children's adventure game, meant to be played together with your parent! :) Please enjoy. Updated with a new Tale every Friday, 7 PST.")
+        description="A family-friendly children's adventure game, meant to be played together with your parent! :) Please enjoy. Updated with a new Tale every Friday, 7 PST.",
+        color="rgb(70,60,70)",
+        image="mountain",
+        )
     chronicle6 = Chronicle(
-        user_id=1,
+        user_id=2,
         title="Untitled",
-        description="WIP (don't look, go away, I can't find the privacy settings)")
+        description="WIP (don't look, go away, I can't find the privacy settings)",
+        color="rgb(70,60,70)",
+        image="poop",
+        )
     
     db.session.add(chronicle1)
     db.session.add(chronicle2)

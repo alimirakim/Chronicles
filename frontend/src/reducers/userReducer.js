@@ -1,6 +1,7 @@
 import {
   GET_USER_CREATIONS,
   LOGOUT_USER,
+  CREATE_USER,
 } from '../actions/userActions'
 
 import {
@@ -51,6 +52,9 @@ export default function userReducer(state = {}, action) {
   let i;
   switch (action.type) {
 
+    case CREATE_USER:
+      return action.user
+    
     case GET_USER_CREATIONS:
       return action.content.user
 

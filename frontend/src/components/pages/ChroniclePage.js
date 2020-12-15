@@ -177,7 +177,7 @@ export default function ChroniclePage() {
       <ul className="gal">
         {chronicles[cid].tale_ids.map(tid => (
           <li key={tid} className="th-card">
-            <Link to={`/chronicles/${cid}/tales/${tid}`}>
+            <Link to={`/tales/${tid}`}>
               <dl>
                 <dt>Title</dt>
                 <dd>{tales[tid].title}</dd>

@@ -3,6 +3,7 @@ from app.models import db, Thread, ThreadChoice
 from app.forms import ThreadForm
 from app.utils import validation_errors_to_messages, createChoices
 from app.forms import ThreadForm
+from pprint import pprint
 
 thread_routes = Blueprint("threads", __name__)
 
@@ -12,7 +13,9 @@ def edit_thread(thid):
     """Edit a thread."""
     form = ThreadForm()
     form["csrf_token"].data = request.cookies["csrf_token"]
-    
+    print("\n\nWHY WHY WHY \n\n\n")
+    pprint(request.json["choices"])
+    print(form.validate_on_submit())
     if form.validate_on_submit():
         thread = Thread.query.get(thid)
         thread.title = form["title"].data
@@ -26,10 +29,12 @@ def edit_thread(thid):
         editted_choice_ids = [c.id for c in request.json["choices"]]
         
         for choice in existing_choices:
+            print("\n\nDELETE", choice)
             if choice.id not in editted_choice_ids:
                 # deleting removed choices
                 db.session.delete(choice)
             else:
+                print("\n\nUPDATE", choice)
                 # updating existing choices
                 [matching_choice] = [c for c in request.json["choices"] if c["id"] and c["id"] == choice.id]
                 choice.title = matching_choice["title"]
@@ -42,7 +47,7 @@ def edit_thread(thid):
         db.session.commit()
         return jsonify(thread=thread.to_dict(), choices=choices)
     else:
-        return {"errors": validation_errors_to_messages}
+        return {"errors": validation_errors_to_messages(form.errors)}, 401
       
 
 @thread_routes.route("/<int:thid>/delete", methods=["DELETE"])
@@ -72,7 +77,7 @@ def create_choice(thid):
         db.session.commit()
         return choice.to_dict()
     else:
-        return {"errors": validation_errors_to_messages}
+        return {"errors": validation_errors_to_messages(form.errors)}, 401
 
 
 @thread_routes.route("/<int:chid>/edit", methods=["PATCH"])
@@ -90,7 +95,7 @@ def edit_choice(chid):
         choice.image = form["image"].data,
         db.session.commit()
     else:
-        return {"errors": validation_errors_to_messages}
+        return {"errors": validation_errors_to_messages(form.errors)}, 401
 
 
 @thread_routes.route("/<int:chid>/delete", methods=["DELETE"])

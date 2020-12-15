@@ -93,7 +93,7 @@ def get_and_normalize_all_data_for_user(current_user):
     
     return user, chronicles, tales, threads, choices, characters, places, assets, conditions, meters
 
-def normalize_user_data(user, chronicles=(), tales=(), threads=(), choices=(), characters=(), places=(), assets=(), conditions=(), meters=()):
+def normalize_user_data(user, chronicles={}, tales={}, threads={}, choices={}, characters={}, places={}, assets={}, conditions={}, meters={}):
     """Return dict suitable for dispatching as user reducer initial state."""
     norm_user = user.to_dict()
     norm_user["tale_ids"] = tuple(tales.keys())
@@ -124,8 +124,8 @@ def createChoices(choices_data, thread):
             title= choice["title"],
             current_thread=thread,
             choice_thread_id=choice["choice_thread_id"],
-            color=choice["color"],
-            image=choice["image"],
+            # color=choice["color"],
+            # image=choice["image"],
             )
         db.session.add(thread_choice)
         db.session.commit()

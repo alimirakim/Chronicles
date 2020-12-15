@@ -8,7 +8,7 @@ class Chronicle(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     title = db.Column(db.String(50), nullable=False)
-    description = db.Column(db.String)
+    description = db.Column(db.String, nullable=False, default="N/A")
     color = db.Column(db.String(50), default="rgb(70,60,70)")
     image = db.Column(db.String(250), default="book")
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
