@@ -8,12 +8,12 @@ import ErrorMessages from '../ErrorMessages'
 export default function LoginForm({ authenticated, setAuthenticated }) {
   const dispatch = useDispatch()
   const [errors, setErrors] = useState([]);
-  const [email, setEmail] = useState("demo@aa.io");
+  const [username, setUsername] = useState("demo@aa.io");
   const [password, setPassword] = useState("password");
 
   const onLogin = async (e) => {
     e.preventDefault();
-    const content = await login(email, password);
+    const content = await login(username, password);
     if (!content.errors) {
       setAuthenticated(true)
       // TODO Refactor this into one dispatch!
@@ -23,7 +23,7 @@ export default function LoginForm({ authenticated, setAuthenticated }) {
     }
   };
 
-  const updateEmail = (e) => setEmail(e.target.value)
+  const updateUsername = (e) => setUsername(e.target.value)
   const updatePassword = (e) => setPassword(e.target.value)
 
   if (authenticated) return <Redirect to="/" />
@@ -33,13 +33,13 @@ export default function LoginForm({ authenticated, setAuthenticated }) {
     <h2>Login</h2>
       <ErrorMessages errors={errors} />
       <div>
-        <label htmlFor="email" className="lo-txt-con">Email
+        <label htmlFor="username" className="lo-txt-con">Username
         <input
-          name="email"
+          name="username"
           type="text"
-          placeholder="Email"
-          value={email}
-          onChange={updateEmail}
+          placeholder="Username"
+          value={username}
+          onChange={updateUsername}
         />
         </label>
       </div>

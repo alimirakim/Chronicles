@@ -104,7 +104,7 @@ export default function ChroniclePage() {
         <i className={`fa-10x fas fa-${pc.image}`} style={{ color: pc.color }}></i>
 
         {/* <h3>About</h3>
-        <p>{parse(pc.description)}</p> */}
+        <p>{pc.description) ? parse(pc.description)}</p> */}
 
         <section style={{ position: "relative" }}>
           <h3>

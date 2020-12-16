@@ -23,6 +23,7 @@ flask-migrate = "*"
 email-validator = "*"
 flask-login = "*"
 pytest = "*"
+coverage = "*"
 
 [dev-packages]
 psycopg2-binary = "==2.8.6"

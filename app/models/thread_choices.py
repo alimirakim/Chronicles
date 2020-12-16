@@ -25,8 +25,8 @@ class ThreadChoice(db.Model):
     image = db.Column(db.String(250), default="map-signs")
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
 
-    current_thread = db.relationship("Thread", foreign_keys=[current_thread_id], passive_deletes=True)
-    choice_thread = db.relationship("Thread", foreign_keys=[choice_thread_id], passive_deletes=True)
+    current_thread = db.relationship("Thread", foreign_keys=[current_thread_id])
+    choice_thread = db.relationship("Thread", foreign_keys=[choice_thread_id])
     locks = db.relationship("Lock", back_populates="choice")
 
     def to_dict(self):

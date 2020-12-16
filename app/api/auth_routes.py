@@ -14,11 +14,8 @@ def authenticate():
     if current_user.is_authenticated:
         user, chronicles, tales, threads, choices, characters, places, assets, conditions, meters = get_and_normalize_all_data_for_user(current_user)
         print("\n\nWhat wrong??")
-
-
         pprint(characters)
-
-   
+        
         return jsonify(
             user=user, 
             chronicles=chronicles, 
@@ -30,6 +27,7 @@ def authenticate():
             assets=assets,
             conditions=conditions,
             meters=meters,
+            msg="authentication successful",
             )
     return {'errors': ['Unauthorized']}, 401
 
@@ -41,11 +39,12 @@ def login():
     form = LoginForm()
     # Get the csrf_token from the request cookie and put it into the
     # form manually to validate_on_submit can be used
+    if form()
     form['csrf_token'].data = request.cookies['csrf_token']
     
     if form.validate_on_submit():
         # Add the user to the session, we are logged in!
-        user = User.query.filter(User.email == form.data['email']).first()
+        user = User.query.filter(User.username == form.data['username']).first()
         login_user(user)
         
         user, chronicles, tales, threads, choices, characters, places, assets, conditions, meters = get_and_normalize_all_data_for_user(user)
@@ -59,7 +58,8 @@ def login():
             places=places,
             assets=assets,
             conditions=conditions,
-            meters=meters,)
+            meters=meters,
+            msg="login successful")
     return {'errors': validation_errors_to_messages(form.errors)}, 401
 
 
@@ -67,7 +67,7 @@ def login():
 def logout():
     """Logs a user out"""
     logout_user()
-    return {'message': 'User logged out'}
+    return {'msg': 'logout successful'}
 
 
 @auth_routes.route('/signup', methods=['POST'])
@@ -105,7 +105,7 @@ def sign_up():
         
         norm_user = normalize_user_data(user)
         
-        return jsonify(user=norm_user)
+        return jsonify(user=norm_user, msg="signup successful")
     return {'errors': validation_errors_to_messages(form.errors)}
 
 

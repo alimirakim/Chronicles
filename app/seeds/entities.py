@@ -7,26 +7,29 @@ def seed_entities():
     # assets
     asset1 = Entity(
         chronicle_id=1,
-        subtype="item")
+        subtype="item",
         title="Red Key",
         description="A tiny red key found in the blue room. It probably unlocks red doors, because why not?",
         color="#e05265ff",
         image="key",
         is_unique=True,
+        )
     asset2 = Entity(
         chronicle_id=1,
-        subtype="item")
+        subtype="item",
         title="Candy",
         description="Colorful pieces of candy wrapped in crinkly celophane. They look delicious.",
         color="#964a70ff",
         image="candy-cane",
+        )
     asset3 = Entity(
         chronicle_id=1,
-        subtype="deed",)
+        subtype="deed",
         title="Took Candy",
         color="#964a70ff",
         description="A candy has been taken.",
         image="hand-sparkles",
+        )
     asset4 = Entity(
         chronicle_id=1,
         subtype="item",
@@ -40,10 +43,10 @@ def seed_entities():
         chronicle_id=1,
         subtype="currency",
         title="Gold",
-        description="The currency of the world of Demolandia."
+        description="The currency of the world of Demolandia.",
         color="#f0bc62ff",
         image="coins",
-    )
+        )
 
     # places
     place1 = Entity(
@@ -87,7 +90,8 @@ def seed_entities():
         description="A young fairy with a sweet tooth",
         color="#885c58ff",
         image="user-circle",
-        is_unique=True)
+        is_unique=True,
+        )
     
     # conditions
     condition1 = Entity(
@@ -113,11 +117,11 @@ def seed_entities():
     ba1 = BearerAsset(
         bearer=character1,
         asset=asset4,
-      )
+        )
     ba2 = BearerAsset(
         bearer=character1,
         asset=condition1,
-    )
+        )
     
     meter1 = Meter(
         chronicle_id=1,
