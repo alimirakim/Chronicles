@@ -9,7 +9,8 @@ class Config:
   
 class TestConfig(Config):
     """Configuration for tests"""
+    SECRET_KEY=os.environ.get('SECRET_KEY')
     DEBUG = True
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = "postgres:///:memory:"
+    # SQLALCHEMY_DATABASE_URI = "postgres://:memory:"
     WTF_CSRF_ENABLED = False

@@ -42,7 +42,6 @@ class Thread(db.Model):
 
     def to_dict(self):
         """Convert to dictionary."""
-        print("\n\nTHREAD DICTIONARY")
         return {
             "id": self.id,
             "tale_id": self.tale_id,
