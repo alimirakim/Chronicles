@@ -1,6 +1,6 @@
 import React from 'react'
 import CreationFormWrapper from './CreationFormWrapper'
-import { addCondition, updateCondition } from '../../actions/conditionActions'
+import { addCondition, updateCondition } from '../../store/mainActions/conditionActions'
 
 export default function ConditionForm({ id, edit, open, handleClose }) {
   const resetUniqueContent = () => console.log("No unique content to reset")

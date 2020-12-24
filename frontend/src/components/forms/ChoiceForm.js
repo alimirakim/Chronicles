@@ -1,6 +1,6 @@
 import React from 'react'
 import CreationFormWrapper from './CreationFormWrapper'
-import { addChoice, updateChoice } from '../../actions/choiceActions'
+import { addChoice, updateChoice } from '../../store/mainActions/choiceActions'
 
 export default function ChoiceForm({ id, edit, open, handleClose }) {
   const resetUniqueContent = () => console.log("No unique content to reset")

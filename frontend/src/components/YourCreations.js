@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import parse from 'html-react-parser'
 
-import {wipeErrors} from '../actions/errorActions'
-import { updateSelection } from '../actions/selectionActions'
+import { wipeErrors } from '../store/mainActions/errorActions'
+import { updateSelection } from '../store/mainActions/selectionActions'
+
+// MY COMPONENTS
 import DeleteForm from './forms/DeleteForm'
+import Info from './mylib/Info'
+
 
 export default function YourCreations({
   pid, // Parent-path id
@@ -99,7 +103,7 @@ export default function YourCreations({
       <h2 className="lo-center-h" style={{ margin: "0 auto", fontSize: "1rem", opacity: 0.8 }}>Your {creationType}s</h2>
       {isEmpty ? <p>You have no {creationType}s yet! Why not start one? :B</p> :
         <>
-          <ul style={{ display: "flex", flexWrap: "wrap-reverse" }}>
+          <ul>
             {Object.values(selectedCreations).map(creation => (
               <li
                 key={creation.id}
@@ -107,23 +111,21 @@ export default function YourCreations({
                 className={active.id === creation.id ? "card active" : "card"}
                 style={active.id === creation.id ? { background: `linear-gradient(240deg, ${creation.color} -50%, rgba(250,250,255,0.8) 20%)` } : {}}
               >
-                <div style={{ backgroundColor: creation.color }} className="card-pic">
-                  <i className={`fas fa-${creation.image} lo-center`}></i>
-                </div>
-                <div className="yrc-con lo-center">
-                
-                  <Link to={`/${creationType}s/${creation.id}`}>{creation.title}</Link>
-                  
+
+                <Link to={`/${creationType}s/${creation.id}`}>
+                  <div style={{ backgroundColor: creation.color }} className="card-pic">
+                    <i className={`fas fa-${creation.image} lo-center `}></i>
+                  </div>
+                </Link>
+
+                <div className="yrc-con lo-center-y">
+                  {creation.title}
                   <div>
-                  
                     <button type="button" onClick={handleOpenEdit}>Edit</button>
                     <button type="button" onClick={handleOpenDelete}>Delete</button>
-                    
-                    <i className="tip fas fa-question-circle"></i>
-                    <section className="tip-info">
-                    <b>DESCRIPTION</b> <br />{creation.description ? parse(creation.description) : "N/A"}
-                    </section>
-                    
+                    <Info content={<><b>DESCRIPTION</b> {creation.description
+                      ? parse(creation.description) : "N/A"}</>}
+                    />
                   </div>
                 </div>
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import CreationFormWrapper from './CreationFormWrapper'
-import { addCharacter, updateCharacter } from '../../actions/characterActions'
+import { addCharacter, updateCharacter } from '../../store/mainActions/characterActions'
 
 export default function CharacterForm({ id, edit, open, handleClose }) {
   const resetUniqueContent = () => console.log("No unique content to reset")

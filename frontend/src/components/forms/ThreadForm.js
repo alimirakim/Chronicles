@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import CreationFormWrapper from './CreationFormWrapper'
 import { AddToList } from './FormInputs'
-import { addThread, updateThread } from '../../actions/threadActions'
+
+
+import { addThread, updateThread } from '../../store/mainActions/threadActions'
 
 
 // const threads = useSelector(state => state.threads)

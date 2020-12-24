@@ -1,6 +1,8 @@
 import React from 'react'
 import CreationFormWrapper from './CreationFormWrapper'
-import { addTale, updateTale } from '../../actions/taleActions'
+
+
+import { addTale, updateTale } from '../../store/mainActions/taleActions'
 
 export default function TaleForm({ id, edit, open, handleClose }) {
   const resetUniqueContent = () => console.log("No unique content to reset")

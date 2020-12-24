@@ -6,11 +6,14 @@ import ChronicleForm from '../forms/ChronicleForm'
 import ThreadForm from '../forms/ThreadForm'
 import TaleForm from '../forms/TaleForm'
 import ChoiceForm from '../forms/ChoiceForm'
-import { addThread } from '../../actions/threadActions'
-import { deleteChronicle } from '../../actions/chronicleActions'
-import { deleteTale } from '../../actions/taleActions'
-import { deleteThread } from '../../actions/threadActions'
-import { deleteChoice } from '../../actions/choiceActions'
+
+
+import { addThread } from '../../store/mainActions/threadActions'
+import { deleteChronicle } from '../../store/mainActions/chronicleActions'
+import { deleteTale } from '../../store/mainActions/taleActions'
+import { deleteThread } from '../../store/mainActions/threadActions'
+import { deleteChoice } from '../../store/mainActions/choiceActions'
+
 import YourCreations from '../YourCreations'
 import {TaleDiagram, CustomNode } from '../TaleDiagram'
 

@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import parse from 'html-react-parser'
 
-import { getGalleryChronicles } from '../../actions/chronicleActions'
+import { getGalleryChronicles } from '../../store/mainActions/chronicleActions'
 
 
 export default function PlayGallery() {

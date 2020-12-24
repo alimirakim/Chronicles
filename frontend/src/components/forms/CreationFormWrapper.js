@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import ErrorMessages from '../ErrorMessages'
+import ErrorMessages from '../mylib/ErrorMessages'
 import { TextInput, TextAreaInput, SelectInputColors, SelectInputImages } from './FormInputs'
-import { getErrors, wipeErrors } from '../../actions/errorActions'
-import { updateSelection } from '../../actions/selectionActions'
+
+import { getErrors, wipeErrors } from '../../store/mainActions/errorActions'
+import { updateSelection } from '../../store/mainActions/selectionActions'
 
 export default function CreationFormWrapper({
   open,

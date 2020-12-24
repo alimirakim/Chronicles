@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {useParams, useHistory} from 'react-router-dom'
-import ErrorMessages from '../ErrorMessages'
+import ErrorMessages from '../mylib/ErrorMessages'
 import { TextInput, SelectInputColors, SelectInputImages } from './FormInputs'
-import { getErrors, wipeErrors } from '../../actions/errorActions'
-import {addCharacter} from '../../actions/characterActions'
+
+import { getErrors, wipeErrors } from '../../store/mainActions/errorActions'
+import {addCharacter} from '../../store/mainActions/characterActions'
 import {v4 as uuidv4} from 'uuid'
 
 

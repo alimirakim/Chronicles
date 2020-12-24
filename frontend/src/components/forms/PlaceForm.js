@@ -1,6 +1,6 @@
 import React from 'react'
 import CreationFormWrapper from './CreationFormWrapper'
-import { addPlace, updatePlace } from '../../actions/placeActions'
+import { addPlace, updatePlace } from '../../store/mainActions/placeActions'
 
 export default function AssetForm({ id, edit, open, handleClose }) {
   const resetUniqueContent = () => console.log("No unique content to reset")

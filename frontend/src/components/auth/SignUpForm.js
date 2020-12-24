@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { useDispatch } from 'react-redux'
 import { Redirect } from 'react-router-dom';
 import { signUp } from '../../services/auth';
-import { createUser } from '../../actions/userActions'
-import ErrorMessages from '../ErrorMessages'
+import { createUser } from '../../store/mainActions/userActions'
+import ErrorMessages from '../mylib/ErrorMessages'
 
 
 const SignUpForm = ({ authenticated, setAuthenticated }) => {

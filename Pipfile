@@ -24,6 +24,8 @@ email-validator = "*"
 flask-login = "*"
 pytest = "*"
 coverage = "*"
+boto3 = "*"
+botocore = "*"
 
 [dev-packages]
 psycopg2-binary = "==2.8.6"

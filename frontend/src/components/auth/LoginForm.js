@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { useDispatch } from 'react-redux'
 import { Redirect } from "react-router-dom";
 import { login } from "../../services/auth";
-import { getCreations } from '../../actions/userActions'
-import ErrorMessages from '../ErrorMessages'
+import { getCreations } from '../../store/mainActions/userActions'
+import ErrorMessages from '../mylib/ErrorMessages'
 
 export default function LoginForm({ authenticated, setAuthenticated }) {
   const dispatch = useDispatch()
   const [errors, setErrors] = useState([]);
-  const [username, setUsername] = useState("demo@aa.io");
+  const [username, setUsername] = useState("demo");
   const [password, setPassword] = useState("password");
 
   const onLogin = async (e) => {

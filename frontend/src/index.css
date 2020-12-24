@@ -1,9 +1,9 @@
-@import "./styles/normalize.css";
-@import "./styles/base.css";
-@import "./styles/layout.css";
-@import "./styles/theme.css";
-@import "./styles/state.css";
-@import "./styles/modules.css";
+/* @import "./styles/css/normalize.css"; */
+@import "./styles/css/base.css";
+@import "./styles/css/layout.css";
+@import "./styles/css/theme.css";
+@import "./styles/css/state.css";
+@import "./styles/css/modules.css";
 
 /* Development-mode-only helpers */
 * {

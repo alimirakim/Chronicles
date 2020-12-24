@@ -18,16 +18,16 @@ import ConditionForm from '../forms/ConditionForm'
 import MeterForm from '../forms/MeterForm'
 
 // ACTION CREATORS
-import { deleteChronicle } from '../../actions/chronicleActions'
-import { deleteTale } from '../../actions/taleActions'
-import { deleteThread } from '../../actions/threadActions'
-import { deleteChoice } from '../../actions/choiceActions'
-import { deleteCharacter } from '../../actions/characterActions'
-import { deletePlace } from '../../actions/placeActions'
-import { deleteAsset } from '../../actions/assetActions'
-import {deleteCondition } from '../../actions/conditionActions'
-import {deleteMeter } from '../../actions/meterActions'
-import { updateSelections, wipeSelections } from '../../actions/selectionActions'
+import { deleteChronicle } from '../../store/mainActions/chronicleActions'
+import { deleteTale } from '../../store/mainActions/taleActions'
+import { deleteThread } from '../../store/mainActions/threadActions'
+import { deleteChoice } from '../../store/mainActions/choiceActions'
+import { deleteCharacter } from '../../store/mainActions/characterActions'
+import { deletePlace } from '../../store/mainActions/placeActions'
+import { deleteAsset } from '../../store/mainActions/assetActions'
+import {deleteCondition } from '../../store/mainActions/conditionActions'
+import {deleteMeter } from '../../store/mainActions/meterActions'
+import { updateSelections, wipeSelections } from '../../store/mainActions/selectionActions'
 
 
 export default function WorldWeaver() {

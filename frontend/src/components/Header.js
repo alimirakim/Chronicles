@@ -17,19 +17,17 @@ export default function Header({ authenticated, setAuthenticated }) {
     <nav>
       <ul className="top-con">
 
-
         {authenticated && <>
-          <li style={{marginLeft: "1rem"}}>
-          <button onClick={onLogout} type="button">
-          Logout
-          </button>
+          <li style={{ marginLeft: "1rem" }}>
+            <button onClick={onLogout} type="button">
+              Logout
+            </button>
           </li>
-          
 
           <NavLink to="/about" exact={true} activeClassName="active">
             <li>About </li>
           </NavLink>
-          
+
           <NavLink to="/users" exact={true} activeClassName="active">
             <li>Users </li>
           </NavLink>
@@ -42,7 +40,7 @@ export default function Header({ authenticated, setAuthenticated }) {
             <li>WorldWeaver</li>
           </NavLink>
 
-{/* 
+          {/* 
           <NavLink to={`/library`} exact={true} activeClassName="active">
             <li>Library</li>
           </NavLink> */}
@@ -74,12 +72,15 @@ export default function Header({ authenticated, setAuthenticated }) {
         </li> */}
 
         </>}
-        
-        
+
+        <NavLink to={`/character-generator`} exact={true} activeClassName="active">
+          <li>Generator</li>
+        </NavLink>
+
         <NavLink to={`/gallery`} exact={true} activeClassName="active">
-            <li>Gallery</li>
-            {/* Spotlight, discovery, find, new, latest, by your followed, by tag, popular */}
-          </NavLink>
+          <li>Gallery</li>
+          {/* Spotlight, discovery, find, new, latest, by your followed, by tag, popular */}
+        </NavLink>
 
         {/* For Anon Users, show only Login/Signup options: */}
         {!authenticated && <>
@@ -94,11 +95,11 @@ export default function Header({ authenticated, setAuthenticated }) {
           </NavLink>
 
         </>}
-        
+
         <NavLink to="/" exact={true} activeClassName="active" >
-            <li> Home </li>
-          </NavLink>
-          
+          <li> Home </li>
+        </NavLink>
+
       </ul>
     </nav>
   </header >);

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import parse from 'html-react-parser'
-import { getGalleryChronicles } from '../../actions/chronicleActions'
+import { getGalleryChronicles } from '../../store/mainActions/chronicleActions'
 
 // import { updateSelections, wipeSelections } from '../actions/selectionActions'
 

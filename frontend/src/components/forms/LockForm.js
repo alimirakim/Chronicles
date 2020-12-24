@@ -1,6 +1,6 @@
 import React from 'react'
 import CreationFormWrapper from './CreationFormWrapper'
-import { addLock, updateLock } from '../../actions/lockActions'
+import { addLock, updateLock } from '../../store/mainActions/lockActions'
 
 export default function LockForm({ id, edit, open, handleClose }) {
   const resetUniqueContent = () => console.log("No unique content to reset")

@@ -5,8 +5,10 @@ import parse from 'html-react-parser'
 import PlayerCharacterForm from '../forms/PlayerCharacterForm'
 import ChronicleForm from '../forms/ChronicleForm'
 import DeleteForm from '../forms/DeleteForm'
-import { getChronicle, deleteChronicle } from '../../actions/chronicleActions'
-import { getTales } from '../../actions/taleActions'
+
+
+import { getChronicle, deleteChronicle } from '../../store/mainActions/chronicleActions'
+import { getTales } from '../../store/mainActions/taleActions'
 
 
 export default function ChroniclePage() {

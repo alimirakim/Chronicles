@@ -1,6 +1,6 @@
 import React from 'react'
 import CreationFormWrapper from './CreationFormWrapper'
-import { addEffect, updateEffect } from '../../actions/effectActions'
+import { addEffect, updateEffect } from '../../mainActions/effectActions'
 
 export default function EffectForm({ id, edit, open, handleClose }) {
   const resetUniqueContent = () => console.log("No unique content to reset")

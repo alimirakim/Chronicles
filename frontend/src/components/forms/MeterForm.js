@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import CreationFormWrapper from './CreationFormWrapper'
 import { SelectInput } from './FormInputs'
-import { addMeter, updateMeter } from '../../actions/meterActions'
+import { addMeter, updateMeter } from '../../store/mainActions/meterActions'
 
 export default function MeterForm({ id, edit, open, handleClose }) {
   const [min, setMin] = useState(edit ? edit.min : 1)

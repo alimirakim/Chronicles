@@ -8,6 +8,8 @@ import Header from "./components/Header"
 import Footer from "./components/Footer"
 import SignUpForm from "./components/auth/SignUpForm"
 import LoginForm from "./components/auth/LoginForm"
+import FileForm from './components/forms/FileForm'
+
 // PAGE COMPONENTS
 import Home from './components/pages/Home'
 import PlayGallery from './components/pages/PlayGallery'
@@ -20,10 +22,11 @@ import Library from './components/pages/Library'
 import WorldWeaver from './components/pages/WorldWeaver'
 import TaleSpinner from './components/pages/TaleSpinner'
 import About from './components/pages/About'
+import Generator from './components/generator/Generator'
 
 
 // ACTIONS
-import { getCreations } from './actions/userActions'
+import { getCreations } from './store/mainActions/userActions'
 
 function App() {
   const dispatch = useDispatch()
@@ -83,23 +86,33 @@ function App() {
       <Route path="/gallery" exact={true}>
         <PlayGallery />
       </Route>
+      
       <Route path="/chronicles/:cid" exact={true}>
         <ChroniclePage />
       </Route>
+      
       <Route path="/tales/:tid" exact={true}>
         <TalePage />
       </Route>
+      
       <Route path="/tales/:tid/play">
         <CurrentThread />
+      </Route>
+
+      <Route path="/character-generator">
+        <Generator />
       </Route>
 
       {/* Private game-library and creator pages, for users */}
       <ProtectedRoute path="/library" exact={true} authenticated={authenticated}>
         <Library />
       </ProtectedRoute>
+      
       <ProtectedRoute path="/worldweaver" exact={true} authenticated={authenticated}>
+        <FileForm />
         <WorldWeaver />
       </ProtectedRoute>
+      
       <ProtectedRoute path="/talespinner/tales/:tid" exact={true} authenticated={authenticated}>
         <TaleSpinner threads={threads} />
       </ProtectedRoute>

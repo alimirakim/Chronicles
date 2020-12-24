@@ -1,6 +1,6 @@
 import React from 'react'
 import CreationFormWrapper from './CreationFormWrapper'
-import { addChronicle, updateChronicle } from '../../actions/chronicleActions'
+import { addChronicle, updateChronicle } from '../../store/mainActions/chronicleActions'
 
 export default function ChronicleForm({ id, edit, open, handleClose }) {
   const resetUniqueContent = () => console.log("No unique content to reset")

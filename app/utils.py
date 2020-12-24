@@ -1,6 +1,50 @@
 from wtforms.validators import ValidationError
 from pprint import pprint
 from app.models import db, Chronicle, Tale, Thread, ThreadChoice, Entity
+import boto3, botocore
+from .config import Config
+from pprint import pprint
+
+
+s3 = boto3.client(
+  "s3",
+  aws_access_key_id=Config.S3_KEY,
+  aws_secret_access_key=Config.S3_SECRET
+)
+
+def upload_file_to_s3(file, bucket_name, acl="public-read"):
+    """
+    Docs: http://boto3.readthedocs.io/en/latest/guide/s3.html
+    """
+    
+    print("FFFFFFFFFFUICK")
+    objs = s3.list_objects(Bucket="iris-isle-bucket")
+    # print("\n\nbucket!")
+    pprint(objs)
+    all_files = objs["Contents"]
+    print("\n\nall files!")
+    pprint(all_files)
+    
+    
+    file_names = [file["Key"] for file in objs["Contents"]]
+    print("filenames")
+    pprint(file_names)
+    
+    try:
+        s3.upload_fileobj(
+            file, bucket_name, file.filename, ExtraArgs={
+                "ACL": acl,
+                "ContentType": file.content_type
+            }
+        )
+    except Exception as e:
+        # This is a catch-all exception. Edit as needed.
+        print("Something happened uh oh:", e)
+        if hasattr(e, 'message'):
+            print(e.message)
+        return e
+        
+    return "{}{}".format(Config.S3_LOCATION, file.filename)
 
 
 def validation_errors_to_messages(validation_errors):
@@ -12,8 +56,8 @@ def validation_errors_to_messages(validation_errors):
         for error in validation_errors[field]:
             errorMessages.append(f"{field} : {error}")
     return errorMessages
-    
-    
+
+
 def within_length_limit(form, field):
     """Check if the input is below the max length limit allowed."""
     value = field.data
@@ -190,8 +234,7 @@ def createLocks(locks_data, thread):
         db.session.commit()
         locks[lock.id] = fin_lock.to_dict()
     return locks
-    
-    
+
 
 color_choices = [
     "rgb(70,60,70)",
