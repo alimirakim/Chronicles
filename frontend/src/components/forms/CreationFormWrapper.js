@@ -1,10 +1,16 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import ErrorMessages from '../mylib/ErrorMessages'
-import { TextInput, TextAreaInput, SelectInputColors, SelectInputImages } from './FormInputs'
 
 import { getErrors, wipeErrors } from '../../store/mainActions/errorActions'
 import { updateSelection } from '../../store/mainActions/selectionActions'
+
+
+import FileInput from '../mylib/FileInput'
+import TextInput from '../mylib/TextInput'
+import TextAreaInput from '../mylib/TextAreaInput'
+import ColorInput from '../mylib/ColorInput'
+import IconInput from '../mylib/IconInput'
 
 export default function CreationFormWrapper({
   open,
@@ -22,7 +28,8 @@ export default function CreationFormWrapper({
   const [title, setTitle] = useState(edit ? edit.title : "")
   const [description, setDescription] = useState(edit ? edit.description : "")
   const [color, setColor] = useState(edit ? edit.color : "rgb(70,60,70)")
-  const [image, setImage] = useState(edit ? edit.image : `heart`)
+  const [icon, setIcon] = useState(edit ? edit.icon : `heart`)
+  const [file, setFile] = useState(edit ? edit.image : "")
 
   const handleSelection = (selection) => {
     if (creationType === "thread") return dispatch(updateSelection(creationType, selection.thread))
@@ -46,7 +53,7 @@ export default function CreationFormWrapper({
     const res = await fetch(path, {
       method: edit ? "PATCH" : "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, description, color, image, ...uniqueContent }),
+      body: JSON.stringify({ title, description, color, image, icon, ...uniqueContent }),
     })
     const content = await res.json()
     if (!content.errors) {
@@ -72,8 +79,9 @@ export default function CreationFormWrapper({
       {/* Generic inputs */}
       <TextInput label="Title" value={title} setValue={setTitle} />
       <TextAreaInput label="Description" value={description} setValue={setDescription} />
-      <SelectInputColors image={image} value={color} setValue={setColor} />
-      <SelectInputImages color={color} value={image} setValue={setImage} />
+      <ColorInput icon={icon} value={color} setValue={setColor} />
+      <IconInput color={color} value={icon } setValue={setIcon} />
+      <FileInput />
       <UniqueForm />
 
       <button className="lo-wow">

@@ -22,7 +22,8 @@ class Thread(db.Model):
     title = db.Column(db.String(250), nullable=False)
     description = db.Column(db.String, nullable=False, default="N/A")
     color = db.Column(db.String(50), default="rgb(70,60,70)")
-    image = db.Column(db.String(250), default="sign")
+    icon = db.Column(db.String(250), default="sign")
+    image = db.Column(db.String(250))
     x = db.Column(db.Integer, nullable=False, default=0)
     y = db.Column(db.Integer, nullable=False, default=0)
     is_sequitur = db.Column(db.Boolean, nullable=False, default=True)
@@ -48,6 +49,7 @@ class Thread(db.Model):
             "title": self.title,
             "description": self.description,
             "color": self.color,
+            "icon": self.icon,
             "image": self.image,
             "x": self.x,
             "y": self.y,

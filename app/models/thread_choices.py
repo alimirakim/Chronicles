@@ -22,7 +22,7 @@ class ThreadChoice(db.Model):
     current_thread_id = db.Column(db.Integer, db.ForeignKey("threads.id", ondelete="cascade"), nullable=False)
     choice_thread_id = db.Column(db.Integer, db.ForeignKey("threads.id", ondelete="cascade"), nullable=False)
     color = db.Column(db.String(50), default="rgb(70,60,70)")
-    image = db.Column(db.String(250), default="map-signs")
+    icon = db.Column(db.String(250), default="map-signs")
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
 
     current_thread = db.relationship("Thread", foreign_keys=[current_thread_id])
@@ -38,7 +38,7 @@ class ThreadChoice(db.Model):
             "choice_thread_id": self.choice_thread_id,
             "locks": [lock.to_dict() for lock in self.locks],
             "color": self.color,
-            "image": self.image,
+            "icon": self.icon,
             "created_at": self.created_at,
         }
         

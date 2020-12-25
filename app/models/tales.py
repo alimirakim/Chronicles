@@ -11,7 +11,8 @@ class Tale(db.Model):
     description = db.Column(db.String, nullable=False, default="N/A")
     first_thread_id = db.Column(db.Integer)
     color = db.Column(db.String(50), default="rgb(70,60,70)")
-    image = db.Column(db.String(250), default="scroll")
+    icon = db.Column(db.String(250), default="scroll")
+    image = db.Column(db.String(250))
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
     
     chronicle = db.relationship("Chronicle", back_populates="tales")
@@ -28,6 +29,7 @@ class Tale(db.Model):
             "first_thread_id": self.first_thread_id,
             "thread_ids": [thread.id for thread in self.threads],
             "color": self.color,
+            "icon": self.icon,
             "image": self.image,
             "created_at": self.created_at,
         }

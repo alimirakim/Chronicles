@@ -9,17 +9,19 @@ class Entity(db.Model):
     """
     __tablename__ = "entities"
     id = db.Column(db.Integer, primary_key=True)
-    chronicle_id = db.Column(db.Integer, db.ForeignKey("chronicles.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     type = db.Column(db.String(50), nullable=False, default="asset") # (db.Enum("asset", "character", "place", "condition", "rank"))
-    subtype = db.Column(db.String(50)) # (db.Enum("item", "bond", "deed", "idea", "title", "human", "skill", "knowledge", "fancy schmancy"))
+    # subtype = db.Column(db.String(50)) # (db.Enum("item", "bond", "deed", "idea", "title", "human", "skill", "knowledge", "fancy schmancy"))
     title = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String, nullable=False, default="N/A")
     color = db.Column(db.String(50), default="rgb(70,60,70)")
+    icon = db.Column(db.String(250), default="id-card")
     image = db.Column(db.String(250), default="id-card")
     is_unique = db.Column(db.Boolean, nullable=False, default=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
     
-    chronicle = db.relationship("Chronicle", back_populates="entities")
+    user = db.relationship("User", back_populates="entities")
+    chronicles = db.relationship("Chronicle", back_populates="entities")
     # conditions = db.relationship("BearerCondition", back_populates="entity")
     meters = db.relationship("EntityMeter", back_populates="entity")
     assets = db.relationship("BearerAsset", foreign_keys="[BearerAsset.bearer_id]", backref="asset")
@@ -31,12 +33,13 @@ class Entity(db.Model):
         """Convert to dictionary."""
         return {
             "id": self.id,
-            "chronicle_id": self.chronicle_id,
+            "user_id": self.user_id,
             "type": self.type,
             "subtype": self.subtype,
             "title": self.title,
             "description": self.description,
             "color": self.color,
+            "icon": self.icon,
             "image": self.image,
             # "conditions": [condition.to_dict() for condition in self.conditions]
             "meters": [meter.to_dict() for meter in self.meters],

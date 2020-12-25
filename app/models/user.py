@@ -8,12 +8,13 @@ class User(db.Model, UserMixin):
   __tablename__ = 'users'
 
   id = db.Column(db.Integer, primary_key = True)
-  username = db.Column(db.String(40), nullable = False, unique = True)
-  email = db.Column(db.String(255), nullable = False, unique = True)
-  hashword = db.Column(db.String(255), nullable = False)
+  username = db.Column(db.String(40), nullable=False, unique=True)
+  email = db.Column(db.String(255), nullable=False, unique=True)
+  hashword = db.Column(db.String(255), nullable=False)
   created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
 
   chronicles = db.relationship("Chronicle", back_populates="user")
+  creations = db.relationship("Creation", back_populates="user")
   p_characters = db.relationship("Entity", secondary="player_characters", backref="player")
 
   @property

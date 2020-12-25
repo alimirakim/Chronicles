@@ -11,7 +11,8 @@ class Meter(db.Model):
     title = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String, nullable=False, default="N/A")
     color = db.Column(db.String(50), default="rgb(70,60,70)")
-    image = db.Column(db.String(250), default="sliders")
+    icon = db.Column(db.String(250), default="sliders")
+    image = db.Column(db.String(250))
     min = db.Column(db.Integer, nullable=False, default=0)
     max = db.Column(db.Integer, nullable=False, default=20)
     algorithm = db.Column(db.String, nullable=False, default="constant") # "constant", "log", "linear", "loglinear", "polynomial", "exponential", "factorial", "random"
@@ -30,6 +31,7 @@ class Meter(db.Model):
             "title": self.title,
             "description": self.description,
             "color": self.color,
+            "icon": self.icon,
             "image": self.image,
             "min": self.min,
             "max": self.max,

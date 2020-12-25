@@ -62,17 +62,17 @@ export default function CurrentThread() {
     <ul>
     {/* TODO Check if 'is_returnable' before allowing Go Back option */}
       {history.length
-        ? <li className="card" ><button onClick={handleGoBack} className="yrc-con lo-center"><span><i className="fas fa-arrow-left" ></i> Go Back</span></button></li>
-        : <li className="card"><Link to={`/tales/${tid}`}   className="yrc-con lo-center"><span><i className="fas fa-arrow-left" ></i> Go Back</span></Link></li>
+        ? <li className="card" ><button onClick={handleGoBack} className="yrc-con lo-center-y"><span><i className="fas fa-arrow-left" ></i> Go Back</span></button></li>
+        : <li className="card"><Link to={`/tales/${tid}`}   className="yrc-con lo-center-y"><span><i className="fas fa-arrow-left" ></i> Go Back</span></Link></li>
       }
       {currentChoices.filter(choice => checkLocks(choice)).map(choice => (
         
 
         <li key={choice.id} className="card" onClick={handleChoice(choice.choice_thread_id)}>
         <div style={{ backgroundColor: choice.color }} className="card-pic">
-                  <i className={`fas fa-${choice.image} lo-center`}></i>
+                  <i className={`fas fa-${choice.image} lo-center-y`}></i>
                 </div>
-                <div className="yrc-con lo-center">
+                <div className="yrc-con lo-center-y">
         {choice.title}
         </div>
         </li>
