@@ -3,132 +3,83 @@ from datetime import datetime
 
 
 class Entity(db.Model):
-    """
-    An entity representing a person, creature, place, thing, or idea that can
-    have and maintain state, such as inventory, conditions, meters, etc.
-    """
+    """Represents a unique entity."""
     __tablename__ = "entities"
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-    type = db.Column(db.String(50), nullable=False, default="asset") # (db.Enum("asset", "character", "place", "condition", "rank"))
-    # subtype = db.Column(db.String(50)) # (db.Enum("item", "bond", "deed", "idea", "title", "human", "skill", "knowledge", "fancy schmancy"))
-    title = db.Column(db.String(50), nullable=False)
+    type = db.Column(db.String(50), nullable=False) # character, place, thing, creature
+    category = db.Column(db.String(50))
+    title = db.Column(db.String(50), nullable=False, default="Untitled")
     description = db.Column(db.String, nullable=False, default="N/A")
     color = db.Column(db.String(50), default="rgb(70,60,70)")
-    icon = db.Column(db.String(250), default="id-card")
-    image = db.Column(db.String(250), default="id-card")
-    is_unique = db.Column(db.Boolean, nullable=False, default=False)
+    icon = db.Column(db.String(50), default="id-card")
+    image = db.Column(db.String(250), default="")
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
     
     user = db.relationship("User", back_populates="entities")
-    chronicles = db.relationship("Chronicle", back_populates="entities")
-    # conditions = db.relationship("BearerCondition", back_populates="entity")
-    meters = db.relationship("EntityMeter", back_populates="entity")
-    assets = db.relationship("BearerAsset", foreign_keys="[BearerAsset.bearer_id]", backref="asset")
-    # assets = db.relationship("BearerAsset", foreign_keys="[BearerAsset.asset_id]", backref="bearer")
-    asset_locks = db.relationship("AssetLock", back_populates="asset")
-    asset_effects = db.relationship("AssetEffect", back_populates="asset")
+    location_id = db.Column(db.Integer, db.ForeignKey("entities.id"))
+    generated_id = db.Column(db.Integer)
     
+    # entity_assets = db.relationship("Asset", secondary="entity_assets", backref="entity")
+    # entity_meters = db.relationship("Meter", secondary="entity_meters", backref="entity")
+    # entity_statuses = db.relationship("Status", secondary="entity_statuses", backref="entity")
+    # entity_slots = db.relationship("Slot", secondary="entity_slots", backref="entity")
+
     def to_dict(self):
-        """Convert to dictionary."""
+        """Convert to jsonifyable dictionary."""
         return {
             "id": self.id,
             "user_id": self.user_id,
             "type": self.type,
-            "subtype": self.subtype,
+            "category": self.category,
             "title": self.title,
             "description": self.description,
             "color": self.color,
             "icon": self.icon,
             "image": self.image,
-            # "conditions": [condition.to_dict() for condition in self.conditions]
-            "meters": [meter.to_dict() for meter in self.meters],
-            # "bearer": [bearer.to_dict() for bearer in self.bearer],
-            "assets": [asset.to_dict() for asset in self.assets],
-            "is_unique": self.is_unique,
             "created_at": self.created_at,
-            "player": self.player,
+
+            "location_id": self.location_id,
+            "generated_id": self.generated_id,
+            
+            # "assets": [asset.id for asset in self.entity_assets],
+            # "statuses": [status.id for status in self.entity_statuses],
+            # "meters": [meter.id for meter in self.entity_meters],
+            # "slots": [slot.id for slot in self.entity_slots],
         }
 
 
-class BearerCondition(db.Model):
-    """A condition that an entity is afflicted with."""
-    __tablename__ = "bearer_conditions"
-    id = db.Column(db.Integer, primary_key=True)
-    bearer_id = db.Column(db.Integer, db.ForeignKey("entities.id"), nullable=False)
-    condition_id = db.Column(db.Integer, db.ForeignKey("entities.id"), nullable=False)
-    expiry = db.Column(db.DateTime)
-    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
-
-    def to_dict(self):
-        """Returns a dictionary of an entity's asset"""
-        return {
-            "bearer_id": self.bearer_id,
-            "condition_id": self.condition_id,
-            "expiry": self.expiry,
-            "created_at": self.created_at,
-        }
-        
-
-# NOTE this is a fancy JOIN! Represents: items, conditions, ranks, bonds, deeds, titles, ideas,
-class BearerAsset(db.Model):
-    """Represents something that an individual entity has."""
-    __tablename__ = "bearer_assets"
-    id = db.Column(db.Integer, primary_key=True)
-    bearer_id = db.Column(db.Integer, db.ForeignKey("entities.id"), nullable=False)
-    asset_id = db.Column(db.Integer, db.ForeignKey("entities.id"), nullable=False)
-    quantity = db.Column(db.Integer, nullable=False, default=1)
-    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
-
-    def to_dict(self):
-        """Returns a dictionary of an entity's asset"""
-        return {
-            "bearer_id": self.bearer_id,
-            "asset_id": self.asset_id,
-            "quantity": self.quantity,
-            "created_at": self.created_at,
-        }
-
-
-class EntityMeter(db.Model): # NOTE Rule against meters for non-unique entities?
-    """The meter status associated with an entity."""
-    __tablename__ = "entity_meters"
-    id = db.Column(db.Integer, primary_key=True)
-    entity_id = db.Column(db.Integer, db.ForeignKey("entities.id"), nullable=False)
-    meter_id = db.Column(db.Integer, db.ForeignKey("meters.id"), nullable=False)
-    progress = db.Column(db.Integer, nullable=False, default=0)
-    total = db.Column(db.Integer, nullable=False, default=0)
-    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
-    
-    entity = db.relationship("Entity", back_populates="meters")
-    meter = db.relationship("Meter")
-    
-    def to_dict(self):
-        """Returns a dictionary of an entity's meter"""
-        return {
-            "entity_id": self.entity_id,
-            "meter_id": self.meter_id,
-            "progress": self.progress,
-            "total": self.total,
-            "created_at": self.created_at,
-        }
-
-class Modifier(db.Model):
-    """
-    Modifier for an entity, like an equippable item or condition, on another
-    metered entity, like a skill or size rating.
-    """
-    __tablename__ = "modifiers"
-    id = db.Column(db.Integer, primary_key=True)
-    entity_id = db.Column(db.Integer, db.ForeignKey("entities.id"), nullable=False)
-    meter_id = db.Column(db.Integer, db.ForeignKey("meters.id"), nullable=False)
-    mod = db.Column(db.Integer, nullable=False, default=1)
-
-
-# Join table for a player's playable characters
-player_characters = db.Table(
-    "player_characters",
+entity_assets = db.Table(
+    "entity_assets",
     db.Model.metadata,
-    db.Column("player_id", db.Integer, db.ForeignKey("users.id"), primary_key=True),
-    db.Column("character_id", db.Integer, db.ForeignKey("entities.id"), primary_key=True),
-    )
+    db.Column("entity_id", db.Integer, db.ForeignKey("entities.id"), primary_key=True, nullable=False),
+    db.Column("asset_id", db.Integer, db.ForeignKey("assets.id"), primary_key=True, nullable=False),
+    db.Column("quantity", db.Integer, nullable=False, default=1)
+)
+
+
+entity_statuses = db.Table(
+    "entity_statuses",
+    db.Model.metadata,
+    db.Column("entity_id", db.Integer, db.ForeignKey("entities.id"), primary_key=True, nullable=False),
+    db.Column("status_id", db.Integer, db.ForeignKey("statuses.id"), primary_key=True, nullable=False),
+    db.Column("expiry", db.DateTime)
+)
+
+
+entity_meters = db.Table(
+    "entity_meters",
+    db.Model.metadata,
+    db.Column("entity_id", db.Integer, db.ForeignKey("entities.id"), primary_key=True, nullable=False),
+    db.Column("meter_id", db.Integer, db.ForeignKey("meters.id"), primary_key=True, nullable=False),
+    db.Column("points", db.Integer, nullable=False, default=0)
+)
+
+
+entity_slots = db.Table(
+    "entity_slots",
+    db.Model.metadata,
+    db.Column("entity_id", db.Integer, db.ForeignKey("entities.id"), primary_key=True, nullable=False),
+    db.Column("slot_id", db.Integer, db.ForeignKey("slots.id"), primary_key=True, nullable=False),
+    db.Column("filler_id", db.Integer, db.ForeignKey("entities.id"))
+)

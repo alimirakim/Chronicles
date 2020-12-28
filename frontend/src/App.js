@@ -9,7 +9,6 @@ import Footer from "./components/Footer"
 import SignUpForm from "./components/auth/SignUpForm"
 import LoginForm from "./components/auth/LoginForm"
 import FileForm from './components/forms/FileForm'
-import FileInput from './components/forms/FileInput'
 
 // PAGE COMPONENTS
 import Home from './components/pages/Home'
@@ -110,7 +109,6 @@ function App() {
       </ProtectedRoute>
       
       <ProtectedRoute path="/worldweaver" exact={true} authenticated={authenticated}>
-        <FileInput />
         <WorldWeaver />
       </ProtectedRoute>
       

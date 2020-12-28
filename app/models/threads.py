@@ -1,6 +1,6 @@
 from .db import db
-from pprint import pprint
 from datetime import datetime
+from pprint import pprint
 
 # TODO IDEA Non-sequitur threads! Thread is available as a choice anywhere as long 
 # as x conditions are met. Can be restricted to once-only, or other number.
@@ -13,31 +13,36 @@ from datetime import datetime
 # not met, action thread "talk to lucien" is available.
 # If location of thread has assets "mushroom", option "pick mushrooms" is available.
 
-
 class Thread(db.Model):
     """One scene that can connect sequentially to other Threads."""
     __tablename__ = "threads"
     id = db.Column(db.Integer, primary_key=True)
-    tale_id = db.Column(db.Integer, db.ForeignKey("tales.id", ondelete="cascade"), nullable=False)
-    title = db.Column(db.String(250), nullable=False)
+    title = db.Column(db.String(50), nullable=False, default="Untitled")
     description = db.Column(db.String, nullable=False, default="N/A")
     color = db.Column(db.String(50), default="rgb(70,60,70)")
-    icon = db.Column(db.String(250), default="sign")
-    image = db.Column(db.String(250))
-    x = db.Column(db.Integer, nullable=False, default=0)
-    y = db.Column(db.Integer, nullable=False, default=0)
-    is_sequitur = db.Column(db.Boolean, nullable=False, default=True)
-    is_returnable = db.Column(db.Boolean, nullable=False, default=True)
+    icon = db.Column(db.String(50), default="feather-alt")
+    image = db.Column(db.String(250), default="book-library-with-open-textbook.jpg")
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
     
+    tale_id = db.Column(db.Integer, db.ForeignKey("tales.id", ondelete="cascade"), nullable=False)
+    is_sequitur = db.Column(db.Boolean, nullable=False, default=True)
+    is_returnable = db.Column(db.Boolean, nullable=False, default=True)
+    x = db.Column(db.Integer, nullable=False, default=0)
+    y = db.Column(db.Integer, nullable=False, default=0)
+    
     tale = db.relationship("Tale", back_populates="threads")
-    effects = db.relationship("Effect", 
+    asset_effects = db.relationship("AssetEffect", 
         back_populates="thread", 
         cascade="all, delete", 
         passive_deletes=True)
-    choices = db.relationship("ThreadChoice", 
-        foreign_keys="ThreadChoice.current_thread_id", 
-        back_populates="choice_thread", 
+    choices = db.relationship("Choice", 
+        foreign_keys="Choice.prev_thread_id", 
+        back_populates="prev_thread", 
+        cascade="all, delete",
+        passive_deletes=True)
+    choice_parents = db.relationship("Choice",
+        foreign_keys="Choice.next_thread_id", 
+        back_populates="next_thread", 
         cascade="all, delete",
         passive_deletes=True)
 
@@ -45,19 +50,20 @@ class Thread(db.Model):
         """Convert to dictionary."""
         return {
             "id": self.id,
-            "tale_id": self.tale_id,
             "title": self.title,
             "description": self.description,
             "color": self.color,
             "icon": self.icon,
             "image": self.image,
-            "x": self.x,
-            "y": self.y,
+            "created_at": self.created_at,
+            
+            "tale_id": self.tale_id,
             "is_sequitur": self.is_sequitur,
             "is_returnable": self.is_returnable,
-            "effects": [effect.to_dict() for effect in self.effects],
-            "choices": [choice.to_dict() for choice in self.choices],
-            "created_at": self.created_at,
+            "x": self.x,
+            "y": self.y,
+            "asset_effects": [effect.to_dict() for effect in self.asset_effects],
+            "choices": [choice.to_dict() for choice in self.choice_children],
         }
     
     # TODO Convert thread choices into a through table

@@ -20,7 +20,8 @@ export default function ResultDisplay() {
         <dl className="dis">
           {c.traitTypeIds.map(ttid => {
             const setting = settings[traitTypes[ttid].traitType]
-            let displaySetting, tagIds = []
+            let displaySetting
+            let tagIds = []
             if (typeof setting === "number") {
               displaySetting = traits[setting].trait
               tagIds = traits[setting].tagIds

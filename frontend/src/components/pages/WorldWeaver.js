@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 // YOUR COMPONENTS
 import YourCreations from '../YourCreations'
-import { SelectInputColors, SelectInputImages } from '../forms/FormInputs'
+
 
 // FORM COMPONENTS
 import ChronicleForm from '../forms/ChronicleForm'
@@ -31,6 +31,7 @@ import { updateSelections, wipeSelections } from '../../store/mainActions/select
 
 
 export default function WorldWeaver() {
+  
   const dispatch = useDispatch()
   // TODO QUESTION Ask, is this less efficient than selecting each individually??
   const { user, chronicles, tales, threads, choices, selected, characters, assets, places, conditions, meters } = useSelector(state => ({

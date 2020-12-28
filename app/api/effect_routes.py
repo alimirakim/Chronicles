@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from flask_login import current_user
-from app.models import db, Effect
+from app.models import db
 from app.utils import validation_errors_to_messages
 
 effect_routes = Blueprint("effects", __name__)

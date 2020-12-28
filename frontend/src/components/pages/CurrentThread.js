@@ -7,16 +7,16 @@ export default function CurrentThread() {
   const { cid, tid } = useParams()
   const { state: { thid } } = useLocation()
   const tale = useSelector(state => state.tales[tid])
-  const { effects, threads, thread, threadChoices, currentThreadChoices } = useSelector(state => ({
+  const { effects, threads, thread, choices, currentChoices } = useSelector(state => ({
     effects: state.effects,
     threads: state.threads,
-    threadChoices: state.choices,
+    choices: state.choices,
     thread: state.threads[thid],
-    currentThreadChoices: Object.values(state.choices).filter(choice => choice.current_thread_id === thid),
+    currentChoices: Object.values(state.choices).filter(choice => choice.current_thread_id === thid),
   }))
   const [history, setHistory] = useState([])
   const [currentThread, setCurrentThread] = useState(thread)
-  const [currentChoices, setCurrentChoices] = useState(currentThreadChoices)
+  const [currentChoices, setCurrentChoices] = useState(currentChoices)
 
   const handleChoice = (chid) => (e) => {
     const updatedHistory = [...history]
@@ -24,14 +24,14 @@ export default function CurrentThread() {
     setHistory(updatedHistory)
     console.log("history", history)
     setCurrentThread(threads[chid])
-    setCurrentChoices(Object.values(threadChoices).filter(choice => choice.current_thread_id == threads[chid].id))
+    setCurrentChoices(Object.values(choices).filter(choice => choice.current_thread_id == threads[chid].id))
   }
 
   const handleGoBack = (e) => {
     const prevThread = threads[history[history.length - 1]]
     setHistory(history.slice(0, history.length - 1))
     setCurrentThread(threads[prevThread.id])
-    setCurrentChoices(Object.values(threadChoices).filter(choice => choice.current_thread_id == prevThread.id))
+    setCurrentChoices(Object.values(choices).filter(choice => choice.current_thread_id == prevThread.id))
   }
 
   const checkLocks = (e) => {

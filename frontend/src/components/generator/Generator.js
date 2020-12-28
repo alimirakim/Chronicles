@@ -69,6 +69,24 @@ export default function Generator() {
       }
     })
   }
+  
+  const handleSave = async (e) => {
+    e.preventDefault()
+    const res = await fetch(`${basePath}/characters/create`, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(settings)
+    })
+    const char = await res.json()
+    const res2 = await fetch(`/api/characters/create`, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(settings)
+      
+    })
+    // TODO Save character to npseed database, then on confirmation, use that info
+    // to save character to main database
+  }
 
   if (!Object.keys(categories)) return null
 
@@ -82,6 +100,7 @@ export default function Generator() {
       <h2>Customize Options</h2>
 
       <button>Submit</button>
+      <button onClick={handleSave}>Save Character</button>
 
       {Object.values(categories).map(c => (
         <>

@@ -6,8 +6,6 @@ from .threads import seed_threads, undo_threads
 from .entities import seed_entities, undo_entities
 from .effects import seed_effects, undo_effects
 from .locks import seed_locks, undo_locks
-# from .characters import seed_characters, undo_characters
-# from .places import seed_places, undo_places
 
 # Creates a seed group to hold our commands
 # So we can type `flask seed --help`

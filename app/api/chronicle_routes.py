@@ -1,7 +1,7 @@
 from pprint import pprint
 from flask import Blueprint, jsonify, request
 from flask_login import current_user
-from app.models import db, Chronicle, Tale, Thread, ThreadChoice, Entity, Meter
+from app.models import db, Chronicle, Tale, Thread, Choice, Entity, Meter
 from app.utils import validation_errors_to_messages
 from app.forms import ChronicleForm, TaleForm, EntityForm, MeterForm
 

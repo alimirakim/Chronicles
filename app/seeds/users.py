@@ -11,10 +11,8 @@ def seed_users():
     player = User(username='Player',
                 email='player@mail.com',
                 password='password')
-    newb = User(username='Newb4Lyfe',
-                email='newb@mail.com',
-                password='password')
     db.session.add(demo)
+    db.session.add(player)
     db.session.commit()
 
 # Uses a raw SQL query to TRUNCATE the users table.

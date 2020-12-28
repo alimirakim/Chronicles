@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from app.models import db, Thread, ThreadChoice
+from app.models import db, Thread, Choice
 from app.forms import ThreadForm
 from app.utils import validation_errors_to_messages, createChoices
 from app.forms import ThreadForm
@@ -24,7 +24,7 @@ def edit_thread(thid):
         thread.image = form["image"].data
         
         # updating choices
-        existing_choices = ThreadChoice.query.filter(ThreadChoice.current_thread_id == thread.id).all()
+        existing_choices = Choice.query.filter(Choice.current_thread_id == thread.id).all()
         existing_choice_ids = [c.id for c in existing_choices]
         editted_choice_ids = [c.id for c in request.json["choices"]]
         
@@ -66,7 +66,7 @@ def create_choice(thid):
     form["csrf_token"].data = request.cookies["csrf_token"]
     
     if form.validate_on_submit():
-        choice = ThreadChoice(
+        choice = Choice(
             title=form["title"].data,
             current_thread_id=form["current_thread"].data,
             choice_thread_id=form["choice_thread"].data,

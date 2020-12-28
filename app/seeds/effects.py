@@ -1,4 +1,4 @@
-from app.models import db, Effect, AssetEffect
+from app.models import db, AssetEffect
 
 
 def seed_effects():
@@ -6,29 +6,29 @@ def seed_effects():
     
     # EFFECTS THREAD: Take Candy
     # Adds a candy to player's inventory state
-    effect1 = Effect(thread_id=5)
-    asseteffect1 = AssetEffect(
-      effect=effect1,
+    asseteffect1=AssetEffect(
+      type="gain",
+      thread_id=5,
       asset_id=2)
     
     # Records that a candy was taken by player
-    effect1b = Effect(thread_id=5)
     asseteffect1b = AssetEffect(
-      effect=effect1b,
+      type="record",
+      thread_id=5,
       asset_id=3,
     )
     
     # EFFECTS THREAD: Take Key
     # Adds red key to player's inventory state
-    effect2 = Effect(thread_id=7)
     asseteffect2 = AssetEffect(
-      effect=effect2,
+      type="gain",
+      thread_id=7,
       asset_id=1)
     
     # Records that the key was taken by the player, to lock thread to once-only.
-    effect2b = Effect(thread_id=5)
     asseteffect2b = AssetEffect(
-      effect=effect2,
+      type="record",
+      thread_id=5,
       asset_id=3)
     
     # Changes Sweet Fairy's Mood Condition from Angry to Happy
@@ -37,10 +37,6 @@ def seed_effects():
     # Lowers points to affection meter for sweet fairy.
     # Adds points to perception meter for player.
 
-    db.session.add(effect1)
-    db.session.add(effect1b)
-    db.session.add(effect2)
-    db.session.add(effect2b)
     db.session.add(asseteffect1)
     db.session.add(asseteffect1b)
     db.session.add(asseteffect2)
@@ -50,6 +46,4 @@ def seed_effects():
 
 def undo_effects():
     db.session.execute('TRUNCATE asset_effects RESTART IDENTITY CASCADE;')
-    db.session.commit()
-    db.session.execute('TRUNCATE effects RESTART IDENTITY CASCADE;')
     db.session.commit()

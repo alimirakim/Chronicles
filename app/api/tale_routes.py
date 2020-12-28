@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from app.models import db, Tale, Thread, ThreadChoice
+from app.models import db, Tale, Thread, Choice
 from app.forms import TaleForm, ThreadForm
 from app.utils import validation_errors_to_messages, createChoices, createEffects, createLocks
 

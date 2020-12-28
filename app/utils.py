@@ -1,6 +1,6 @@
 from wtforms.validators import ValidationError
 from pprint import pprint
-from app.models import db, Chronicle, Tale, Thread, ThreadChoice, Entity
+from app.models import db, Chronicle, Tale, Thread, Choice, Entity
 import boto3, botocore
 from .config import Config
 from pprint import pprint
@@ -78,7 +78,7 @@ def get_and_normalize_all_data_for_user(current_user):
         , db.joinedload(Chronicle.tales) \
         .joinedload(Tale.threads) \
         .joinedload(Thread.choices) \
-        .joinedload(ThreadChoice.locks) \
+        .joinedload(Choice.locks) \
         , db.joinedload(Chronicle.entities) \
         .joinedload(Entity.assets) \
         , db.joinedload(Chronicle.meters)) \
@@ -164,7 +164,7 @@ def createChoices(choices_data, thread):
     choices = {}
     for choice in choices_data:
         # TODO Check if 'choices' is object so as to grab alt title.
-        thread_choice = ThreadChoice(
+        thread_choice = Choice(
             title= choice["title"],
             current_thread=thread,
             choice_thread_id=choice["choice_thread_id"],
