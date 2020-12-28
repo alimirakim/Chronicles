@@ -1,5 +1,5 @@
 import React from 'react'
-import useFileHandlers from '../mylib/hooks/useFileHandlers'
+import useFileHandlers from './hooks/useFileHandlers'
 
 function Input(props) {
   return (

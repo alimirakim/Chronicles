@@ -30,6 +30,7 @@ export default function Generator() {
   const traits = useSelector(state => state.charGen.traits)
   const tagTypes = useSelector(state => state.charGen.tagTypes)
   const tagTypeChances = useSelector(state => state.charGen.tagTypeChances)
+  const settings = useSelector(state => state.charGen.settings)
   const genSettings = useSelector(state => state.charGen.genSettings)
   const generator = useSelector(state => state.charGen.generator)
 

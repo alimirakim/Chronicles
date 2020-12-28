@@ -2,7 +2,6 @@ from flask import Blueprint, jsonify, request
 from app.models import db, Thread, Choice
 from app.forms import ThreadForm
 from app.utils import validation_errors_to_messages, createChoices
-from app.forms import ThreadForm
 from pprint import pprint
 
 thread_routes = Blueprint("threads", __name__)
@@ -13,14 +12,12 @@ def edit_thread(thid):
     """Edit a thread."""
     form = ThreadForm()
     form["csrf_token"].data = request.cookies["csrf_token"]
-    print("\n\nWHY WHY WHY \n\n\n")
-    pprint(request.json["choices"])
-    print(form.validate_on_submit())
     if form.validate_on_submit():
         thread = Thread.query.get(thid)
         thread.title = form["title"].data
         thread.description = form["description"].data
         thread.color = form["color"].data
+        thread.icon = form["icon"].data
         thread.image = form["image"].data
         
         # updating choices
@@ -39,6 +36,7 @@ def edit_thread(thid):
                 [matching_choice] = [c for c in request.json["choices"] if c["id"] and c["id"] == choice.id]
                 choice.title = matching_choice["title"]
                 choice.color = matching_choice["color"]
+                choice.icon = matching_choice["icon"]
                 choice.image = matching_choice["image"]
                 request.json["choices"].remove(matching_choice)
         # adding new choices
@@ -62,15 +60,16 @@ def delete_thread(thid):
 @thread_routes.route("/<int:thid>/create", methods=["POST"])
 def create_choice(thid):
     """Create a choice."""
-    form = ChoiceForm()
+    form = ThreadForm()
     form["csrf_token"].data = request.cookies["csrf_token"]
     
     if form.validate_on_submit():
         choice = Choice(
             title=form["title"].data,
-            current_thread_id=form["current_thread"].data,
-            choice_thread_id=form["choice_thread"].data,
+            prev_thread_id=form["prev_thread"].data,
+            next_thread_id=form["next_thread"].data,
             color=form["color"].data,
+            icon=form["icon"].data,
             image=form["image"].data,
         )
         db.session.add(choice)
@@ -89,11 +88,13 @@ def edit_choice(chid):
     if form.validate_on_submit():
         choice = Choice.query.get(chid)
         choice.title = form["title"].data
-        choice.current_thread_id = form["current_thread"].data
-        choice.choice_thread_id = form["choice_thread"].data
-        choice.color = form["color"].data,
-        choice.image = form["image"].data,
+        choice.prev_thread_id = form["prev_thread"].data
+        choice.next_thread_id = form["next_thread"].data
+        choice.color = form["color"].data
+        choice.icon = form["icon"].data
+        choice.image = form["image"].data
         db.session.commit()
+        return choice.to_dict()
     else:
         return {"errors": validation_errors_to_messages(form.errors)}, 401
 

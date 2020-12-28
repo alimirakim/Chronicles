@@ -20,7 +20,7 @@ class Choice(db.Model):
     title = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String, nullable=False, default="N/A")
     color = db.Column(db.String(50), default="rgb(70,60,70)")
-    icon = db.Column(db.String(50), default="signs")
+    icon = db.Column(db.String(50), default="map-signs")
     image = db.Column(db.String(250))
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
     prev_thread_id = db.Column(db.Integer, db.ForeignKey("threads.id", ondelete="cascade"), nullable=False)

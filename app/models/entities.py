@@ -20,10 +20,10 @@ class Entity(db.Model):
     location_id = db.Column(db.Integer, db.ForeignKey("entities.id"))
     generated_id = db.Column(db.Integer)
     
-    # entity_assets = db.relationship("Asset", secondary="entity_assets", backref="entity")
-    # entity_meters = db.relationship("Meter", secondary="entity_meters", backref="entity")
-    # entity_statuses = db.relationship("Status", secondary="entity_statuses", backref="entity")
-    # entity_slots = db.relationship("Slot", secondary="entity_slots", backref="entity")
+    entity_assets = db.relationship("Asset", secondary="entity_assets", backref="entity")
+    entity_meters = db.relationship("Meter", secondary="entity_meters", backref="entity")
+    entity_statuses = db.relationship("Status", secondary="entity_statuses", backref="entity")
+    entity_slots = db.relationship("EntitySlot", foreign_keys="EntitySlot.entity_id", back_populates="entity")
 
     def to_dict(self):
         """Convert to jsonifyable dictionary."""
@@ -42,10 +42,10 @@ class Entity(db.Model):
             "location_id": self.location_id,
             "generated_id": self.generated_id,
             
-            # "assets": [asset.id for asset in self.entity_assets],
-            # "statuses": [status.id for status in self.entity_statuses],
-            # "meters": [meter.id for meter in self.entity_meters],
-            # "slots": [slot.id for slot in self.entity_slots],
+            "asset_ids": [asset.id for asset in self.entity_assets],
+            "status_ids": [status.id for status in self.entity_statuses],
+            "meter_ids": [meter.id for meter in self.entity_meters],
+            "slot_ids": [slot.slot_id for slot in self.entity_slots],
         }
 
 
@@ -76,10 +76,19 @@ entity_meters = db.Table(
 )
 
 
-entity_slots = db.Table(
-    "entity_slots",
-    db.Model.metadata,
-    db.Column("entity_id", db.Integer, db.ForeignKey("entities.id"), primary_key=True, nullable=False),
-    db.Column("slot_id", db.Integer, db.ForeignKey("slots.id"), primary_key=True, nullable=False),
-    db.Column("filler_id", db.Integer, db.ForeignKey("entities.id"))
-)
+# entity_slots = db.Table(
+#     "entity_slots",
+#     db.Model.metadata,
+#     db.Column("entity_id", db.Integer, db.ForeignKey("entities.id"), primary_key=True, nullable=False),
+#     db.Column("slot_id", db.Integer, db.ForeignKey("slots.id"), primary_key=True, nullable=False),
+#     db.Column("filler_id", db.Integer, db.ForeignKey("entities.id"))
+# )
+
+class EntitySlot(db.Model):
+    __tablename__ = "entity_slots"
+    entity_id = db.Column(db.Integer, db.ForeignKey("entities.id"), primary_key=True, nullable=False)
+    slot_id = db.Column(db.Integer, db.ForeignKey("slots.id"), primary_key=True, nullable=False)
+    filler_id = db.Column(db.Integer, db.ForeignKey("entities.id"))
+
+    entity = db.relationship("Entity", foreign_keys=[entity_id], back_populates="entity_slots")
+    filler = db.relationship("Entity", foreign_keys=[filler_id], backref="slot_filler")

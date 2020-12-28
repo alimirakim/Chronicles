@@ -1,6 +1,6 @@
 from wtforms.validators import ValidationError
 from pprint import pprint
-from app.models import db, Chronicle, Tale, Thread, Choice, Entity
+from app.models import db, User, Chronicle, Tale, Thread, Choice, Entity
 import boto3, botocore
 from .config import Config
 from pprint import pprint
@@ -17,7 +17,6 @@ def upload_file_to_s3(file, bucket_name, acl="public-read"):
     Docs: http://boto3.readthedocs.io/en/latest/guide/s3.html
     """
     
-    print("FFFFFFFFFFUICK")
     objs = s3.list_objects(Bucket="iris-isle-bucket")
     # print("\n\nbucket!")
     pprint(objs)
@@ -71,61 +70,61 @@ def get_and_normalize_all_data_for_user(current_user):
     tales, threads, choices, characters, etc., then normalize into dictionaries.
     """
     # Query all a user's chronicles
-    chronicles = Chronicle.query.filter(Chronicle.user_id == current_user.id).options( \
-        db.joinedload(Chronicle.tales) \
-        .joinedload(Tale.threads) \
-        .joinedload(Thread.effects) \
-        , db.joinedload(Chronicle.tales) \
-        .joinedload(Tale.threads) \
-        .joinedload(Thread.choices) \
-        .joinedload(Choice.locks) \
-        , db.joinedload(Chronicle.entities) \
-        .joinedload(Entity.assets) \
-        , db.joinedload(Chronicle.meters)) \
-        .all()
+    user = User.query.options( \
+        db.joinedload(User.pcs), \
+        db.joinedload(User.assets), \
+        db.joinedload(User.meters), \
+        db.joinedload(User.statuses), \
+          
+        db.joinedload(User.entities), \
+        #   .joinedload(Entity.assets), \
+        # db.joinedload(User.entities) \
+        #   .joinedload(Entity.meters), \
+        # db.joinedload(User.entities) \
+        #   .joinedload(Entity.statuses), \
+        # db.joinedload(User.entities) \
+        #   .joinedload(Entity.slots), \
+          
+        db.joinedload(User.chronicles) \
+          .joinedload(Chronicle.tales) \
+          .joinedload(Tale.threads) \
+          .joinedload(Thread.asset_effects), \
+        db.joinedload(User.chronicles) \
+          .joinedload(Chronicle.tales) \
+          .joinedload(Tale.threads) \
+          .joinedload(Thread.choices) \
+          .joinedload(Choice.asset_locks) \
+    ).get(current_user.id)
 
     # Normalize data before returning
+    pcs = {pc.id:pc.to_dict() for pc in user.pcs}
+    assets = {a.id:a.to_dict() for a in user.assets}
+    statuses = {s.id:s.to_dict() for s in user.statuses}
+    meters = {m.id:m.to_dict() for m in user.meters}
+    entities = {e.id:e.to_dict() for e in user.entities}
+    chronicles = {c.id:c.to_dict() for c in user.chronicles}
+
     tales = {}
     threads = {}
     choices = {}
-    characters = {}
-    places = {}
-    assets = {}
-    conditions = {}
-    meters = {}
-
-    for chronicle in chronicles:
-        for entity in chronicle.entities:
-            if entity.type == "asset":
-                assets[entity.id] = entity.to_dict()
-            elif entity.type == "character":
-                characters[entity.id] = entity.to_dict()
-                characters[entity.id]["player"] = [p.id for p in entity.player]
-                
-            elif entity.type == "place":
-                places[entity.id] = entity.to_dict()
-            elif entity.type == "condition":
-                conditions[entity.id] = entity.to_dict()
-        for meter in chronicle.meters:
-            meters[meter.id] = meter.to_dict()
+    for chronicle in user.chronicles:
         for tale in chronicle.tales:
-            tales[tale.id] = tale.to_dict()
             for thread in tale.threads:
                 threads[thread.id] = thread.to_dict()
                 for choice in thread.choices:
                     choices[choice.id] = choice.to_dict()
-                    
-    chronicles = {chronicle.id:chronicle.to_dict() for chronicle in chronicles}
+    
 
     user = normalize_user_data(
-        user=current_user, 
+        user=current_user,
+        pcs=pcs,
+        chronicles=chronicles,
         tales=tales, 
         threads=threads, 
         choices=choices, 
-        characters=characters,
-        places=places,
+        entities=entities,
         assets=assets,
-        conditions=conditions,
+        statuses=statuses,
         meters=meters,)
 
     print("\n\nUSER, CHRONICLES, TALES, THREADS, CHOICES")
@@ -134,19 +133,20 @@ def get_and_normalize_all_data_for_user(current_user):
     # pprint(tales)
     # pprint(threads)
     # pprint(choices)
-    
-    return user, chronicles, tales, threads, choices, characters, places, assets, conditions, meters
+    return user, pcs, chronicles, tales, threads, choices, entities, assets, statuses, meters
 
-def normalize_user_data(user, chronicles={}, tales={}, threads={}, choices={}, characters={}, places={}, assets={}, conditions={}, meters={}):
+
+def normalize_user_data(user, pcs={}, chronicles={}, tales={}, threads={}, choices={}, entities={}, assets={}, statuses={}, meters={}):
     """Return dict suitable for dispatching as user reducer initial state."""
     norm_user = user.to_dict()
+    norm_user["pc_ids"] = tuple(pcs.keys())
+    norm_user["chronicle_ids"] = tuple(chronicles.keys())
     norm_user["tale_ids"] = tuple(tales.keys())
     norm_user["thread_ids"] = tuple(threads.keys())
     norm_user["choice_ids"] = tuple(choices.keys())
-    norm_user["character_ids"] = tuple(characters.keys())
-    norm_user["place_ids"] = tuple(places.keys())
+    norm_user["entity_ids"] = tuple(entities.keys())
     norm_user["asset_ids"] = tuple(assets.keys())
-    norm_user["condition_ids"] = tuple(conditions.keys())
+    norm_user["status_ids"] = tuple(statuses.keys())
     norm_user["meter_ids"] = tuple(meters.keys())
     # norm_user["lock_ids"] = tuple(locks.keys())
     # norm_user["effect_ids"] = tuple(effects.keys())
@@ -165,11 +165,13 @@ def createChoices(choices_data, thread):
     for choice in choices_data:
         # TODO Check if 'choices' is object so as to grab alt title.
         thread_choice = Choice(
-            title= choice["title"],
-            current_thread=thread,
-            choice_thread_id=choice["choice_thread_id"],
-            # color=choice["color"],
-            # image=choice["image"],
+            title=choice["title"],
+            description=choice["description"],
+            prev_thread=thread,
+            next_thread_id=choice["next_thread_id"],
+            color=choice["color"],
+            icon=choice["icon"],
+            image=choice["image"],
             )
         db.session.add(thread_choice)
         db.session.commit()
@@ -186,24 +188,19 @@ def createEffects(effects_data, thread):
     effects = {}
     for effect_data in effects_data:
         # TODO Check if 'effects' is object so as to grab alt title.
-        effect = Effect(
+        effect = AssetEffect(
             title= effect_data["title"],
             thread=thread,
             type=effect_data["type"],
             color=effect_data["color"],
+            icon=effect_data["icon"],
             image=effect_data["image"],
+            asset_id=effect_data["asset"],
+            quantity=effect_data["quantity"],
             )
-        # Create and populate the subtype of the effect
-        if effect.type == "asset":
-            fin_effect = AssetEffect(
-                effect=effect,
-                asset_id=effect_data["asset"],
-                quantity=effect_data["quantity"],
-                is_gained=effect_data["is_gained"],
-                )
-        db.session.add(fin_effect)
+        db.session.add(effect)
         db.session.commit()
-        effect[effect.id] = fin_effect.to_dict()
+        effects[effect.id] = effect.to_dict()
     return effect
 
 
@@ -221,18 +218,14 @@ def createLocks(locks_data, thread):
             type=lock_data["type"],
             choice_id=lock_data["choice_id"],
             color=lock_data["color"],
+            icon=lock_data["icon"],
             image=lock_data["image"],
-            )
-        if lock_data["type"] == "asset":
-            fin_lock = AssetLock(
-                lock=lock,
-                asset_id=lock_data["asset_id"],
-                quantity=lock_data["quantity"],
-                type=lock_data["asset_type"],
+            asset_id=lock_data["asset_id"],
+            quantity=lock_data["quantity"],
             )
         db.session.add(fin_lock)
         db.session.commit()
-        locks[lock.id] = fin_lock.to_dict()
+        locks[lock.id] = lock.to_dict()
     return locks
 
 
@@ -255,7 +248,7 @@ color_choices = [
     "#57768aff",
 ]
   
-image_choices = [
+icon_choices = [
       "book",
       "scroll", 
       "feather-alt", 

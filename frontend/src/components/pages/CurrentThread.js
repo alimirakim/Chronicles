@@ -7,16 +7,16 @@ export default function CurrentThread() {
   const { cid, tid } = useParams()
   const { state: { thid } } = useLocation()
   const tale = useSelector(state => state.tales[tid])
-  const { effects, threads, thread, choices, currentChoices } = useSelector(state => ({
+  const { effects, threads, thread, choices, initCurrentChoices } = useSelector(state => ({
     effects: state.effects,
     threads: state.threads,
     choices: state.choices,
     thread: state.threads[thid],
-    currentChoices: Object.values(state.choices).filter(choice => choice.current_thread_id === thid),
+    initCurrentChoices: Object.values(state.choices).filter(choice => choice.prev_thread_id === thid),
   }))
   const [history, setHistory] = useState([])
   const [currentThread, setCurrentThread] = useState(thread)
-  const [currentChoices, setCurrentChoices] = useState(currentChoices)
+  const [currentChoices, setCurrentChoices] = useState(initCurrentChoices)
 
   const handleChoice = (chid) => (e) => {
     const updatedHistory = [...history]
@@ -24,14 +24,14 @@ export default function CurrentThread() {
     setHistory(updatedHistory)
     console.log("history", history)
     setCurrentThread(threads[chid])
-    setCurrentChoices(Object.values(choices).filter(choice => choice.current_thread_id == threads[chid].id))
+    setCurrentChoices(Object.values(choices).filter(choice => choice.prev_thread_id == threads[chid].id))
   }
 
   const handleGoBack = (e) => {
     const prevThread = threads[history[history.length - 1]]
     setHistory(history.slice(0, history.length - 1))
     setCurrentThread(threads[prevThread.id])
-    setCurrentChoices(Object.values(choices).filter(choice => choice.current_thread_id == prevThread.id))
+    setCurrentChoices(Object.values(choices).filter(choice => choice.prev_thread_id == prevThread.id))
   }
 
   const checkLocks = (e) => {
@@ -68,7 +68,7 @@ export default function CurrentThread() {
       {currentChoices.filter(choice => checkLocks(choice)).map(choice => (
         
 
-        <li key={choice.id} className="card" onClick={handleChoice(choice.choice_thread_id)}>
+        <li key={choice.id} className="card" onClick={handleChoice(choice.next_thread_id)}>
         <div style={{ backgroundColor: choice.color }} className="card-pic">
                   <i className={`fas fa-${choice.image} lo-center-y`}></i>
                 </div>

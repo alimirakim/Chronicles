@@ -6,6 +6,32 @@ from app.forms import MeterForm
 
 meter_routes = Blueprint("meters", __name__)
 
+# Create a type of progressable meter, like 'levels' or 'skills'
+@meter_routes.route("/<int:cid>/meters/create", methods=["POST"])
+def create_meter(cid):
+    """Create a new meter that belongs to a chronicle"""
+    form = MeterForm()
+    form["csrf_token"].data = request.cookies["csrf_token"]
+
+    if form.validate_on_submit():
+        meter = Meter(
+            title=form["title"].data,
+            description=form["description"].data,
+            color=form["color"].data,
+            icon=form["icon"].data,
+            image=form["image"].data,
+            min=form["min"].data,
+            max=form["max"].data,
+            base=form["base"].data,
+            mod=form["mod"].data,
+            algorithm=form["algo"].data,
+            )
+        db.session.add(meter)
+        db.session.commit()
+        return meter.to_dict()
+    else:
+        return {"errors": validation_errors_to_messages(form.errors)}, 401
+
 
 @meter_routes.route("/<int:plid>/edit", methods=["PATCH"])
 def edit_meter(plid):

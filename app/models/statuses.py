@@ -13,7 +13,7 @@ class Status(db.Model):
     title = db.Column(db.String(50), nullable=False, default="Untitled")
     description = db.Column(db.String, nullable=False, default="N/A")
     color = db.Column(db.String(50), default="rgb(70,60,70)")
-    icon = db.Column(db.String(50), default="heartrate")
+    icon = db.Column(db.String(50), default="heartbeat")
     image = db.Column(db.String(250), default="")
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
     

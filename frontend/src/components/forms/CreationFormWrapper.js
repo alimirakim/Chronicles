@@ -29,7 +29,7 @@ export default function CreationFormWrapper({
   const [description, setDescription] = useState(edit ? edit.description : "")
   const [color, setColor] = useState(edit ? edit.color : "rgb(70,60,70)")
   const [icon, setIcon] = useState(edit ? edit.icon : `heart`)
-  const [file, setFile] = useState(edit ? edit.image : "")
+  const [image, setImage] = useState(edit ? edit.image : "")
 
   const handleSelection = (selection) => {
     if (creationType === "thread") return dispatch(updateSelection(creationType, selection.thread))

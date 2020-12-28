@@ -63,7 +63,7 @@ class Thread(db.Model):
             "x": self.x,
             "y": self.y,
             "asset_effects": [effect.to_dict() for effect in self.asset_effects],
-            "choices": [choice.to_dict() for choice in self.choice_children],
+            "choices": [choice.to_dict() for choice in self.choices],
         }
     
     # TODO Convert thread choices into a through table

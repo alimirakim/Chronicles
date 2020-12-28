@@ -5,6 +5,8 @@ from app.utils import validation_errors_to_messages, createChoices, createEffect
 
 tale_routes = Blueprint("tales", __name__)
 
+# Creation routes for Tales, Characters, Places, Assets, Conditions, Meters...
+
 
 @tale_routes.route("/chronicle/<int:cid>")
 def tales_of_chronicle(cid):
@@ -13,17 +15,19 @@ def tales_of_chronicle(cid):
     tales = [t.to_dict() for t in tales]
     return jsonify(tales)
 
+
 @tale_routes.route("/<int:tid>/edit", methods=["PATCH"])
 def edit_tale(tid):
     """Edit a tale."""
     form = TaleForm()
     form["csrf_token"].data = request.cookies["csrf_token"]
-    
+
     if form.validate_on_submit():
         tale = Tale.query.get(tid)
         tale.title = form["title"].data
         tale.description = form["description"].data
         tale.color = form["color"].data
+        tale.icon = form["icon"].data
         tale.image = form["image"].data
         db.session.commit()
         return tale.to_dict()
@@ -52,25 +56,26 @@ def create_thread(tid):
             title=form["title"].data,
             description=form["description"].data,
             color=form["color"].data,
+            icon=form["icon"].data,
             image=form["image"].data,
-            )
+        )
         db.session.add(thread)
         db.session.commit()
-        
+
         # Creates effects for thread in database
         # effects = createEffects(request.json["effects"], thread)
-        
+
         # Creates choices for thread in database
         choices = createChoices(request.json["choices"], thread)
-        
+
         # Create locks for choices in database
         # locks = createLocks(request.json["locks"], thread)
-        
+
         return jsonify(thread=thread.to_dict(), choices=choices)
     else:
         return {"errors": validation_errors_to_messages(form.errors)}, 401
-        
-        
+
+
 # following = db.relationship(
 #     "User", secondary="followers",
 #     primaryjoin= id == Followers.follower_id,
