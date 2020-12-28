@@ -28,9 +28,6 @@ export default function placesReducer(state = {}, action) {
       delete newState[action.place.id]
       return newState
       
-    case DELETE_CHRONICLE:
-      return Object.values(state).filter(place => action.chronicle.place_ids.includes(place.id))
-      
     default:
       return state
   }

@@ -5,7 +5,7 @@ import charactersReducer from './mainReducers/charactersReducer'
 import assetsReducer from './mainReducers/assetsReducer'
 import choicesReducer from './mainReducers/choicesReducer'
 import chroniclesReducer from './mainReducers/chroniclesReducer'
-import conditionsReducer from './mainReducers/conditionsReducer'
+import statusesReducer from './mainReducers/statusesReducer'
 import placesReducer from './mainReducers/placesReducer'
 import metersReducer from './mainReducers/metersReducer'
 import selectionsReducer from './mainReducers/selectionsReducer'
@@ -24,7 +24,7 @@ const rootReducer = combineReducers({
   choices: choicesReducer,
   characters: charactersReducer,
   chronicles: chroniclesReducer,
-  conditions: conditionsReducer,
+  statuses: statusesReducer,
   effects: effectsReducer,
   errors: errorsReducer,
   places: placesReducer,

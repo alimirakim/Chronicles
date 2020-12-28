@@ -14,7 +14,7 @@ import ChoiceForm from '../forms/ChoiceForm'
 import CharacterForm from '../forms/CharacterForm'
 import PlaceForm from '../forms/PlaceForm'
 import AssetForm from '../forms/AssetForm'
-import ConditionForm from '../forms/ConditionForm'
+import StatusForm from '../forms/StatusForm'
 import MeterForm from '../forms/MeterForm'
 
 // ACTION CREATORS
@@ -25,7 +25,7 @@ import { deleteChoice } from '../../store/mainActions/choiceActions'
 import { deleteCharacter } from '../../store/mainActions/characterActions'
 import { deletePlace } from '../../store/mainActions/placeActions'
 import { deleteAsset } from '../../store/mainActions/assetActions'
-import {deleteCondition } from '../../store/mainActions/conditionActions'
+import {deleteStatus } from '../../store/mainActions/statusActions'
 import {deleteMeter } from '../../store/mainActions/meterActions'
 import { updateSelections, wipeSelections } from '../../store/mainActions/selectionActions'
 
@@ -34,7 +34,7 @@ export default function WorldWeaver() {
   
   const dispatch = useDispatch()
   // TODO QUESTION Ask, is this less efficient than selecting each individually??
-  const { user, chronicles, tales, threads, choices, selected, characters, assets, places, conditions, meters } = useSelector(state => ({
+  const { user, chronicles, tales, threads, choices, selected, characters, assets, places, statuses, meters } = useSelector(state => ({
     user: state.user,
     chronicles: state.chronicles,
     tales: state.tales,
@@ -44,7 +44,7 @@ export default function WorldWeaver() {
     characters: state.characters,
     assets: state.assets,
     places: state.places,
-    conditions: state.conditions,
+    statuses: state.statuses,
     meters: state.meters,
   }))
 
@@ -124,14 +124,14 @@ export default function WorldWeaver() {
         creationForm={AssetForm}
       />
 
-      {/* conditions */}
+      {/* statuses */}
       <YourCreations
         pid={selected.chronicle.id}
-        creationType="condition"
-        creations={Object.values(conditions).filter(cond => user.condition_ids.includes(cond.id))}
-        filterBySelect={(conditions, cid) => Object.values(conditions).filter(condition => condition.chronicle_id === cid)}
-        deleteActionCreator={deleteCondition}
-        creationForm={ConditionForm}
+        creationType="status"
+        creations={Object.values(statuses).filter(cond => user.status_ids.includes(cond.id))}
+        filterBySelect={(statuses, cid) => Object.values(statuses).filter(status => status.chronicle_id === cid)}
+        deleteActionCreator={deleteStatus}
+        creationForm={StatusForm}
       />
       
       

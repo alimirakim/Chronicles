@@ -33,9 +33,9 @@ import {
   DELETE_ASSET,
 } from '../mainActions/assetActions'
 import {
-  ADD_CONDITION,
-  DELETE_CONDITION,
-} from '../mainActions/conditionActions'
+  ADD_STATUS,
+  DELETE_STATUS,
+} from '../mainActions/statusActions'
 import {
   ADD_METER,
   DELETE_METER,
@@ -124,13 +124,13 @@ export default function userReducer(state = {}, action) {
     case LOGOUT_USER:
       return {}
 
-    // conditions
-    case ADD_CONDITION:
-      newState.condition_ids.push(action.condition.id)
+    // statuses
+    case ADD_STATUS:
+      newState.status_ids.push(action.status.id)
       return newState
-    case DELETE_CONDITION:
-      i = newState.condition_ids.indexOf(action.condition.id)
-      newState.condition_ids.splice(i, 1)
+    case DELETE_STATUS:
+      i = newState.status_ids.indexOf(action.status.id)
+      newState.status_ids.splice(i, 1)
       return newState
 
     // meters

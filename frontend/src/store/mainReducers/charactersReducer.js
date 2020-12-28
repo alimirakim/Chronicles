@@ -27,10 +27,7 @@ export default function charactersReducer(state = {}, action) {
     case DELETE_CHARACTER:
       delete newState[action.character.id]
       return newState
-      
-    case DELETE_CHRONICLE:
-        return Object.values(state).filter(char => !action.chronicle.character_ids.includes(char.id))
-      
+
     default:
       return state
   }

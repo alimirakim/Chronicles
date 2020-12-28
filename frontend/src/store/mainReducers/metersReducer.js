@@ -47,9 +47,6 @@ export default function metersReducer(state = {}, action) {
     // case DELETE_TALE:
     //   return Object.values(state).filter(meter => action.tale.thread_ids.includes(meter.thread_id))
 
-    case DELETE_CHRONICLE:
-    return Object.values(state).filter(meter => action.chronicle.meter_ids.includes(meter.id))
-
     default:
       return state
   }

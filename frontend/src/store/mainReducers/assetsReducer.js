@@ -4,7 +4,6 @@ import {
   UPDATE_ASSET,
   DELETE_ASSET
 } from '../mainActions/assetActions'
-import { DELETE_CHRONICLE } from '../mainActions/chronicleActions'
 import { GET_USER_CREATIONS } from '../mainActions/userActions'
 
 
@@ -28,11 +27,7 @@ export default function assetsReducer(state = {}, action) {
     case DELETE_ASSET:
       delete newState[action.asset.id]
       return newState
-      
-    case DELETE_CHRONICLE:
-      return Object.values(state).filter(asset => !action.chronicle.asset_ids.includes(asset.id))
-      
-      
+
     default:
       return state
   }
