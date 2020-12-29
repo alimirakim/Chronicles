@@ -10,14 +10,14 @@ export default function TaleSpinner() {
   const { tid } = useParams()
   const dispatch = useDispatch()
   const threads = useSelector(state => state.threads)
+  const choices = useSelector(state.choices)
   const taleThreads = useSelector(state => Object.values(state.threads).filter(th => th.tale_id === Number(tid)))
   const threadChoices = []
   taleThreads.forEach(th => th.choices.forEach(ch => threadChoices.push(ch.id)))
-  // const choices = useSelector(state.choices)
   const taleChoices = useSelector(state => Object.values(state.choices).filter(ch => threadChoices.includes(ch.id)))
   const [mouseUp, setMouseUp] = useState(false)
 
-  const [nodes, setNodes] = useState(taleThreads.map(th => ({
+  const nodes = taleThreads.map(th => ({
     id: th.id,
     content: th.title,
     coordinates: [th.x, th.y],
@@ -25,23 +25,22 @@ export default function TaleSpinner() {
     outputs: [{ id: `outport-${th.id}` }],
     render: CustomRender,
     data: { onClick: deleteNode, color: th.color },
-  })))
+  }))
 
-  const [links, setLinks] = useState(taleChoices.map(ch => ({
+  const links = taleChoices.map(ch => ({
     input: `outport-${ch.prev_thread_id}`,
     output: `inport-${ch.next_thread_id}`,
     label: ch.title !== threads[ch.next_thread_id].title ? ch.title : "",
-  })))
+  }))
 
   // create diagram schema
-  const [initialSchema, setInitialSchema] = useState(createSchema({ nodes, links }))
-  const [schema, { onChange, addNode, removeNode }] = useSchema(initialSchema)
+  const [schema, { onChange, addNode, removeNode }] = useSchema(createSchema({ nodes, links })) // creating initial schema
   
   // TODO How to track 'one level down' with useEffect??
   useEffect(() => {
-    console.log("nodes, links", nodes, links)
     if (mouseUp) {
       const movedNode = nodes.find(node => threads[node.id].x !== node.coordinates[0] || threads[node.id].y !== node.coordinates[1])
+      console.log("nodes, links", nodes, links)
       console.log("mouse up!", movedNode)
       if (movedNode) {
         (async () => {
@@ -55,15 +54,15 @@ export default function TaleSpinner() {
       }
       setMouseUp(false)
     }
-  }, [mouseUp, nodes, links])
+    
+    
+    
+  }, [mouseUp, threads, choices, nodes, links])
 
-  
-
-  
   const onMouseUp = e => setMouseUp(true)
 
-  const deleteNode = (id) => {
-    const badNode = schema.nodes.find(node => node.id === id)
+  function deleteNode(id, nodes) {
+    const badNode = nodes.find(node => node.id === id)
       (async () => {
         await fetch(`/api/tales/${tid}/threads/${id}/delete`, {
           method: "DELETE",
@@ -108,7 +107,7 @@ function CustomRender({ id, content, data, inputs, outputs }) {
   return (
     <div style={{ background: data.color }}>
       <div>
-        <button onClick={() => data.onClick(id)} type="button">
+        <button onClick={() => data.onClick(id, data.schema)} type="button">
           <i className="fas fa-minus-circle"></i>Delete
         </button>
         <div role="button">
