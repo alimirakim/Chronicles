@@ -1,60 +1,56 @@
 import React from 'react'
-import useFileHandlers from './hooks/useFileHandlers'
 
-function Input(props) {
-  return (
-    <input
-      type="file" accept="image/*" name="user_file" multiple {...props}
-    />
-  )
-}
 
-export default function FileInput() {
-  const {
-    files,
-    pending,
-    next,
-    uploading,
-    uploaded,
-    status,
-    onSubmit,
-    onChange,
-  } = useFileHandlers()
+export default function FileInput({ file, setFile }) {
 
-  return (
-    <div className="fil-con">
-      <form className="fil" onSubmit={onSubmit}>
+  const handleChange = (e) => {
+    if (e.target.files.length) {
+      const newFile = Array.from(e.target.files)[0]
+      newFile.src = window.URL.createObjectURL(newFile)
+      console.log("handling file change", newFile)
+      setFile(newFile)
+    }
+  }
+  console.log("file", file)
 
-        {status === 'FILES_UPLOADED' && (
-          <div className="success-container">
-            <div>
-              <h2>Congratulations!</h2>
-              <small>You uploaded your files. Get some rest.</small>
-            </div>
-          </div>
-        )}
+  return (<div className="fil-con">
+    <input type="file" accept="image/*" name="user_file" onChange={handleChange} />
 
-        <div>
-          <Input onChange={onChange} />
-          <button type="submit">Submit</button>
-        </div>
-
-        <div>
-          {files.map(({ file, src, id }, index) => (
-            <div
-              style={{
-                opacity: uploaded[id] ? 0.2 : 1,
-              }}
-              key={`thumb${index}`}
-              className="thumbnail-wrapper"
-            >
-              <img className="thumbnail" src={src} alt="" />
-              <div className="thumbnail-caption">{file.name}</div>
-            </div>
-          ))}
-        </div>
-
-      </form>
+    {/* Shows preview thumbnail and filename */}
+    <div className="thumbnail-wrapper">
+      {file.src && <>
+        <img className="thumbnail" src={file.src} alt={`Thumbnail of ${file.name}`} />
+        <div className="thumbnail-caption">{file.name}</div>
+      </>}
+      {file && !file.src && <>
+        <img className="thumbnail" src={file} alt={`Thumbnail of ${file.name}`} />
+        <div className="thumbnail-caption">{file}</div>
+      </>}
     </div>
-  )
+
+  </div>)
 }
+
+
+// const handleSubmit = async (e) => {
+//   // e.preventDefault()
+//   // console.log("e content", e)
+//   console.log("target content", e.target)
+
+//   // const res = await fetch(`/api/upload`, {
+//   //   method: "POST",
+//   //   headers: { "Content-Type": "images/*" },
+//   //   body: JSON.stringify(e.target.value)
+//   // })
+//   // setSrc(res)
+// }
+
+// return (
+//   <form action="/upload" method="POST" encType="multipart/form-data" onSubmit={handleSubmit} >
+//     <label>Upload File
+//       <input type="file" name="user_file" onChange={handleChange} />
+//     </label>
+//     <button>Upload</button>
+//   </form>
+// )
+// }

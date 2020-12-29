@@ -2,163 +2,123 @@ import React, { useState, cloneElement, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import Diagram, { createSchema, useSchema } from 'beautiful-react-diagrams'
-import ChronicleForm from '../forms/ChronicleForm'
-import ThreadForm from '../forms/ThreadForm'
-import TaleForm from '../forms/TaleForm'
-import ChoiceForm from '../forms/ChoiceForm'
 
-
-import { addThread } from '../../store/mainActions/threadActions'
-import { deleteChronicle } from '../../store/mainActions/chronicleActions'
-import { deleteTale } from '../../store/mainActions/taleActions'
-import { deleteThread } from '../../store/mainActions/threadActions'
-import { deleteChoice } from '../../store/mainActions/choiceActions'
-
-import YourCreations from '../YourCreations'
-import {TaleDiagram, CustomNode } from '../TaleDiagram'
-
+import { updateThread, editThread, deleteThread } from '../../store/mainActions/threadActions'
+import { SelectInputImages } from '../forms/FormInputs'
 
 export default function TaleSpinner() {
-  const {tid} = useParams()
-  const user = useSelector(state => state.user)
-  const selected = useSelector(state => state.selections)
-  const chronicles = useSelector(state => state.chronicles)
-  const tales = useSelector(state => Object.values(state.tales).filter(tale => tale.chronicle_id === selected.chronicle.id))
+  const { tid } = useParams()
+  const dispatch = useDispatch()
   const threads = useSelector(state => state.threads)
-  const choices = useSelector(state => state.choices)
-  const [open, setOpen] = useState(false)
-  const [nodes, setNodes] = useState([])
-  const [links, setLinks] = useState([])
-  const [initialSchema, setInitialSchema] = useState()
-  const coords = [50, 0]
-console.log("threads", threads)
-  const newNodes = []
-  const newLinks = []
-    Object.values(threads).filter(thread => thread.tale_id === Number(tid)).map((thread, i) => {
-    newNodes.push({
-      id: String(thread.id),
-      content: String(thread.title),
-      coordinates: [coords[0], coords[1]],
-      inputs: [{ id: `input-${thread.id}`, alignment: 'left' }],
-      outputs: [{ id: `output-${thread.id}`, alignment: 'right' }],
-      // render: CustomNode,
-      // data: {onClickDelete: deleteThreadNode, onClickCreateChoice: createChoice},
-    })
-    Object.values(thread.choices).map((choice, i) => {
-      // console.log("link", choice)
-      newLinks.push({
-        input: String(`output-${thread.id}`),
-        output: String(`input-${choice.choice_thread_id}`),
-        label: choice.title !== threads[choice.choice_thread_id].title ? choice.title : ""
-      })
-    })
-    coords[1] += 50
-    coords[0] += 50
-    console.log("nodes, links", newNodes, newLinks)
-  })
-  coords[0] = 50
-  coords[1] = 0
-  if (!initialSchema) setInitialSchema(createSchema({ nodes: newNodes, links: newLinks }))
+  const taleThreads = useSelector(state => Object.values(state.threads).filter(th => th.tale_id === Number(tid)))
+  const threadChoices = []
+  taleThreads.forEach(th => th.choices.forEach(ch => threadChoices.push(ch.id)))
+  // const choices = useSelector(state.choices)
+  const taleChoices = useSelector(state => Object.values(state.choices).filter(ch => threadChoices.includes(ch.id)))
+  const [mouseUp, setMouseUp] = useState(false)
 
-  useEffect(() => {
-    console.log("hello", nodes, links)
-    const newNodes = []
-    const newLinks = []
-    Object.values(threads).filter(thread => thread.tale_id === Number(selected.tale.id)).map((thread, i) => {
-      newNodes.push({
-        id: String(thread.id),
-        content: String(thread.title),
-        coordinates: [coords[0], coords[1]],
-        inputs: [{ id: `input-${thread.id}`, alignment: 'left' }],
-        outputs: [{ id: `output-${thread.id}`, alignment: 'right' }],
-        // render: CustomNode,
-        // data: { 
-        //   onClickDelete: deleteThreadNode, 
-        //   onClickCreateChoice: createChoice, 
-        //   onClickEdit: editThreadNode,
-        // },
-      })
-      Object.values(thread.choices).map((choice, i) => {
-        // console.log("link", choice)
-        newLinks.push({
-          input: String(`output-${thread.id}`),
-          output: String(`input-${choice.choice_thread_id}`),
-          label: choice.title !== threads[choice.choice_thread_id].title ? choice.title : ""
-        })
-      })
+  const [nodes, setNodes] = useState(taleThreads.map(th => ({
+    id: th.id,
+    content: th.title,
+    coordinates: [th.x, th.y],
+    inputs: [{ id: `inport-${th.id}` }],
+    outputs: [{ id: `outport-${th.id}` }],
+    render: CustomRender,
+    data: { onClick: deleteNode, color: th.color },
+  })))
 
-      coords[0] += 50
-      coords[1] += 50
-      // console.log("coords", coords)
-    })
-    setNodes(newNodes)
-    setLinks(newLinks)
-    coords[0] = 50
-    coords[1] = 0
-    setInitialSchema(createSchema({ nodes, links }))
-  }, [selected.chronicle, selected.tale, threads])
+  const [links, setLinks] = useState(taleChoices.map(ch => ({
+    input: `outport-${ch.prev_thread_id}`,
+    output: `inport-${ch.next_thread_id}`,
+    label: ch.title !== threads[ch.next_thread_id].title ? ch.title : "",
+  })))
 
-
-
-
-  const deleteThreadNode = async (id) => {
-    const node = schema.nodes.find(node => node.id === id)
-    const res = await fetch(`/api/threads/${node.id}`, { method: "DELETE" })
-    if (res.ok) removeNode(node)
-    else console.error("deleteThreadNode error, add to error reducer!")
-  }
-  const editThreadNode = (id) => {
-    console.log("edit")
-  }
-  const createChoice = (id) => {
-
-  }
-
-  const addThreadNode = () => {
-    const newThread = {};
-    const threadNode = {
-      id: newThread.id,
-      content: newThread.title,
-      coordinates: [0, 0],
-      render: CustomNode,
-      data: { onClick: deleteThreadNode },
-      inputs: [{ id: `input-${newThread.id}`, alignment: 'left' }],
-      outputs: [{ id: `output-${newThread.id}`, alignment: 'right' }],
-    }
-    addNode(threadNode)
-  }
-
-  const handleOpen = (e) => setOpen(true)
-  const handleClose = (e) => setOpen(false)
+  // create diagram schema
+  const [initialSchema, setInitialSchema] = useState(createSchema({ nodes, links }))
   const [schema, { onChange, addNode, removeNode }] = useSchema(initialSchema)
   
-  
-  return (<main>
-    {/* <button onClick={handleOpen}> +Thread</button>
-    <ThreadForm tid={tid} open={open} handleClose={handleClose} handleChange={} /> */}
-    <YourCreations
-        pid={selected.tale.id}
-        creationType="thread"
-        creations={Object.values(threads).filter(th => user.thread_ids.includes(th.id))}
-        filterBySelect={(threads, tid) => Object.values(threads).filter(thread => thread.tale_id === tid)}
-        deleteActionCreator={deleteThread}
-        creationForm={ThreadForm}
-      />
+  // TODO How to track 'one level down' with useEffect??
+  useEffect(() => {
+    console.log("nodes, links", nodes, links)
+    if (mouseUp) {
+      const movedNode = nodes.find(node => threads[node.id].x !== node.coordinates[0] || threads[node.id].y !== node.coordinates[1])
+      console.log("mouse up!", movedNode)
+      if (movedNode) {
+        (async () => {
+          const res = await fetch(`/api/threads/${movedNode.id}/update-coords/x/${movedNode.coordinates[0]}/y/${movedNode.coordinates[1]}`, {
+            method: "POST",
+          })
+          const updatedThread = await res.json()
+          console.log("updatedThread", updatedThread)
+          dispatch(updateThread(updatedThread))
+        })()
+      }
+      setMouseUp(false)
+    }
+  }, [mouseUp, nodes, links])
 
-      <YourCreations
-        pid={selected.thread.id}
-        creationType="choice"
-        creations={Object.values(choices).filter(ch => user.choice_ids.includes(ch.id))}
-        filterBySelect={(choices, thid) => Object.values(choices).filter(choice => choice.current_thread_id === thid)}
-        deleteActionCreator={deleteChoice}
-        creationForm={ChoiceForm}
-      />
-
-    <h2>Your Threads</h2>
-    {/* <button onClick={addNewNode}>+Thread</button> */}
-    <ThreadForm id={selected.tale.id} />
-    
-    <TaleDiagram initialSchema={initialSchema} />
   
-  </main>)
+
+  
+  const onMouseUp = e => setMouseUp(true)
+
+  const deleteNode = (id) => {
+    const badNode = schema.nodes.find(node => node.id === id)
+      (async () => {
+        await fetch(`/api/tales/${tid}/threads/${id}/delete`, {
+          method: "DELETE",
+        })
+      })()
+    removeNode(badNode)
+    setNodes(nodes.filter(node => node.id !== id))
+    dispatch(deleteThread(id))
+  }
+
+  const createNode = () => {
+    (async () => {
+      const res = await fetch(`/api/tales/${tid}/threads/create`, {
+        method: "POST",
+      })
+      const newThread = await res.json()
+      const newNode = {
+        id: newThread.id,
+        content: newThread.title,
+        coordinates: [newThread.x, newThread.y],
+        inputs: [{ id: `inport-${newThread.id}` }],
+        outputs: [{ id: `outport-${newThread.id}` }],
+        render: CustomRender,
+        data: { onClick: deleteNode, color: newThread.color },
+      }
+      addNode(newNode)
+      setNodes([...nodes, newNode])
+    })()
+  }
+
+
+  return (<>
+    <button onClick={createNode}><i className="fas fa-plus-circle"></i> Thread</button>
+    <div style={{ height: "800px", width: "100%" }}>
+      <Diagram schema={schema} onChange={onChange} onMouseUp={onMouseUp} />
+    </div>
+  </>)
+}
+
+function CustomRender({ id, content, data, inputs, outputs }) {
+
+  return (
+    <div style={{ background: data.color }}>
+      <div>
+        <button onClick={() => data.onClick(id)} type="button">
+          <i className="fas fa-minus-circle"></i>Delete
+        </button>
+        <div role="button">
+          {content}
+        </div>
+        <div>
+          {inputs.map(port => cloneElement(port))}
+          {outputs.map(port => cloneElement(port))}
+        </div>
+      </div>
+    </div>
+  )
 }

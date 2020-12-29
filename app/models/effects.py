@@ -19,7 +19,7 @@ class AssetEffect(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     type = db.Column(db.String(50))
     category = db.Column(db.String(50))
-    thread_id = db.Column(db.Integer, db.ForeignKey("threads.id"), nullable=False)
+    thread_id = db.Column(db.Integer, db.ForeignKey("threads.id", ondelete="cascade"), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
     asset_id = db.Column(db.Integer, db.ForeignKey("assets.id"), nullable=False)
     quantity = db.Column(db.Integer, nullable=False, default=1)

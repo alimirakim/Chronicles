@@ -16,8 +16,13 @@
   color: gray;
 }
 
-
 .top-con {
+  z-index: 1;
+  position: absolute;
+  width: 100%;
+  background-color: rgba(230,200,200,0.3);
+}
+.top-con > ul {
   display: flex;
   flex-flow: row-reverse;
   justify-content: center;
@@ -25,7 +30,7 @@
   padding: 0.5rem;
   background-color: rgba(50,40,50,0.1);
 }
-.top-con > a {
+.top-con > ul > a {
   position: relative;
   left: 0;
   bottom: 0;
@@ -42,14 +47,14 @@
   /* text-transform: uppercase; */
   transition: all 0.1s ease-in;
 }
-.top-con > a:hover {
+.top-con > ul > a:hover {
   border-radius: 0.5rem;
   opacity: 1;
 }
-.top-con > .active {
-  left: 0.1rem;
-  bottom: 0.2rem;
-  box-shadow: 5px 5px 0px darkgray;
+.top-con > ul > .active {
+  top: 0.2rem;
+  right: 0.2rem;
+  box-shadow: 5px 5px 0px rgba(0,0,0,0.2);
   opacity: 1;
   font-weight: bold;
 }

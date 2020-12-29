@@ -1,35 +1,37 @@
-import React from 'react';
-import { NavLink, Link, Redirect } from 'react-router-dom';
-import LogoutButton from './auth/LogoutButton';
-import { logout } from "../services/auth";
+import React from 'react'
+import { useSelector } from 'react-redux'
+import { NavLink, Redirect } from 'react-router-dom'
+import { logout } from "../services/auth"
 
 
-export default function Header({ authenticated, setAuthenticated }) {
+export default function Header({ auth, setAuth, title, subtitle, imageUrl }) {
+
+  const user = useSelector(state => state.user)
+
   const onLogout = async (e) => {
     await logout();
-    setAuthenticated(false)
+    setAuth(false)
     return <Redirect to="/login" />
   }
 
   return (<header id="top">
-    <Link to="/"><h1 className="top-title">THE CHRONICLES</h1></Link>
+    {/* <Link to="/"><h1 className="top-title">THE CHRONICLES</h1></Link> */}
 
-    <nav>
-      <ul className="top-con">
+    <nav className="top-con">
+      <ul>
+        <NavLink to="/about" exact={true} activeClassName="active">
+          <li>About</li>
+        </NavLink>
 
-        {authenticated && <>
+        {auth && <>
           <li style={{ marginLeft: "1rem" }}>
-            <button onClick={onLogout} type="button">
+            <button onClick={onLogout} type="button" style={{ margin: 0 }}>
               Logout
             </button>
           </li>
 
-          <NavLink to="/about" exact={true} activeClassName="active">
-            <li>About </li>
-          </NavLink>
-
-          <NavLink to="/users" exact={true} activeClassName="active">
-            <li>Users </li>
+          <NavLink to={`/users/${user.id}`} exact={true} activeClassName="active">
+            <li>Profile</li>
           </NavLink>
 
           {/* <NavLink to={`/talespinner`} exact={true} activeClassName="active">
@@ -83,12 +85,11 @@ export default function Header({ authenticated, setAuthenticated }) {
         </NavLink>
 
         {/* For Anon Users, show only Login/Signup options: */}
-        {!authenticated && <>
+        {!auth && <>
 
           <NavLink to="/login" exact={true} activeClassName="active">
-            <li> Login</li>
+            <li>Login</li>
           </NavLink>
-
 
           <NavLink to="/sign-up" exact={true} activeClassName="active">
             <li>Sign Up</li>
@@ -97,10 +98,19 @@ export default function Header({ authenticated, setAuthenticated }) {
         </>}
 
         <NavLink to="/" exact={true} activeClassName="active" >
-          <li> Home </li>
+          <li>Home</li>
         </NavLink>
 
       </ul>
     </nav>
-  </header >);
+
+    <section className={`hdr lo-screen-fill`} style={{ backgroundImage: `url(${imageUrl})` }}>
+      <div className="lo-txt-center">
+        <h1>{title}</h1>
+        <hr />
+        <h2>{subtitle}</h2>
+      </div>
+    </section>
+
+  </header>);
 }

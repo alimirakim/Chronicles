@@ -6,7 +6,7 @@ import { createUser } from '../../store/mainActions/userActions'
 import ErrorMessages from '../mylib/ErrorMessages'
 
 
-const SignUpForm = ({ authenticated, setAuthenticated }) => {
+const SignUpForm = ({ auth, setAuth }) => {
   const dispatch = useDispatch()
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("@gmail.com");
@@ -19,7 +19,7 @@ const SignUpForm = ({ authenticated, setAuthenticated }) => {
     if (password === repeatPassword) {
       const user = await signUp(username, email, password);
       if (!user.errors) {
-        setAuthenticated(true);
+        setAuth(true);
         dispatch(createUser(user))
       } else {
         setErrors(user.errors)
@@ -27,7 +27,7 @@ const SignUpForm = ({ authenticated, setAuthenticated }) => {
     }
   }
 
-  if (authenticated) return <Redirect to="/" />
+  if (auth) return <Redirect to="/" />
 
   const updateUsername = (e) => setUsername(e.target.value);
   const updateEmail = (e) => setEmail(e.target.value);

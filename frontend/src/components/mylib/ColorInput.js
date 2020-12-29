@@ -1,27 +1,28 @@
 import React from 'react'
 
 
-const colors = [
-  "rgb(70,60,70)",
-  "#f9fbefff",
-  "#e05265ff",
-  "#f78464ff",
-  "#f0bc62ff",
-  "#ffdf7eff",
-  "#8cb15eff",
-  "#1b9d8eff",
-  "#5a70ccff",
-  "#2e5a9cff",
-  "#4f4686ff",
-  "#964a70ff",
-  "#885c58ff",
-  "#5c2f2fff",
-  "#2f2032ff",
-  "#57768aff",
-]
+
 
 
 export default function ColorInput({ icon, value, setValue, colors }) {
+  if (!colors) colors = [
+      "rgb(70,60,70)",
+      "#f9fbefff",
+      "#e05265ff",
+      "#f78464ff",
+      "#f0bc62ff",
+      "#ffdf7eff",
+      "#8cb15eff",
+      "#1b9d8eff",
+      "#5a70ccff",
+      "#2e5a9cff",
+      "#4f4686ff",
+      "#964a70ff",
+      "#885c58ff",
+      "#5c2f2fff",
+      "#2f2032ff",
+      "#57768aff",
+    ]
 
   const handleChange = (e) => setValue(e.target.value)
 

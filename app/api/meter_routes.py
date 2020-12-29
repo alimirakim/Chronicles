@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from flask_login import current_user
 from app.models import db, Meter
-from app.utils import validation_errors_to_messages
+from app.utils import validation_errors_to_messages, upload_file
 from app.forms import MeterForm
 
 meter_routes = Blueprint("meters", __name__)
@@ -14,12 +14,13 @@ def create_meter(cid):
     form["csrf_token"].data = request.cookies["csrf_token"]
 
     if form.validate_on_submit():
+        image_filename = upload_file(form["image"].data)
         meter = Meter(
             title=form["title"].data,
             description=form["description"].data,
             color=form["color"].data,
             icon=form["icon"].data,
-            image=form["image"].data,
+            image=image_filename,
             min=form["min"].data,
             max=form["max"].data,
             base=form["base"].data,
@@ -40,11 +41,12 @@ def edit_meter(plid):
     form["csrf_token"].data = request.cookies["csrf_token"]
     
     if form.validate_on_submit():
+        image_filename = upload_file(form["image"].data)
         meter = Meter.query.get(plid)
         meter.title = form["title"].data
         meter.description = form["description"].data
         meter.color = form["color"].data
-        meter.image = form["image"].data
+        meter.image = image_filename
         meter.min = form["min"].data
         meter.max = form["max"].data
         meter.base = form["base"].data

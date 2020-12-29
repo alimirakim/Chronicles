@@ -19,7 +19,7 @@ class Asset(db.Model):
     is_allowed_multiple = db.Column(db.Boolean, nullable=False, default=True)
     
     user = db.relationship("User", back_populates="assets")
-    modifiers = db.relationship("Modifier", secondary="asset_modifiers", backref="asset")
+    modifiers = db.relationship("Modifier", secondary="asset_modifiers", backref="asset", cascade="all, delete", passive_deletes=True)
 
     def to_dict(self):
         """Convert to jsonifyable dictionary."""

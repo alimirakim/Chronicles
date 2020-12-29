@@ -27,6 +27,8 @@ export default function YourCreations({
   const [openEdit, setOpenEdit] = useState(false)
   const [openDelete, setOpenDelete] = useState(false)
   const active = selected[creationType]
+  // const active = selected[creationType] ? selected[creationType] : {id: ""}
+  
 
 
   const handleActive = (selection) => (e) => dispatch(updateSelection(creationType, selection))
@@ -114,7 +116,7 @@ export default function YourCreations({
 
                 <Link to={`/${creationType}s/${creation.id}`}>
                   <div style={{ backgroundColor: creation.color }} className="card-pic">
-                    <i className={`fas fa-${creation.image} lo-center `}></i>
+                    <i className={`fas fa-${creation.icon} lo-center `}></i>
                   </div>
                 </Link>
 

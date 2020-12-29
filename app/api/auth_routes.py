@@ -12,12 +12,13 @@ auth_routes = Blueprint('auth', __name__)
 def authenticate():
     """Authenticates a user."""
     if current_user.is_authenticated:
-        user, chronicles, tales, threads, choices, characters, places, assets, statuses, meters = get_and_normalize_all_data_for_user(current_user)
+        user, pcs, chronicles, tales, threads, choices, characters, places, assets, statuses, meters = get_and_normalize_all_data_for_user(current_user)
         print("\n\nWhat wrong??")
         pprint(characters)
         
         return jsonify(
-            user=user, 
+            user=user,
+            pcs=pcs,
             chronicles=chronicles, 
             tales=tales, 
             threads=threads, 
@@ -46,9 +47,10 @@ def login():
         user = User.query.filter(User.username == form.data['username']).first()
         login_user(user)
         
-        user, chronicles, tales, threads, choices, characters, places, assets, statuses, meters = get_and_normalize_all_data_for_user(user)
+        user, pcs, chronicles, tales, threads, choices, characters, places, assets, statuses, meters = get_and_normalize_all_data_for_user(user)
         return jsonify(
             user=user, 
+            pcs=pcs,
             chronicles=chronicles, 
             tales=tales, 
             threads=threads, 

@@ -8,7 +8,7 @@ class Slot(db.Model):
     """
     __tablename__ = "slots"
     id = db.Column(db.Integer, primary_key=True)
-    chronicle_id = db.Column(db.Integer, db.ForeignKey("chronicles.id"), nullable=False)
+    chronicle_id = db.Column(db.Integer, db.ForeignKey("chronicles.id", ondelete="cascade"), nullable=False)
     category = db.Column(db.String(50))
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
     

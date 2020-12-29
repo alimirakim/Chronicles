@@ -11,6 +11,7 @@ import {
 // MY COMPONENTS
 import ResultDisplay from './ResultDisplay'
 import TraitField from './TraitField'
+import Header from '../Header'
 
 // ACTIONS
 import { setAllContent } from '../../store/genActions/traitActions'
@@ -22,7 +23,7 @@ const basePath = `http://localhost:4000`
 // *****************************************************************************
 
 
-export default function Generator() {
+export default function Generator({ auth, setAuth }) {
   const dispatch = useDispatch()
 
   const categories = useSelector(state => state.charGen.categories)
@@ -70,20 +71,20 @@ export default function Generator() {
       }
     })
   }
-  
+
   const handleSave = async (e) => {
     e.preventDefault()
     const res = await fetch(`${basePath}/characters/create`, {
       method: "POST",
-      headers: {"Content-Type": "application/json"},
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(settings)
     })
     const char = await res.json()
     const res2 = await fetch(`/api/characters/create`, {
       method: "POST",
-      headers: {"Content-Type": "application/json"},
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(settings)
-      
+
     })
     // TODO Save character to npseed database, then on confirmation, use that info
     // to save character to main database
@@ -91,31 +92,31 @@ export default function Generator() {
 
   if (!Object.keys(categories)) return null
 
-  return (<>
-    <h1>NPSEED</h1>
+  return (
+    <main>
+      <ResultDisplay />
 
-    <ResultDisplay />
+      <form onSubmit={handleSubmit}>
 
-    <form onSubmit={handleSubmit}>
+        <h2>Customize Options</h2>
 
-      <h2>Customize Options</h2>
+        <button>Submit</button>
+        <button onClick={handleSave}>Save Character</button>
 
-      <button>Submit</button>
-      <button onClick={handleSave}>Save Character</button>
+        {Object.values(categories).map(c => (
+          <>
+            <h3>Category: {c.category}</h3>
+            {c.traitTypeIds.map(ttid => {
+              return (<TraitField
+                traitType={traitTypes[ttid]}
+                traitsOfType={Object.values(traits).filter(t => traitTypes[ttid].traitIds.includes(t.id))}
+                tagTypeIds={traitTypes[ttid].tagTypeIds}
+              />)
+            })}
+          </>
+        ))}
 
-      {Object.values(categories).map(c => (
-        <>
-          <h3>Category: {c.category}</h3>
-          {c.traitTypeIds.map(ttid => {
-            return (<TraitField
-              traitType={traitTypes[ttid]}
-              traitsOfType={Object.values(traits).filter(t => traitTypes[ttid].traitIds.includes(t.id))}
-              tagTypeIds={traitTypes[ttid].tagTypeIds}
-            />)
-          })}
-        </>
-      ))}
-
-    </form> </>
+      </form>
+    </main>
   )
 }

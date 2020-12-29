@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from app.models import db, Thread, Choice
 from app.forms import ThreadForm
-from app.utils import validation_errors_to_messages, createChoices
+from app.utils import validation_errors_to_messages, createChoices, upload_file
 from pprint import pprint
 
 thread_routes = Blueprint("threads", __name__)
@@ -13,12 +13,13 @@ def edit_thread(thid):
     form = ThreadForm()
     form["csrf_token"].data = request.cookies["csrf_token"]
     if form.validate_on_submit():
+        image_filename = upload_file(form["image"].data)
         thread = Thread.query.get(thid)
         thread.title = form["title"].data
         thread.description = form["description"].data
         thread.color = form["color"].data
         thread.icon = form["icon"].data
-        thread.image = form["image"].data
+        thread.image = image_filename
         
         # updating choices
         existing_choices = Choice.query.filter(Choice.current_thread_id == thread.id).all()
@@ -56,6 +57,15 @@ def delete_thread(thid):
     db.session.commit()
     return "Oh my, that thread was snipped! :0"
     
+@thread_routes.route("/<int:thid>/update-coords/x/<int:x>/y/<int:y>", methods=["POST"])
+def update_thread_coords(thid, x, y):
+    """Update the [x, y] coordinates for a thread's diagram positioning"""
+    thread = Thread.query.get(thid)
+    thread.x = x
+    thread.y = y
+    db.session.commit()
+    return jsonify(thread=thread.to_dict(), choices=thread.to_dict()["choices"])
+
 
 @thread_routes.route("/<int:thid>/create", methods=["POST"])
 def create_choice(thid):
@@ -64,13 +74,14 @@ def create_choice(thid):
     form["csrf_token"].data = request.cookies["csrf_token"]
     
     if form.validate_on_submit():
+        image_filename = upload_file(form["image"].data)
         choice = Choice(
             title=form["title"].data,
             prev_thread_id=form["prev_thread"].data,
             next_thread_id=form["next_thread"].data,
             color=form["color"].data,
             icon=form["icon"].data,
-            image=form["image"].data,
+            image=image_filename
         )
         db.session.add(choice)
         db.session.commit()
@@ -86,13 +97,14 @@ def edit_choice(chid):
     form["csrf_token"].data = request.cookies["csrf_token"]
     
     if form.validate_on_submit():
+        image_filename = upload_file(form["image"].data)
         choice = Choice.query.get(chid)
         choice.title = form["title"].data
         choice.prev_thread_id = form["prev_thread"].data
         choice.next_thread_id = form["next_thread"].data
         choice.color = form["color"].data
         choice.icon = form["icon"].data
-        choice.image = form["image"].data
+        choice.image = image_filename
         db.session.commit()
         return choice.to_dict()
     else:

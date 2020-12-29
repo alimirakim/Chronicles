@@ -15,11 +15,10 @@ const initialState = {
   character: "",
   place: "",
   asset: "",
-  condition: "",
+  status: "",
   meter: "",
   // effect: "",
   // lock: "",
-  // meter: "",
 }
 
 export default function selectionsReducer(state = initialState, action) {

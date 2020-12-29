@@ -2,7 +2,7 @@ from pprint import pprint
 from flask import Blueprint, jsonify, request
 from flask_login import current_user
 from app.models import db, Chronicle, Tale, Thread, Choice, Entity, Meter
-from app.utils import validation_errors_to_messages
+from app.utils import validation_errors_to_messages, upload_file
 from app.forms import ChronicleForm, TaleForm, EntityForm, MeterForm
 
 chronicle_routes = Blueprint("chronicles", __name__)
@@ -34,13 +34,15 @@ def create_chronicle():
     form["csrf_token"].data = request.cookies["csrf_token"]
     
     if form.validate_on_submit():
+        image_filename = upload_file(form["image"].data)
+        
         chronicle = Chronicle(
             user_id=current_user.id,
             title=form["title"].data,
             description=form["description"].data,
             color=form["color"].data,
             icon=form["icon"].data,
-            image=form["image"].data,
+            image=image_filename,
             )
         tale = Tale(
             chronicle=chronicle,
@@ -55,11 +57,12 @@ def create_chronicle():
         db.session.commit()
         tale.first_thread_id = thread.id
         db.session.commit()
-        return jsonify(
-            chronicle={chronicle.id: chronicle.to_dict()}, 
-            tale={tale.id: tale.to_dict()}, 
-            thread={thread.id: thread.to_dict()}
-            )
+        return chronicle.to_dict()
+          # jsonify(
+          #   chronicle={chronicle.id: chronicle.to_dict()}, 
+          #   tale={tale.id: tale.to_dict()}, 
+          #   thread={thread.id: thread.to_dict()}
+          #   )
     else:
       return {"errors": validation_errors_to_messages(form.errors)}, 401
 
@@ -71,12 +74,14 @@ def edit_chronicle(cid):
     form["csrf_token"].data = request.cookies["csrf_token"]
     
     if form.validate_on_submit():
+        image_filename = upload_file(form["image"].data)
+        
         chronicle = Chronicle.query.get(cid)
         chronicle.title = form["title"].data
         chronicle.description = form["description"].data
         chronicle.color = form["color"].data
         chronicle.icon = form["icon"].data
-        chronicle.image = form["image"].data
+        chronicle.image = image_filename
         db.session.commit()
         return chronicle.to_dict()
     else:
@@ -100,6 +105,7 @@ def create_player(cid, uid):
     form["csrf_token"].data = request.cookies["csrf_token"]
     
     if form.validate_on_submit():
+        image_filename = upload_file(form["image"].data)
         entity = Entity(
             chronicle_id=cid,
             type="character",
@@ -108,7 +114,7 @@ def create_player(cid, uid):
             description=form["description"].data,
             color=form["color"].data,
             icon=form["icon"].data,
-            image=form["image"].data,
+            image=image_filename,
             )
         
         # TODO Option to add entity assets, meters, conditions?
@@ -129,13 +135,14 @@ def create_tale(cid):
     form["csrf_token"].data = request.cookies["csrf_token"]
 
     if form.validate_on_submit():
+        image_filename = upload_file(form["image"].data)
         tale = Tale(
             chronicle_id=cid,
             title=form["title"].data,
             description=form["description"].data,
             color=form["color"].data,
             icon=form["icon"].data,
-            image=form["image"].data,
+            image=image_filename,
         )
         db.session.add(tale)
         db.session.commit()

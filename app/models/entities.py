@@ -13,17 +13,17 @@ class Entity(db.Model):
     description = db.Column(db.String, nullable=False, default="N/A")
     color = db.Column(db.String(50), default="rgb(70,60,70)")
     icon = db.Column(db.String(50), default="id-card")
-    image = db.Column(db.String(250), default="")
+    image = db.Column(db.String(250))
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
     
     user = db.relationship("User", back_populates="entities")
     location_id = db.Column(db.Integer, db.ForeignKey("entities.id"))
     generated_id = db.Column(db.Integer)
     
-    entity_assets = db.relationship("Asset", secondary="entity_assets", backref="entity")
-    entity_meters = db.relationship("Meter", secondary="entity_meters", backref="entity")
-    entity_statuses = db.relationship("Status", secondary="entity_statuses", backref="entity")
-    entity_slots = db.relationship("EntitySlot", foreign_keys="EntitySlot.entity_id", back_populates="entity")
+    entity_assets = db.relationship("Asset", secondary="entity_assets", backref="entity", cascade="all, delete", passive_deletes=True)
+    entity_meters = db.relationship("Meter", secondary="entity_meters", backref="entity", cascade="all, delete", passive_deletes=True)
+    entity_statuses = db.relationship("Status", secondary="entity_statuses", backref="entity", cascade="all, delete", passive_deletes=True)
+    entity_slots = db.relationship("EntitySlot", foreign_keys="EntitySlot.entity_id", back_populates="entity", cascade="all, delete", passive_deletes=True)
 
     def to_dict(self):
         """Convert to jsonifyable dictionary."""

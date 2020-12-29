@@ -29,13 +29,20 @@ export default function CreationFormWrapper({
   const [description, setDescription] = useState(edit ? edit.description : "")
   const [color, setColor] = useState(edit ? edit.color : "rgb(70,60,70)")
   const [icon, setIcon] = useState(edit ? edit.icon : `heart`)
-  const [image, setImage] = useState(edit ? edit.image : "")
-
+  const [imageFile, setImageFile] = useState(edit ? edit.image : "")
+  
   const handleSelection = (selection) => {
     if (creationType === "thread") return dispatch(updateSelection(creationType, selection.thread))
     dispatch(updateSelection(creationType, selection))
     console.info("new creation selection", creationType, selection)
   }
+  
+  const resetState = () => {
+    setTitle("")
+    setDescription("")
+    resetUniqueContent()
+  }
+  
   const handleCloseAndReset = (e) => {
     if (errors.length) dispatch(wipeErrors())
     if (!edit) {
@@ -49,17 +56,29 @@ export default function CreationFormWrapper({
   const submitCreation = async (e) => {
     e.preventDefault()
     if (errors.length) dispatch(wipeErrors())
-    console.log("submit!",)
+    
+    let data = new FormData()
+    data.append("title", title)
+    data.append("description", description)
+    data.append("color", color)
+    data.append("icon", icon)
+    data.append("image", imageFile)
+    data.append("user_file", imageFile)
+    data.append("uniqueContent", uniqueContent)
+    console.log("submit data!", data)
+    
+    resetState()
     const res = await fetch(path, {
       method: edit ? "PATCH" : "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, description, color, image, icon, ...uniqueContent }),
+      // headers: { "Content-Type": "application/json" },
+      body: data,
     })
     const content = await res.json()
     if (!content.errors) {
+      console.log("res content", content)
       dispatch(actionCreator(content))
       handleSelection(content)
-      handleClose()
+      handleCloseAndReset()
     } else {
       console.error("ERROR!!!", content.errors)
       dispatch(getErrors(content.errors))
@@ -68,7 +87,7 @@ export default function CreationFormWrapper({
 
   if (!open) return null
   return (<>
-    <form onSubmit={submitCreation}>
+    <form method="POST" encType="multipart/form-data" onSubmit={submitCreation}>
       <h2>{edit ? `Edit ${creationType}: "${edit.title}"` : `Create a ${creationType}`}</h2>
 
       {/* Hides popup form on click */}
@@ -81,7 +100,7 @@ export default function CreationFormWrapper({
       <TextAreaInput label="Description" value={description} setValue={setDescription} />
       <ColorInput icon={icon} value={color} setValue={setColor} />
       <IconInput color={color} value={icon } setValue={setIcon} />
-      <FileInput />
+      <FileInput file={imageFile} setFile={setImageFile} />
       <UniqueForm />
 
       <button className="lo-wow">

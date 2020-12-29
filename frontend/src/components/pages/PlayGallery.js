@@ -5,9 +5,10 @@ import parse from 'html-react-parser'
 
 import { getGalleryChronicles } from '../../store/mainActions/chronicleActions'
 
+import Header from '../Header'
 
-export default function PlayGallery() {
-  
+export default function PlayGallery({ auth, setAuth }) {
+
   const dispatch = useDispatch()
   const chronicles = useSelector(state => state.chronicles)
   let gallery_ids = useSelector(state => state.chronicles.gallery_ids)
@@ -22,7 +23,7 @@ export default function PlayGallery() {
       }
     })()
   }, [])
-  
+
   if (!gallery_ids.length) return null;
 
   return (
@@ -34,7 +35,7 @@ export default function PlayGallery() {
       <article>
         <div className="chron-head th-card">
           <Link to={`/chronicles/${gallery_ids[0]}`}>
-            {/* <img src={`/images/${item.image}.svg`} alt={`Splash image for "${item.title}" by ${item.creator}`} /> */}
+            {/* <img src={`/images/${item.icon}.svg`} alt={`Splash image for "${item.title}" by ${item.creator}`} /> */}
             <h2>Today's Spotlight</h2>
             <dl>
               <dt>Title</dt>
@@ -58,7 +59,7 @@ export default function PlayGallery() {
           {gallery_ids.map(id => (
             <li key={id} className="th-card gal-card">
               <Link to={`/chronicles/${id}`}>
-                {/* <img src={`/images/${item.image}.svg`} alt={`Splash image for "${item.title}" by ${item.creator}`} /> */}
+                {/* <img src={`/images/${item.icon}.svg`} alt={`Splash image for "${item.title}" by ${item.creator}`} /> */}
                 <dl>
                   <dt>Title</dt>
                   <dd>{chronicles[id].title}</dd>

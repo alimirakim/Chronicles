@@ -7,20 +7,22 @@ import ChronicleForm from '../forms/ChronicleForm'
 import DeleteForm from '../forms/DeleteForm'
 
 
+import Header from '../Header'
+
 import { getChronicle, deleteChronicle } from '../../store/mainActions/chronicleActions'
 import { getTales } from '../../store/mainActions/taleActions'
 
 
-export default function ChroniclePage() {
+export default function ChroniclePage({ auth, setAuth }) {
   const { cid } = useParams()
   const dispatch = useDispatch()
   const user = useSelector(state => state.user)
-  const chronicles = useSelector(state => state.chronicles)
+  const chronicle = useSelector(state => state.chronicles[cid])
   const tales = useSelector(state => state.tales)
   const pc = useSelector(state => Object.values(state.characters)
     .find(char => char.chronicle_id === Number(cid) && user.pc_ids.includes(char.id)))
   const assets = useSelector(state => state.assets)
-  const conditions = useSelector(state => state.conditions)
+  const statuses = useSelector(state => state.statuses)
   const meters = useSelector(state => state.meters)
   const [openEdit, setOpenEdit] = useState(false)
   const [openDelete, setOpenDelete] = useState(false)
@@ -32,7 +34,7 @@ export default function ChroniclePage() {
 
   // Get the page's chronicle, its list of tales, and user's character
   useEffect(() => {
-    if (!chronicles[cid]) {
+    if (!chronicle) {
       (async () => {
         const res = await fetch(`/api/chronicles/${cid}`)
         if (res.ok) {
@@ -42,7 +44,7 @@ export default function ChroniclePage() {
           console.error("Chronicle fetch fail D: ")
         }
       })()
-    } else if (Object.keys(tales).filter(t => chronicles[cid].tale_ids.includes(Number(t))).length !== chronicles[cid].tale_ids.length) {
+    } else if (Object.keys(tales).filter(t => chronicle.tale_ids.includes(Number(t))).length !== chronicle.tale_ids.length) {
       (async () => {
         const res = await fetch(`/api/tales/chronicle/${cid}`)
         if (res.ok) {
@@ -55,46 +57,52 @@ export default function ChroniclePage() {
     }
   }, [])
 
+  console.log("chron", chronicle)
 
-  if (!chronicles[cid]) return null
-  if (Object.keys(tales).filter(t => chronicles[cid].tale_ids.includes(Number(t))).length !== chronicles[cid].tale_ids.length) return null
+  if (!chronicle) return null
+  if (Object.keys(tales).filter(t => chronicle.tale_ids.includes(Number(t))).length !== chronicle.tale_ids.length) return null
 
-  return (
+  const h = <>
+    <address>Created by <Link to={`/users/${chronicle.user_id}`}>{chronicle.creator}</Link>
+    </address> <small>on {chronicle.created_at.toLocaleString()}</small>
+  </>
+
+  return (<>
+    <Header
+      auth={auth} setAuth={setAuth}
+      imageUrl={chronicle.image}
+      title={chronicle.title}
+      subtitle={h}
+    />
+
     <main>
-      {/* Edit / Delete options, restricted to creator */}
-      {user.id === chronicles[cid].user_id && <>
+
+      {user.id === chronicle.user_id && <>
         <button type="button" onClick={handleOpenEdit}>Edit</button>
         <button type="button" onClick={handleOpenDelete}>Delete</button>
-
         {openEdit && <ChronicleForm
           open={openEdit}
           handleClose={handleCloseEdit}
           id={cid}
-          edit={chronicles[cid]}
+          edit={chronicle}
         />}
         {openDelete && <DeleteForm
           open={openDelete}
           handleClose={handleCloseDelete}
-          creation={chronicles[cid]}
+          creation={chronicle}
           creationType="chronicle"
           deleteActionCreator={deleteChronicle}
         />}
       </>}
 
-      {/* Chronicle summary header */}
-      <section className="chron-head">
-        <h1>{chronicles[cid].title}</h1>
-        <address>Created by <Link to={`/users/${chronicles[cid].user_id}`}>{chronicles[cid].creator}</Link>
-        </address> <small>on {chronicles[cid].created_at.toLocaleString()}</small>
-        
-        {parse(chronicles[cid].description)}
-      </section>
+      <h3>About <i>"{chronicle.title}"</i></h3>
+      <p>{parse(chronicle.description)}</p>
 
       {/* Character maker + chronicle start, restricted to new players */}
-      {!pc && <>
-        <h2>Start "{chronicles[cid].title}": Make Your Character!</h2>
-        <PlayerCharacterForm tid={chronicles[cid].first_tale_id} />
-      </>}
+      {/* {!pc && <>
+        <h2>Start "{chronicle.title}": Make Your Character!</h2>
+        <PlayerCharacterForm tid={chronicle.first_tale_id} />
+      </>} */}
 
 
       {pc && <section>
@@ -103,7 +111,7 @@ export default function ChroniclePage() {
             <section className="tip-info">Keep track of your character's status, possessions, levels, conditions, and levels.</section></i>
         </h2>
 
-        <i className={`fa-10x fas fa-${pc.image}`} style={{ color: pc.color }}></i>
+        <i className={`fa-10x fas fa-${pc.icon}`} style={{ color: pc.color }}></i>
 
         {/* <h3>About</h3>
         <p>{pc.description) ? parse(pc.description)}</p> */}
@@ -117,7 +125,6 @@ export default function ChroniclePage() {
           <ul style={{ paddingLeft: "2rem" }}>
             {pc.assets.map(a => <li key={a.asset_id} style={{ listStyle: "square" }}><i><b>{assets[a.asset_id].title}</b></i> (Quantity: {a.quantity})</li>)}
           </ul>
-        </section>
 
         <hr />
 
@@ -129,7 +136,7 @@ export default function ChroniclePage() {
         <ul>
           {pc.meters.map(m => <li key={m.meter_id}>
             <div className="tip-card" style={{ backgroundColor: meters[m.meter_id].color }}>
-              <i className={`tip fas fa-2x fa-${meters[m.meter_id].image}`} >
+              <i className={`tip fas fa-2x fa-${meters[m.meter_id].icon}`} >
                 <section className="tip-info" style={{ color: "black" }}><b>{meters[m.meter_id].title}</b>: <hr />{parse(meters[m.meter_id].description)}</section>
               </i></div>
             <dl>
@@ -139,7 +146,6 @@ export default function ChroniclePage() {
             </dl>
           </li>)}
         </ul>
-      </section>}
 
       <hr />
 
@@ -149,7 +155,7 @@ export default function ChroniclePage() {
           <section className="tip-info">These are conditions that are currently afflicting your character, for good or ill.</section>
         </i></h3>
 
-            <p><i>N/A</i></p>
+      <p><i>N/A</i></p>
       <ul>
         {/* {pc.conditions.map(c => <li key={c}>
           <dl>
@@ -165,6 +171,9 @@ export default function ChroniclePage() {
       </ul>
 
       <hr />
+      </section>
+      </section>
+      }
 
       {/* TODO Add bulletin board for announcements, updates, etc. */}
 
@@ -172,14 +181,14 @@ export default function ChroniclePage() {
 
       {/* TODO Add list of started and finished tales */}
 
-      <h2>The Tales of "{chronicles[cid].title}" <i className="tip fas fa-question-circle">
-        <section className="tip-info">These are the available stories for "{chronicles[cid].title}" that you can play. Maybe you can unlock more depending on certain circumstances...</section>
+      <h2>The Tales of "{chronicle.title}" <i className="tip fas fa-question-circle">
+        <section className="tip-info">These are the available stories for "{chronicle.title}" that you can play. Maybe you can unlock more depending on certain circumstances...</section>
       </i></h2>
 
       <ul className="gal">
-        {chronicles[cid].tale_ids.map(tid => (
+        {chronicle.tale_ids.map(tid => (
           <li key={tid} className="th-card">
-            <Link to={`/tales/${tid}`}>
+            <Link to={`/chronicles/${cid}/tales/${tid}`}>
               <dl>
                 <dt>Title</dt>
                 <dd>{tales[tid].title}</dd>
@@ -191,6 +200,6 @@ export default function ChroniclePage() {
         ))}
       </ul>
 
-    </main >
-  )
+    </main>
+  </>)
 }

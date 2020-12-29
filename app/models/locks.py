@@ -18,7 +18,7 @@ class AssetLock(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     type = db.Column(db.String(50)) # proof, prohibited, price
     category = db.Column(db.String(50))
-    choice_id = db.Column(db.Integer, db.ForeignKey("choices.id"), nullable=False)
+    choice_id = db.Column(db.Integer, db.ForeignKey("choices.id", ondelete="cascade"), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
     
     asset_id = db.Column(db.Integer, db.ForeignKey("assets.id"), nullable=False)

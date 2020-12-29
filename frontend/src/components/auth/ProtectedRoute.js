@@ -3,7 +3,7 @@ import { Route, Redirect } from 'react-router-dom'
 
 function ProtectedRoute(props) {
 
-  if (!props.authenticated) return <Redirect to="/sign-up" />
+  if (!props.auth) return <Redirect to="/login" />
 
   return <Route {...props} />
 }

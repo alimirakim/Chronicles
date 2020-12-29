@@ -28,7 +28,7 @@ class Choice(db.Model):
 
     prev_thread = db.relationship("Thread", foreign_keys=[prev_thread_id], back_populates="choices")
     next_thread = db.relationship("Thread", foreign_keys=[next_thread_id], back_populates="choice_parents")
-    asset_locks = db.relationship("AssetLock", back_populates="choice")
+    asset_locks = db.relationship("AssetLock", back_populates="choice", cascade="all, delete", passive_deletes=True)
 
     def to_dict(self):
         return {

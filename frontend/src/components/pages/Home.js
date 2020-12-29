@@ -9,8 +9,9 @@ import { getGalleryChronicles } from '../../store/mainActions/chronicleActions'
 // COMPONENTS
 // import LoginForm from "../auth/LoginForm"
 // import SignUpForm from "../auth/SignUpForm"
+import Header from '../Header'
 
-export default function Home({ authenticated, setAuthenticated }) {
+export default function Home({ auth, setAuth }) {
   const dispatch = useDispatch()
   let gallery_ids = useSelector(state => state.chronicles.gallery_ids)
   gallery_ids = Array.from(gallery_ids)
@@ -29,22 +30,14 @@ export default function Home({ authenticated, setAuthenticated }) {
 
   return (
     <main>
-      <article style={{ textAlign: "center" }}><h1>Welcome to TaleSpinner</h1>
-        <p>Discover and play free text adventures made by users like you, or spin your own tale or three and share it to the world!</p>
-
-        <br />
-        <br />
-{!authenticated && <>
+      {!auth && <>
         <div className="lo-wow"><Link to="/sign-up">Create and Account</Link></div>
         <div className="lo-wow"><Link to="/login">Login</Link></div>
-</>}
-        <br />
-        <br />
-      </article>
+      </>}
+
       <GalleryRibbon ids={gallery_ids} />
 
-    </main>
-  )
+    </main>)
 }
 
 {/* Want to make games but don't know programming?
@@ -68,7 +61,7 @@ function GalleryRibbon({ ids }) {
         {Object.values(ids).map(id => (
           <li key={id} className="card" style={{ padding: "0.5rem 1rem" }}>
             <Link to={`/chronicles/${id}`}>
-              <i className={`fas fa-3x fa-${chronicles[id].image}`} style={{ width: "3rem", height: "3rem", float: "left", margin: "0.5rem 1rem", color: chronicles[id].color }}></i>
+              <i className={`fas fa-3x fa-${chronicles[id].icon}`} style={{ width: "3rem", height: "3rem", float: "left", margin: "0.5rem 1rem", color: chronicles[id].color }}></i>
               <dl>
                 <dt>Title</dt>
                 <dd>{chronicles[id].title}</dd>

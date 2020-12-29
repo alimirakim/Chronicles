@@ -5,7 +5,7 @@ import { login } from "../../services/auth";
 import { getCreations } from '../../store/mainActions/userActions'
 import ErrorMessages from '../mylib/ErrorMessages'
 
-export default function LoginForm({ authenticated, setAuthenticated }) {
+export default function LoginForm({ auth, setAuth }) {
   const dispatch = useDispatch()
   const [errors, setErrors] = useState([]);
   const [username, setUsername] = useState("demo");
@@ -15,7 +15,7 @@ export default function LoginForm({ authenticated, setAuthenticated }) {
     e.preventDefault();
     const content = await login(username, password);
     if (!content.errors) {
-      setAuthenticated(true)
+      setAuth(true)
       // TODO Refactor this into one dispatch!
       dispatch(getCreations(content))
     } else {
@@ -26,7 +26,7 @@ export default function LoginForm({ authenticated, setAuthenticated }) {
   const updateUsername = (e) => setUsername(e.target.value)
   const updatePassword = (e) => setPassword(e.target.value)
 
-  if (authenticated) return <Redirect to="/" />
+  if (auth) return <Redirect to="/" />
 
   return (<>
     <form onSubmit={onLogin} className="lo-box-med, lo-center-h" style={{width: "50%"}}>

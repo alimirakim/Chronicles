@@ -15,3 +15,15 @@
 @import "modules/card";
 @import "modules/chron";
 /* @import "modules"; */
+
+
+
+.hdr {
+  padding: 4rem 6rem 2rem;
+  height: 15rem;
+  overflow: hidden;
+}
+
+.hdr > div > h1 {
+  font-size: 2.5rem;
+}

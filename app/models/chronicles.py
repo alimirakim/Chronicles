@@ -15,8 +15,8 @@ class Chronicle(db.Model):
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
     
     user = db.relationship("User", back_populates="chronicles")
-    tales = db.relationship("Tale", back_populates="chronicle")
-    slots = db.relationship("Slot", back_populates="chronicle")
+    tales = db.relationship("Tale", back_populates="chronicle", cascade="all, delete", passive_deletes=True)
+    slots = db.relationship("Slot", back_populates="chronicle", cascade="all, delete", passive_deletes=True)
 
     def to_dict(self):
         """Convert to jsonifyable dictionary."""

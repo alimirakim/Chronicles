@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from app.models import db, Tale, Thread, Choice
 from app.forms import TaleForm, ThreadForm
-from app.utils import validation_errors_to_messages, createChoices, createEffects, createLocks
+from app.utils import validation_errors_to_messages, createChoices, createEffects, createLocks, upload_file
 
 tale_routes = Blueprint("tales", __name__)
 
@@ -23,12 +23,13 @@ def edit_tale(tid):
     form["csrf_token"].data = request.cookies["csrf_token"]
 
     if form.validate_on_submit():
+        image_filename = upload_file(form["image"].data)
         tale = Tale.query.get(tid)
         tale.title = form["title"].data
         tale.description = form["description"].data
         tale.color = form["color"].data
         tale.icon = form["icon"].data
-        tale.image = form["image"].data
+        tale.image = image_filename
         db.session.commit()
         return tale.to_dict()
     else:
@@ -51,13 +52,14 @@ def create_thread(tid):
     form["csrf_token"].data = request.cookies["csrf_token"]
 
     if form.validate_on_submit():
+        image_filename = upload_file(form["image"].data)
         thread = Thread(
             tale_id=tid,
             title=form["title"].data,
             description=form["description"].data,
             color=form["color"].data,
             icon=form["icon"].data,
-            image=form["image"].data,
+            image=image_filename,
         )
         db.session.add(thread)
         db.session.commit()

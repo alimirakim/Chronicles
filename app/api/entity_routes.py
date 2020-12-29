@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from flask_login import current_user
 from app.models import db, Entity
-from app.utils import validation_errors_to_messages
+from app.utils import validation_errors_to_messages, upload_file
 from app.forms import EntityForm
 
 entity_routes = Blueprint("entities", __name__)
@@ -14,6 +14,7 @@ def create_entity(cid, entity):
     form["csrf_token"].data = request.cookies["csrf_token"]
     
     if form.validate_on_submit():
+        image_filename = upload_file(form["image"].data)
         entity = Entity(
             user=current_user,
             type=form["type"].data,
@@ -22,7 +23,7 @@ def create_entity(cid, entity):
             description=form["description"].data,
             color=form["color"].data,
             icon=form["icon"].data,
-            image=form["image"].data,
+            image=image_filename,
             )
         
         # TODO Option to add entity assets, meters, conditions?
@@ -40,6 +41,7 @@ def edit_entity(tid):
     form["csrf_token"].data = request.cookies["csrf_token"]
     
     if form.validate_on_submit():
+        image_filename = upload_file(form["image"].data)
         entity = Entity.query.get(tid)
         entity.type = form["type"].data,
         entity.category = form["category"].data,
@@ -47,7 +49,7 @@ def edit_entity(tid):
         entity.description = form["description"].data
         entity.color = form["color"].data
         entity.icon = form["icon"].data
-        entity.image = form["image"].data
+        entity.image = image_filename
         db.session.commit()
         return entity.to_dict()
     else:

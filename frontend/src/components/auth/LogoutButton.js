@@ -2,10 +2,10 @@ import React from "react";
 import {Redirect} from 'react-router-dom'
 import { logout } from "../../services/auth";
 
-const LogoutButton = ({setAuthenticated}) => {
+const LogoutButton = ({setAuth}) => {
   const onLogout = async (e) => {
     await logout();
-    setAuthenticated(false)
+    setAuth(false)
     return <Redirect to="/login" />
   };
 

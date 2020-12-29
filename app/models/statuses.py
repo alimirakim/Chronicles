@@ -20,7 +20,7 @@ class Status(db.Model):
     duration = db.Column(db.DateTime)
     
     user = db.relationship("User", back_populates="statuses")
-    modifiers = db.relationship("Modifier", secondary="status_modifiers", backref="status")
+    modifiers = db.relationship("Modifier", secondary="status_modifiers", backref="status", cascade="all, delete", passive_deletes=True)
     
     def to_dict(self):
         """Convert to jsonifyable dictionary."""

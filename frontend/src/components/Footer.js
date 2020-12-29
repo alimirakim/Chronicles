@@ -2,9 +2,9 @@ import React from 'react'
 import { NavLink } from 'react-router-dom'
 import LogoutButton from './auth/LogoutButton'
 
-export default function Footer({ authenticated, setAuthenticated }) {
+export default function Footer({ auth, setAuth }) {
 
-  console.info("stuff", authenticated)
+  console.info("stuff", auth)
   return (
     <div className="btm-wrap">
     <footer className="btm">
@@ -15,12 +15,12 @@ export default function Footer({ authenticated, setAuthenticated }) {
           <li><NavLink to={`/gallery`} exact={true} activeClassName="active">Chronicles Gallery</NavLink></li>
           <li><NavLink to={`/library`} exact={true} activeClassName="active">Library</NavLink></li>
 
-          {authenticated && <>
+          {auth && <>
             <li><NavLink to={`/worldweaver`} exact={true} activeClassName="active">WorldWeaver</NavLink></li>
             <li><NavLink to={`/talespinner`} exact={true} activeClassName="active">TaleSpinner</NavLink></li>
-            <li><LogoutButton setAuthenticated={setAuthenticated} /></li>
+            <li><LogoutButton setAuth={setAuth} /></li>
           </>}
-          {!authenticated && <>
+          {!auth && <>
             <li><NavLink to={`/login`} exact={true} activeClassName="active">Login</NavLink></li>
             <li><NavLink to={`/sign-up`} exact={true} activeClassName="active">Sign up</NavLink></li>
           </>}

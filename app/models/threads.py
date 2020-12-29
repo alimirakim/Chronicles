@@ -21,7 +21,7 @@ class Thread(db.Model):
     description = db.Column(db.String, nullable=False, default="N/A")
     color = db.Column(db.String(50), default="rgb(70,60,70)")
     icon = db.Column(db.String(50), default="feather-alt")
-    image = db.Column(db.String(250), default="book-library-with-open-textbook.jpg")
+    image = db.Column(db.String(250), default="/images/book-library-with-open-textbook.jpg")
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
     
     tale_id = db.Column(db.Integer, db.ForeignKey("tales.id", ondelete="cascade"), nullable=False)

@@ -185,6 +185,13 @@
 }
 
 .top-con {
+  z-index: 1;
+  position: absolute;
+  width: 100%;
+  background-color: rgba(230, 200, 200, 0.3);
+}
+
+.top-con > ul {
   display: flex;
   flex-flow: row-reverse;
   justify-content: center;
@@ -193,7 +200,7 @@
   background-color: rgba(50, 40, 50, 0.1);
 }
 
-.top-con > a {
+.top-con > ul > a {
   position: relative;
   left: 0;
   bottom: 0;
@@ -211,15 +218,15 @@
   transition: all 0.1s ease-in;
 }
 
-.top-con > a:hover {
+.top-con > ul > a:hover {
   border-radius: 0.5rem;
   opacity: 1;
 }
 
-.top-con > .active {
-  left: 0.1rem;
-  bottom: 0.2rem;
-  box-shadow: 5px 5px 0px darkgray;
+.top-con > ul > .active {
+  top: 0.2rem;
+  right: 0.2rem;
+  box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.2);
   opacity: 1;
   font-weight: bold;
 }
@@ -481,14 +488,13 @@ button {
   height: 100%;
 }
 
-.success-container h2,
-small {
+.success-container h2 {
   color: green;
   text-align: center;
 }
 
 @media screen and (max-width: 472px) {
-  .container {
+  .fil-con {
     padding: 6px;
   }
   .thumbnail-wrapper {
@@ -558,12 +564,23 @@ small {
 }
 
 .chron-head {
-  width: 80%;
-  margin: 1rem auto;
-  border: 8px inset lightgray;
-  padding: 0.5rem 1rem;
-  background-color: #fafaf5;
+  z-index: 1;
+  position: relative;
+  width: 100;
+  margin: 0 auto;
+  padding: 0.5rem 0;
+  color: white;
+  box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.5);
 }
 
 /* @import "modules"; */
+.hdr {
+  padding: 4rem 6rem 2rem;
+  height: 15rem;
+  overflow: hidden;
+}
+
+.hdr > div > h1 {
+  font-size: 2.5rem;
+}
 /*# sourceMappingURL=modules.css.map */
