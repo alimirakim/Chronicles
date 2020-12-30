@@ -78,6 +78,25 @@ def create_thread(tid):
         return {"errors": validation_errors_to_messages(form.errors)}, 401
 
 
+@tale_routes.route("/<int:tid>/threads/create-node", methods=["POST"])
+def create_thread_node(tid):
+    """Create a new thread."""
+    form = ThreadForm()
+    form["csrf_token"].data = request.cookies["csrf_token"]
+
+    if form.validate_on_submit():
+        thread = Thread(
+            tale_id=tid,
+            title="Untitled",
+            color="#f9fbefff",
+            icon="feather-alt",
+        )
+        db.session.add(thread)
+        db.session.commit()
+        return thread.to_dict()
+    else:
+        return {"errors": validation_errors_to_messages(form.errors)}, 401
+
 # following = db.relationship(
 #     "User", secondary="followers",
 #     primaryjoin= id == Followers.follower_id,

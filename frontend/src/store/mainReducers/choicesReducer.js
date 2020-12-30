@@ -42,7 +42,7 @@ export default function choicesReducer(state = {}, action) {
       Object.values(action.choices).forEach(choice => newState[choice.id] = choice)
       return newState
     case DELETE_THREAD:
-      return Object.values(state).filter(choice => choice.prev_thread_id !== action.thread.id)
+      return Object.values(state).filter(choice => choice.prev_thread_id !== action.id)
 
     case DELETE_TALE:
       return Object.values(state).filter(choice => !action.tale.thread_ids.includes(choice.prev_thread_id))

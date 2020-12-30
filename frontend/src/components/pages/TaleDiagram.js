@@ -1,5 +1,5 @@
 import React, { useState, cloneElement, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch, connect } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import Diagram, { createSchema, useSchema } from 'beautiful-react-diagrams'
 
@@ -7,7 +7,7 @@ import ThreadNodeRender from './ThreadNodeRender'
 
 // ACTION CREATORS
 import { deleteChoice } from '../../store/mainActions/choiceActions'
-import { updateThread, editThread, deleteThread } from '../../store/mainActions/threadActions'
+import { addThread, updateThread, deleteThread } from '../../store/mainActions/threadActions'
 
 
 // read tale thread ids, choice ids, threads, choices
@@ -28,7 +28,7 @@ function createLink(choice, thread) {
 }
 function createNode(thread, data) {
   return {
-    id: thread.id,
+    id: String(thread.id),
     content: thread.title,
     coordinates: [thread.x, thread.y],
     inputs: [{ id: `inport-${thread.id}` }],
@@ -39,36 +39,32 @@ function createNode(thread, data) {
   }
 }
 
+
 export default function TaleDiagram() {
-  const tid = useSelector(state => state.selections.tale.id)
   const dispatch = useDispatch()
-  const selected = useSelector(state => state.selections)
   const threads = useSelector(state => state.threads)
   const choices = useSelector(state => state.choices)
-  const taleThreads = useSelector(state => Object.values(state.threads).filter(th => th.tale_id === Number(tid)))
-  const threadChoices = []
-  taleThreads.forEach(th => th.choices.forEach(ch => threadChoices.push(ch.id)))
-  const taleChoices = useSelector(state => Object.values(state.choices).filter(ch => threadChoices.includes(ch.id)))
+  const selectedTale = useSelector(state => state.selections.tale)
+  const selectedTaleThreads = useSelector(state => state.selections.tale.thread_ids)
   const [mouseUp, setMouseUp] = useState(false)
-  
-  // creates nodes and links
-  const [currentSchema, setCurrentSchema] = useState("")
-  const nodes = taleThreads.map(thread => createNode(thread, { onClick: deleteNode }))
-  const links = taleChoices.map(choice => createLink(choice, threads[choice.next_thread_id]))
-  // create diagram schema
 
-  // when a new tale is selected, a new schema is populated
+  const [schema, { onChange, addNode, removeNode, connect }] = useSchema() // creating initial schema
+  const [...taleThreads] = Object.values(threads).filter(th => th.tale_id === selectedTale.id)
+  const [...taleChoices] = Object.values(choices).filter(ch => ch.tale_id === selectedTale.id)
+
+  // Updates schema upon selecting new tale
   useEffect(() => {
-    const [schema, { onChange, addNode, removeNode }] = useSchema(createSchema({ nodes, links })) // creating initial schema
-    const schemaContent = {schema, onChange, addNode, removeNode}
-    setCurrentSchema(schemaContent)
-  }, [selected.tale])
-  
+    console.log("updating schema", selectedTale)
+    const nodes = taleThreads.map(thread => createNode(thread, { onClick: deleteNode }))
+    const links = taleChoices.map(choice => createLink(choice, threads[choice.next_thread_id]))
+    onChange({ nodes, links })
+  }, [selectedTale])
+
   // on mouse-up, post moved node's xy coords to database's thread
   useEffect(() => {
     if (mouseUp) {
-      const movedNode = nodes.find(n => threads[n.id].x !== n.coordinates[0] || threads[n.id].y !== n.coordinates[1])
-      console.log("schema, nodes, links", schema, nodes, links)
+      const movedNode = schema.nodes.find(n => threads[n.id].x !== n.coordinates[0] || threads[n.id].y !== n.coordinates[1])
+      console.log("schema, nodes, links", schema)
       console.log("mouse up!", movedNode)
       if (movedNode) {
         (async () => {
@@ -78,18 +74,19 @@ export default function TaleDiagram() {
           })
           const updatedThread = await res.json()
           console.log("updatedThread", updatedThread)
-          dispatch(updateThread(updatedThread))
+          dispatch(updateThread({ thread: updatedThread, choices: updatedThread.choices }))
         })()
       }
+      setMouseUp(false)
     }
   }, [mouseUp])
 
   // when a thread is deleted, the node is removed
   useEffect(() => {
-    if (nodes.length > taleThreads.length) {
-      const missingNode = nodes.find(n => !taleThreads.includes(n.id))
-      currentSchema.removeNode(missingNode)
-      setMouseUp(false)
+    if (schema.nodes.length > taleThreads.length) {
+      const missingNode = schema.nodes.find(n => !taleThreads.includes(n.id))
+      console.log("missingNode", missingNode)
+      removeNode(missingNode)
     }
   }, [threads, choices])
 
@@ -97,29 +94,39 @@ export default function TaleDiagram() {
 
   function deleteNode(id) {
     (async () => {
-      await fetch(`/api/tales/${tid}/threads/${id}/delete`, {method: "DELETE" })
+      await fetch(`/api/threads/${id}/delete`, { method: "DELETE" })
     })()
     dispatch(deleteThread(id))
   }
 
   const createThread = () => {
     (async () => {
-      const res = await fetch(`/api/tales/${tid}/threads/create`, {
-        method: "POST",
-      })
+      console.log("createthread click")
+      const res = await fetch(`/api/tales/${selectedTale.id}/threads/create-node`, 
+      { method: "POST" })
       const newThread = await res.json()
       console.log("newThread", newThread)
+      dispatch(addThread({ thread: newThread, choices: [] }))
       const newNode = createNode(newThread, { onClick: deleteNode })
-      currentSchema.addNode(newNode)
+      console.log("pre-create schema", newNode, schema)
+      addNode(newNode)
+      console.log("post-create schema", schema)
     })()
   }
+  console.log("selectedTale", selectedTaleThreads)
+  console.log("schema", schema)
 
-if (!currentSchema) return null;
   return (<>
-    <button onClick={createThread}><i className="fas fa-plus-circle"></i>Thread</button>
+    <h2>{selectedTale.title}</h2>
 
-    <div style={{ height: "800px", width: "100%" }}>
-      <Diagram schema={currentSchema.schema} onChange={currentSchema.onChange} onMouseUp={onMouseUp} />
+    {selectedTale && <>
+      <p><small><i>{selectedTaleThreads.length} Threads Total</i> | Created on {selectedTale.created_at.toLocaleString()}. </small></p>
+      <button onClick={createThread}><i className="fas fa-plus-circle"></i>Thread</button>
+    </>}
+
+
+    <div style={{ height: "400px", width: "100%" }}>
+      <Diagram schema={schema} onChange={onChange} onMouseUp={onMouseUp} />
     </div>
   </>)
 }

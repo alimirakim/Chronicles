@@ -40,6 +40,7 @@ class Choice(db.Model):
             "image": self.image,
             "created_at": self.created_at,
             
+            "tale_id": self.prev_thread.tale_id,
             "prev_thread_id": self.prev_thread_id,
             "next_thread_id": self.next_thread_id,
         }

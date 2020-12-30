@@ -9,4 +9,4 @@ export const DELETE_THREAD = "DELETE_THREAD"
 export const getThreads = (threads) => ({ type: GET_THREADS, threads })
 export const addThread = (content) => ({ type: ADD_THREAD, thread: content.thread, choices: content.choices })
 export const updateThread = (content) => ({ type: UPDATE_THREAD, thread: content.thread, choices: content.choices })
-export const deleteThread = (thread) => ({ type: DELETE_THREAD, thread })
+export const deleteThread = (id) => ({ type: DELETE_THREAD, id})

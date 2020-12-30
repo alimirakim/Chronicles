@@ -63,7 +63,7 @@ export default function userReducer(state = {}, action) {
       newState.chronicle_ids.push(action.chronicle.id)
       return newState
     case DELETE_CHRONICLE:
-      i = newState.chronicle_ids.indexOf(action.chronicle.id)
+      i = newState.chronicle_ids.indexOf(action.id)
       newState.chronicle_ids.splice(i, 1)
       return newState
 
@@ -72,7 +72,7 @@ export default function userReducer(state = {}, action) {
       newState.tale_ids.push(action.tale.id)
       return newState
     case DELETE_TALE:
-      i = newState.tale_ids.indexOf(action.tale.id)
+      i = newState.tale_ids.indexOf(action.id)
       newState.tale_ids.splice(i, 1)
       return newState
 
@@ -81,7 +81,7 @@ export default function userReducer(state = {}, action) {
       newState.thread_ids.push(action.thread.id)
       return newState
     case DELETE_THREAD:
-      i = newState.thread_ids.indexOf(action.thread.id)
+      i = newState.thread_ids.indexOf(action.id)
       newState.thread_ids.splice(i, 1)
       return newState
 
@@ -90,7 +90,7 @@ export default function userReducer(state = {}, action) {
       newState.choice_ids.push(action.choice.id)
       return newState
     case DELETE_CHOICE:
-      i = newState.choice_ids.indexOf(action.choice.id)
+      i = newState.choice_ids.indexOf(action.id)
       newState.choice_ids.splice(i, 1)
       return newState
 
@@ -99,7 +99,7 @@ export default function userReducer(state = {}, action) {
       newState.character_ids.push(action.character.id)
       return newState
     case DELETE_CHARACTER:
-      i = newState.character_ids.indexOf(action.character.id)
+      i = newState.character_ids.indexOf(action.id)
       newState.character_ids.splice(i, 1)
       return newState
 
@@ -108,7 +108,7 @@ export default function userReducer(state = {}, action) {
       newState.place_ids.push(action.place.id)
       return newState
     case DELETE_PLACE:
-      i = newState.place_ids.indexOf(action.place.id)
+      i = newState.place_ids.indexOf(action.id)
       newState.place_ids.splice(i, 1)
       return newState
 
@@ -117,7 +117,7 @@ export default function userReducer(state = {}, action) {
       newState.asset_ids.push(action.asset.id)
       return newState
     case DELETE_ASSET:
-      i = newState.asset_ids.indexOf(action.asset.id)
+      i = newState.asset_ids.indexOf(action.id)
       newState.asset_ids.splice(i, 1)
       return newState
 
@@ -129,7 +129,7 @@ export default function userReducer(state = {}, action) {
       newState.status_ids.push(action.status.id)
       return newState
     case DELETE_STATUS:
-      i = newState.status_ids.indexOf(action.status.id)
+      i = newState.status_ids.indexOf(action.id)
       newState.status_ids.splice(i, 1)
       return newState
 
@@ -138,7 +138,7 @@ export default function userReducer(state = {}, action) {
       newState.meter_ids.push(action.meter.id)
       return newState
     case DELETE_METER:
-      i = newState.meter_ids.indexOf(action.meter.id)
+      i = newState.meter_ids.indexOf(action.id)
       newState.meter_ids.splice(i, 1)
       return newState
       

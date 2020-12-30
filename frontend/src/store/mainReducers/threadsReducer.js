@@ -27,7 +27,7 @@ export default function threadsReducer(state = {}, action) {
       newState[action.thread.id] = action.thread
       return newState
     case DELETE_THREAD:
-      delete newState[action.thread.id]
+      delete newState[action.id]
       return newState
 
     case DELETE_TALE:
