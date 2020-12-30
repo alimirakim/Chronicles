@@ -4,6 +4,9 @@ import { Link } from 'react-router-dom'
 
 // YOUR COMPONENTS
 import YourCreations from '../YourCreations'
+import {
+  YourChronicles
+} from '../YourCreations'
 
 // FORM COMPONENTS
 import ChronicleForm from '../forms/ChronicleForm'
@@ -45,14 +48,8 @@ export default function WorldWeaver({ auth, setAuth }) {
         <Link to={`/talespinner`}>Go to TaleSpinner</Link>
       </div>
 
-      <YourCreations
-        creationType="chronicle"
-        creations={chronicles}
-        creations={Object.values(chronicles).filter(c => user.chronicle_ids.includes(c.id))}
-        creationForm={ChronicleForm}
-        deleteActionCreator={deleteChronicle}
-      />
-
+      <YourChronicles />
+      
       <YourCreations
         creationType="character"
         creations={Object.values(characters).filter(char => user.character_ids.includes(char.id))}

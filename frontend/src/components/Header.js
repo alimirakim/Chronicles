@@ -34,9 +34,9 @@ export default function Header({ auth, setAuth, title, subtitle, imageUrl }) {
             <li>Profile</li>
           </NavLink>
 
-          {/* <NavLink to={`/talespinner`} exact={true} activeClassName="active">
+          <NavLink to={`/talespinner`} exact={true} activeClassName="active">
             <li>TaleSpinner</li>
-          </NavLink> */}
+          </NavLink>
 
           <NavLink to={`/worldweaver`} exact={true} activeClassName="active">
             <li>WorldWeaver</li>

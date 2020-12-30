@@ -52,6 +52,7 @@ def create_thread(tid):
     form["csrf_token"].data = request.cookies["csrf_token"]
 
     if form.validate_on_submit():
+        print("form", form.data)
         image_filename = upload_file(form["image"].data)
         thread = Thread(
             tale_id=tid,
@@ -68,7 +69,8 @@ def create_thread(tid):
         # effects = createEffects(request.json["effects"], thread)
 
         # Creates choices for thread in database
-        choices = createChoices(request.json["choices"], thread)
+        # choices = createChoices(form["choices"], thread)
+        choices = []
 
         # Create locks for choices in database
         # locks = createLocks(request.json["locks"], thread)

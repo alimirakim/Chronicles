@@ -14,10 +14,15 @@ export default function FileInput({ file, setFile }) {
   console.log("file", file)
 
   return (<div className="fil-con">
-    <input type="file" accept="image/*" name="user_file" onChange={handleChange} />
+    <input 
+    type="file" 
+    accept="image/*" 
+    name="user_file" 
+    onChange={handleChange} 
+      className="fil"
+    />
 
     {/* Shows preview thumbnail and filename */}
-    <div className="thumbnail-wrapper">
       {file.src && <>
         <img className="thumbnail" src={file.src} alt={`Thumbnail of ${file.name}`} />
         <div className="thumbnail-caption">{file.name}</div>
@@ -26,7 +31,6 @@ export default function FileInput({ file, setFile }) {
         <img className="thumbnail" src={file} alt={`Thumbnail of ${file.name}`} />
         <div className="thumbnail-caption">{file}</div>
       </>}
-    </div>
 
   </div>)
 }

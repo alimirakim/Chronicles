@@ -26,11 +26,12 @@ export default function TaleSpinner() {
 
 
   // Select a user's first chronicle and its tales/content upon initialization
-  useEffect(() => {
-    dispatch(updateSelections([
-      { type: "chronicle", selection: Object.keys(chronicles) ? chronicles[Object.keys(chronicles)[0]] : "" },
-    ]))
-  }, [])
+  // useEffect(() => {
+  //   dispatch(updateSelections([
+  //     {type: ""}
+  //     { type: "chronicle", selection: Object.keys(chronicles) ? chronicles[Object.keys(chronicles)[0]] : "" },
+  //   ]))
+  // }, [])
   // Upon chronicle-selection, clear dependent selections and refresh tales // TODO Plus charas, places, assets, etc.
   useEffect(() => {
     dispatch(wipeSelections(["tale", "thread", "choice", "threads", "choices"]))

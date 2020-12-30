@@ -30,19 +30,25 @@ export default function CreationFormWrapper({
   const [color, setColor] = useState(edit ? edit.color : "rgb(70,60,70)")
   const [icon, setIcon] = useState(edit ? edit.icon : `heart`)
   const [imageFile, setImageFile] = useState(edit ? edit.image : "")
-  
+  const [openIcons, setOpenIcons] = useState(false)
+
+  const toggleIcons = (e) => {
+    if (openIcons === false) setOpenIcons(true)
+    else setOpenIcons(false)
+  }
+
   const handleSelection = (selection) => {
     if (creationType === "thread") return dispatch(updateSelection(creationType, selection.thread))
     dispatch(updateSelection(creationType, selection))
     console.info("new creation selection", creationType, selection)
   }
-  
+
   const resetState = () => {
     setTitle("")
     setDescription("")
     resetUniqueContent()
   }
-  
+
   const handleCloseAndReset = (e) => {
     if (errors.length) dispatch(wipeErrors())
     if (!edit) {
@@ -56,7 +62,7 @@ export default function CreationFormWrapper({
   const submitCreation = async (e) => {
     e.preventDefault()
     if (errors.length) dispatch(wipeErrors())
-    
+
     let data = new FormData()
     data.append("title", title)
     data.append("description", description)
@@ -64,9 +70,11 @@ export default function CreationFormWrapper({
     data.append("icon", icon)
     data.append("image", imageFile)
     data.append("user_file", imageFile)
-    data.append("uniqueContent", uniqueContent)
+    for (const contentType in uniqueContent) {
+      data.append(contentType, uniqueContent[contentType])
+    }
     console.log("submit data!", data)
-    
+
     resetState()
     const res = await fetch(path, {
       method: edit ? "PATCH" : "POST",
@@ -98,8 +106,8 @@ export default function CreationFormWrapper({
       {/* Generic inputs */}
       <TextInput label="Title" value={title} setValue={setTitle} />
       <TextAreaInput label="Description" value={description} setValue={setDescription} />
-      <ColorInput icon={icon} value={color} setValue={setColor} />
-      <IconInput color={color} value={icon } setValue={setIcon} />
+      <ColorInput icon={icon} value={color} setValue={setColor} toggleIcons={toggleIcons} />
+      <IconInput open={openIcons} color={color} value={icon} setValue={setIcon} />
       <FileInput file={imageFile} setFile={setImageFile} />
       <UniqueForm />
 

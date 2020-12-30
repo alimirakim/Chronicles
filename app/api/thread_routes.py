@@ -53,6 +53,7 @@ def edit_thread(thid):
 def delete_thread(thid):
     """Delete a thread and its dependents like effects, locks."""
     thread = Thread.query.get(thid)
+    
     db.session.delete(thread)
     db.session.commit()
     return "Oh my, that thread was snipped! :0"

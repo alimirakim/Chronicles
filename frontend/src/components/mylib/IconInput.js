@@ -4,7 +4,7 @@ import React from 'react'
 
 
 // IMPORTANT Repeat values causes confusion to input!! Remove all repeats
-export default function IconInput({ color, value, setValue, icons }) {
+export default function IconInput({ open, color, value, setValue, icons }) {
   
   const handleChange = (e) => setValue(e.target.value)
 
@@ -634,15 +634,18 @@ export default function IconInput({ color, value, setValue, icons }) {
     ],
   
   }
-  return (<div className="th-dark-con lo-scrollbox-sml">
+  
+  if (!open) return null
+  
+  return (<section className="pop th-dark-con lo-scrollbox-sml" style={{maxWidth: "20rem", backgroundColor: "rgb(50,50,50)"}}>
 
-    {Object.keys(icons).map(category => (<>
+    {Object.keys(icons).map((category, i) => (<section key={i}>
 
       <h4 className="th-sleek">{category}</h4>
 
       <div className="rbc">
-        {icons[category].map(icon => (
-          <label className="rbc-con">
+        {icons[category].map((icon, i) => (
+          <label key={i} className="rbc-con">
             <span style={{ display: "none" }}>{icon}</span>
 
             <input
@@ -665,6 +668,6 @@ export default function IconInput({ color, value, setValue, icons }) {
         ))}
       </div>
 
-    </>))}
-  </div>)
+    </section>))}
+  </section>)
 }

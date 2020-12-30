@@ -150,7 +150,7 @@ input {
 /* Small box container */
 .lo-scrollbox-sml {
   height: 10rem;
-  width: 100%;
+  width: 10rem;
   overflow-y: scroll;
   padding-right: 2rem;
   /* border-top-left-radius: 0; */
