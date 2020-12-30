@@ -127,8 +127,8 @@ function App() {
           auth={auth} setAuth={setAuth}
           imageUrl="./images/stockvault-dice127471.jpg"
           title="NPSeed: Random Character Generator"
-      subtitle="Customize each trait to your needs. Receive smartly randomized results that you can actually use."
-   />
+          subtitle="Customize each trait to your needs. Receive smartly randomized results that you can actually use."
+        />
         <Generator />
       </Route>
 
@@ -148,19 +148,19 @@ function App() {
           auth={auth} setAuth={setAuth}
           imageUrl="./images/vintage-desk-concept-with-old-book.jpg"
           title="WorldWeaver"
-    subtitle="Create your own worlds, characters, tales, and games."
+          subtitle="Create your own worlds, characters, tales, and games."
         />
         <WorldWeaver />
       </ProtectedRoute>
 
-      <ProtectedRoute path="/talespinner/tales/:tid" exact={true} auth={auth}>
+      <ProtectedRoute path="/talespinner" exact={true} auth={auth}>
         <Header
           auth={auth} setAuth={setAuth}
           imageUrl="../../images/top-view-vintage-sewing-machine-with-scissors-thread.jpg"
           title="TaleSpinner"
           subtitle="Spin a tale by tying together scenes with choices."
         />
-        <TaleSpinner threads={threads} />
+        <TaleSpinner />
       </ProtectedRoute>
 
       {/* User list and individual user profiles */}

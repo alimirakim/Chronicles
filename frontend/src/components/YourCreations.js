@@ -6,9 +6,100 @@ import parse from 'html-react-parser'
 import { wipeErrors } from '../store/mainActions/errorActions'
 import { updateSelection } from '../store/mainActions/selectionActions'
 
+
 // MY COMPONENTS
-import DeleteForm from './forms/DeleteForm'
 import Info from './mylib/Info'
+import ChronicleForm from './forms/ChronicleForm'
+import TaleForm from './forms/TaleForm'
+import ThreadForm from './forms/ThreadForm'
+import ChoiceForm from './forms/ChoiceForm'
+import DeleteForm from './forms/DeleteForm'
+// import CharacterForm from '../forms/CharacterForm'
+// import PlaceForm from '../forms/PlaceForm'
+// import AssetForm from '../forms/AssetForm'
+// import StatusForm from '../forms/StatusForm'
+// import MeterForm from '../forms/MeterForm'
+
+// ACTION CREATORS
+import { deleteChronicle } from '../store/mainActions/chronicleActions'
+import { deleteTale } from '../store/mainActions/taleActions'
+import { deleteThread } from '../store/mainActions/threadActions'
+import { deleteChoice } from '../store/mainActions/choiceActions'
+// import { deleteCharacter } from '../store/mainActions/characterActions'
+// import { deletePlace } from '../store/mainActions/placeActions'
+// import { deleteAsset } from '../store/mainActions/assetActions'
+// import { deleteStatus } from '../store/mainActions/statusActions'
+// import { deleteMeter } from '../store/mainActions/meterActions'
+// import { updateSelections, wipeSelections } from '../store/mainActions/selectionActions'
+
+
+export function YourChronicles() {
+  const user = useSelector(state => state.user)
+  const chronicles = useSelector(state => state.chronicles)
+  if (!user || !chronicles) return null
+  return (
+    <YourCreations
+      creationType="chronicle"
+      creations={chronicles}
+      creations={Object.values(chronicles).filter(c => user.chronicle_ids.includes(c.id))}
+      creationForm={ChronicleForm}
+      deleteActionCreator={deleteChronicle}
+    />
+  )
+}
+
+
+export function YourTales() {
+  const parentChronicle = useSelector(state => state.selections.chronicle)
+  const tales = useSelector(state => state.tales)
+  if (!parentChronicle || !tales) return null
+  return (
+    <YourCreations
+      pid={parentChronicle.id}
+      creationType="tale"
+      creations={Object.values(tales).filter(t => parentChronicle ? parentChronicle.tale_ids.includes(t.id) : [])}
+      filterBySelect={(tales, cid) => Object.values(tales).filter(tale => tale.chronicle_id === cid)}
+      deleteActionCreator={deleteTale}
+      creationForm={TaleForm}
+    />
+  )
+}
+
+
+export function YourThreads() {
+  const parentTale = useSelector(state => state.selections.tale)
+  const threads = useSelector(state => state.threads)
+  if (!parentTale || !threads) return null
+  return (
+    <YourCreations
+      pid={parentTale.id}
+      creationType="thread"
+      creations={Object.values(threads).filter(th => parentTale.thread_ids.includes(th.id))}
+      filterBySelect={(threads, tid) => Object.values(threads).filter(thread => thread.tale_id === tid)}
+      deleteActionCreator={deleteThread}
+      creationForm={ThreadForm}
+    />
+  )
+}
+
+
+export function YourChoices() {
+  const parentThread = useSelector(state => state.selections.thread)
+  const choices = useSelector(state => state.choices)
+  if (!parentThread || !choices) return null
+  const parentThreadChoiceIds = parentThread.choices.map(ch=>ch.id)
+  return (
+    <YourCreations
+      pid={parentThread.id}
+      creationType="choice"
+      creations={Object.values(choices).filter(ch => parentThreadChoiceIds.includes(ch.id))}
+      // creations={Object.values(choices).filter(ch => parentThread.choice_ids.includes(ch.id))}
+      filterBySelect={(choices, thid) => Object.values(choices).filter(choice => choice.prev_thread_id === thid)}
+      deleteActionCreator={deleteChoice}
+      creationForm={ChoiceForm}
+    />
+  )
+}
 
 
 export default function YourCreations({
@@ -28,7 +119,7 @@ export default function YourCreations({
   const [openDelete, setOpenDelete] = useState(false)
   const active = selected[creationType]
   // const active = selected[creationType] ? selected[creationType] : {id: ""}
-  
+
 
 
   const handleActive = (selection) => (e) => dispatch(updateSelection(creationType, selection))
