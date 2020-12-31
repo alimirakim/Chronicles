@@ -49,8 +49,7 @@ export default function CurrentThread({auth, setAuth}) {
     <section>
     <div style={{ margin: "1rem" }}><Link to={`/chronicles/${cid}/tales/${tid}`}><i className="fas fa-arrow-left" ></i> Go Back</Link></div>
 
-    <h1 style={{ margin: "0 4rem" }}>{tale.title}</h1>
-    <section className="chron-head">
+    <section className="spotlight" style={{padding: "2rem"}}>
       <h2>{currentThread.title}</h2>
       <p>{parse(currentThread.description)}</p>
     </section>
@@ -58,9 +57,9 @@ export default function CurrentThread({auth, setAuth}) {
     <hr />
     <h3>Effects</h3>
     <i>N/A</i>
-    <ul>
+    {/* <ul>
       {currentThread.asset_effects.map(i => <li key={i}>Effect: {effects[i].title}</li>)}
-    </ul>
+    </ul> */}
     <hr />
 
 

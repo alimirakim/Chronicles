@@ -70,7 +70,7 @@ const basePath = `http://localhost:4000`
 //     <div>
 //       <AppBar position="static">
 //         <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
-          
+
 //           <Tab label="Item One" {...a11yProps(0)} />
 //           <Tab label="Item Two" {...a11yProps(1)} />
 //           <Tab label="Item Three" {...a11yProps(2)} />
@@ -161,30 +161,31 @@ export default function Generator({ auth, setAuth }) {
 
   return (
     <main>
+      <h2>Customize Options</h2>
+
+      {/* <button onClick={handleSave}>Save Character</button> */}
+      <h3>How does this work?</h3>
+      <p>Customize each option to suit your needs, and the randomizer will adjust the results for you. Certain traits will have a higher chance to be rolled than others based on if traits have matching 'tags'. For example, if you choose a girl's name, the generator will usually return 'girl' for the gender option, of if you choose a Korean name, 'Eastern'-associated traits will be more likely.</p>
+      <p>Please note that though there is a <i>very high chance</i> for certain tags to get certain results, like girl names with a girl gender, no combination is completely impossible for the randomizer. It incorporates a small chance of rolling completely randomly without any other tags effecting it!</p>
+      <p><b>Your options are:</b></p>
+      <ul style={{ listStyle: "circle", marginLeft: "2rem" }}>
+        <li>Hit 'Randomize'! This will randomize all 'undecided' traits for you at once. The results will be effected both by its own results as it decides each trait down the list, plus any traits you've already set, and the traits you set below <i>won't</i> randomize.</li>
+        <li>Randomize individual traits with the 'randomize' button below the trait.</li>
+        <li>Choose one of the options from the dropdown. The options you choose will effect the randomization results of the other traits.</li>
+        <li>Type in your own custom option! This option will show in your final result sheet, but since it has no tags, it won't effect the result of any other traits.</li>
+        <li>Mix and match the above options for a set-up that works for your needs!</li>
+        <li><small>Future options coming soon(er or later): Choosing from multiple different 'chance' generators, choosing the tags directly for yourself, customizing and saving your own generator settings, saving your characters to your account, and more...</small></li>
+      </ul>
+
       <form onSubmit={handleSubmit}>
         <div className="spotlight" style={{ padding: "1rem 2rem" }}>
           <ResultDisplay handleSave={handleSave} />
         </div>
 
-        <h2>Customize Options</h2>
-
-        {/* <button onClick={handleSave}>Save Character</button> */}
-        <h3>How does this work?</h3>
-        <p>Customize each option to suit your needs, and the randomizer will adjust the results for you. Certain traits will have a higher chance to be rolled than others based on if traits have matching 'tags'. For example, if you choose a girl's name, the generator will usually return 'girl' for the gender option, of if you choose a Korean name, 'Eastern'-associated traits will be more likely.</p>
-        <p>Please note that though there is a <i>very high chance</i> for certain tags to get certain results, like girl names with a girl gender, no combination is completely impossible for the randomizer. It incorporates a small chance of rolling completely randomly without any other tags effecting it!</p>
-        <p><b>Your options are:</b></p>
-        <ul style={{listStyle: "circle", marginLeft: "2rem"}}>
-          <li>Hit 'Randomize'! This will randomize all 'undecided' traits for you at once. The results will be effected both by its own results as it decides each trait down the list, plus any traits you've already set, and the traits you set below <i>won't</i> randomize.</li>
-          <li>Randomize individual traits with the 'randomize' button below the trait.</li>
-          <li>Choose one of the options from the dropdown. The options you choose will effect the randomization results of the other traits.</li>
-          <li>Type in your own custom option! This option will show in your final result sheet, but since it has no tags, it won't effect the result of any other traits.</li>
-          <li>Mix and match the above options for a set-up that works for your needs!</li>
-          <li><small>Future options coming soon(er or later): Choosing from multiple different 'chance' generators, choosing the tags directly for yourself, customizing and saving your own generator settings, saving your characters to your account, and more...</small></li>
-        </ul>
 
         {Object.values(categories).map(c => (
           <>
-          <hr />
+            <hr />
             <h3>Category: {c.category}</h3>
             {c.traitTypeIds.map(ttid => {
               return (<TraitField

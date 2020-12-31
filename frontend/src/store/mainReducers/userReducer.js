@@ -96,20 +96,20 @@ export default function userReducer(state = {}, action) {
 
     // characters
     case ADD_CHARACTER:
-      newState.character_ids.push(action.character.id)
+      newState.entity_ids.push(action.character.id)
       return newState
     case DELETE_CHARACTER:
-      i = newState.character_ids.indexOf(action.id)
-      newState.character_ids.splice(i, 1)
+      i = newState.entity_ids.indexOf(action.id)
+      newState.entity_ids.splice(i, 1)
       return newState
 
     // places
     case ADD_PLACE:
-      newState.place_ids.push(action.place.id)
+      newState.entity_ids.push(action.place.id)
       return newState
     case DELETE_PLACE:
-      i = newState.place_ids.indexOf(action.id)
-      newState.place_ids.splice(i, 1)
+      i = newState.entity_ids.indexOf(action.id)
+      newState.entity_ids.splice(i, 1)
       return newState
 
     // assets

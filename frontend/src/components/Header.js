@@ -116,7 +116,7 @@ export default function Header({ auth, setAuth, title, subtitle, imageUrl }) {
     <section className={`hdr lo-screen-fill ${isStarted}`} style={{ backgroundImage: `url(${imageUrl})` }}>
       <div className="lo-txt-center">
         <h1>{title}</h1>
-         {/* <span style={{opacity: "0"}}><hr  /></span> */}
+         <span style={{opacity: "0"}}><hr  /></span>
         <h2>{subtitle}</h2>
       </div>
     </section>
