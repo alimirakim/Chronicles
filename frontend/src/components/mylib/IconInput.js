@@ -660,7 +660,7 @@ export default function IconInput({ open, color, value, setValue, icons }) {
             <span className="rbc-box rbc-image">
               <i
                 className={`fa fa-${icon} rbc-checkback lo-center`}
-                style={{ color }}
+                style={{ color, position: "absolute" }}
               >
               </i>
             </span>

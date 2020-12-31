@@ -152,7 +152,28 @@ def seed_entities():
         base=10,
         mod=1,
     )
-    
+    meter3 = Meter(
+        user_id=1,
+        title="Killing Arts",
+        description="Do you have what it takes to become America's most deadly assassin?",
+        color="#1b9d8eff",
+        icon="wrench",
+        min=0,
+        max=50,
+        base=10,
+        mod=2,
+    )
+    meter4 = Meter(
+        user_id=1,
+        title="Gardening",
+        description="How green is your thumb?",
+        color="#1b9d8eff",
+        icon="seedling",
+        min=0,
+        max=10,
+        base=1000,
+        mod=5,
+    )
     # em1 = EntityMeter(
     #   entity=character1,
     #   meter=meter1,
@@ -172,6 +193,8 @@ def seed_entities():
     db.session.add(status2)
     db.session.add(meter1)
     db.session.add(meter2)
+    db.session.add(meter3)
+    db.session.add(meter4)
     db.session.commit()
     
     

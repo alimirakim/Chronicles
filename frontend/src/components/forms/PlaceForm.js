@@ -10,7 +10,7 @@ export default function AssetForm({ id, edit, open, handleClose }) {
       open={open}
       handleClose={handleClose}
       edit={edit}
-      path={edit ? `/api/entities/${id}/edit` : `/api/chronicles/${id}/places/create`}
+      path={edit ? `/api/entities/${id}/edit` : `/api/entities/place/create`}
       creationType="place"
       actionCreator={edit ? updatePlace : addPlace}
       uniqueContent={{}}

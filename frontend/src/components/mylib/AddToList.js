@@ -24,7 +24,7 @@ export default function AddToList({
   const addItem = (e) => {
     if (itemId) {
       const updatedAddedItems = [...addedItems]
-      const newAddedItem = `${itemId} Go to: ${allItems[itemId].title}`
+      const newAddedItem = `${itemId} Go to: ${threads[itemId].title}`
       updatedAddedItems.push(newAddedItem)
       setAddedItems(updatedAddedItems)
       setItemId("")

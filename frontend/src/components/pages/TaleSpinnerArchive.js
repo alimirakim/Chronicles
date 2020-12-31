@@ -149,7 +149,7 @@ console.log("threads", threads)
         pid={selected.thread.id}
         creationType="choice"
         creations={Object.values(choices).filter(ch => user.choice_ids.includes(ch.id))}
-        filterBySelect={(choices, thid) => Object.values(choices).filter(choice => choice.current_thread_id === thid)}
+        filterBySelect={(choices, thid) => Object.values(choices).filter(choice => choice.prev_thread_id === thid)}
         deleteActionCreator={deleteChoice}
         creationForm={ChoiceForm}
       />

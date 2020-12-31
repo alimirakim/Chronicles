@@ -13,6 +13,8 @@ from .api.chronicle_routes import chronicle_routes
 from .api.lock_routes import lock_routes
 from .api.effect_routes import effect_routes
 from .api.entity_routes import entity_routes
+from .api.asset_routes import asset_routes
+from .api.status_routes import status_routes
 from .api.meter_routes import meter_routes
 from .api.tale_routes import tale_routes
 from .api.thread_routes import thread_routes
@@ -46,13 +48,15 @@ def create_app(config):
     app.config.from_object(config)
 
     app.register_blueprint(auth_routes, url_prefix='/api/auth')
-    app.register_blueprint(chronicle_routes, url_prefix="/api/chronicles")
-    app.register_blueprint(effect_routes, url_prefix="/api/effects")
     app.register_blueprint(entity_routes, url_prefix="/api/entities")
-    app.register_blueprint(lock_routes, url_prefix="/api/locks")
+    app.register_blueprint(asset_routes, url_prefix="/api/assets")
+    app.register_blueprint(status_routes, url_prefix="/api/statuses")
     app.register_blueprint(meter_routes, url_prefix="/api/meters")
+    app.register_blueprint(chronicle_routes, url_prefix="/api/chronicles")
     app.register_blueprint(tale_routes, url_prefix="/api/tales")
     app.register_blueprint(thread_routes, url_prefix="/api/threads")
+    app.register_blueprint(effect_routes, url_prefix="/api/effects")
+    app.register_blueprint(lock_routes, url_prefix="/api/locks")
     app.register_blueprint(user_routes, url_prefix='/api/users')
     # app.register_blueprint(_routes, url_prefix="/api/")
     db.init_app(app)

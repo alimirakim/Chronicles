@@ -10,7 +10,7 @@ export default function CharacterForm({ id, edit, open, handleClose }) {
       open={open}
       handleClose={handleClose}
       edit={edit}
-      path={edit ? `/api/entities/${id}/edit` : `/api/chronicles/${id}/entities/create`}
+      path={edit ? `/api/entities/${id}/edit` : `/api/entities/character/create`}
       creationType="character"
       actionCreator={edit ? updateEntity : addEntity}
       uniqueContent={{}}

@@ -22,7 +22,7 @@ import WorldWeaver from './components/pages/WorldWeaver'
 import TaleSpinner from './components/pages/TaleSpinner'
 import About from './components/pages/About'
 import Generator from './components/generator/Generator'
-import EntityPage from './components/pages/EntityPage'
+import EntityPage from './components/pages/EntityPage/EntityPage'
 import CreationPage from './components/pages/CreationPage'
 
 
@@ -107,7 +107,11 @@ function App() {
         <PlayGallery />
       </Route>
       
-      <Route path="/entities/:eid" exact={true}>
+      <Route path="/characters/:eid" exact={true}>
+        <EntityPage auth={auth} setAuth={setAuth} />
+      </Route>
+      
+      <Route path="/places/:eid" exact={true}>
         <EntityPage auth={auth} setAuth={setAuth} />
       </Route>
       
@@ -190,7 +194,7 @@ function App() {
         <User auth={auth} setAuth={setAuth} />
       </ProtectedRoute>
 
-      <Footer auth={auth} setAuth={setAuth} />
+      {/* <Footer auth={auth} setAuth={setAuth} /> */}
 
     </BrowserRouter>
   );

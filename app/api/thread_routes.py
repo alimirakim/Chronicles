@@ -22,7 +22,7 @@ def edit_thread(thid):
         thread.image = image_filename
         
         # updating choices
-        existing_choices = Choice.query.filter(Choice.current_thread_id == thread.id).all()
+        existing_choices = Choice.query.filter(Choice.prev_thread_id == thread.id).all()
         existing_choice_ids = [c.id for c in existing_choices]
         editted_choice_ids = [c.id for c in request.json["choices"]]
         

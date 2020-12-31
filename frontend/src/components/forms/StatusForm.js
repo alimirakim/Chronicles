@@ -10,7 +10,7 @@ export default function StatusForm({ id, edit, open, handleClose }) {
       open={open}
       handleClose={handleClose}
       edit={edit}
-      path={edit ? `/api/entities/${id}/edit` : `/api/chronicles/${id}/statuses/create`}
+      path={edit ? `/api/statuses/${id}/edit` : `/api/statuses/create`}
       creationType="status"
       actionCreator={edit ? updateStatus : addStatus}
       uniqueContent={{}}

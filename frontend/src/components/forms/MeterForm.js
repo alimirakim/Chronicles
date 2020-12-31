@@ -77,7 +77,7 @@ export default function MeterForm({ id, edit, open, handleClose }) {
       open={open}
       handleClose={handleClose}
       edit={edit}
-      path={edit ? `/api/meters/${id}/edit` : `/api/chronicles/${id}/meters/create`}
+      path={edit ? `/api/meters/${id}/edit` : `/api/meters/create`}
       creationType="meter"
       actionCreator={edit ? updateMeter : addMeter}
       uniqueContent={{ min, max, base, mod, algo }}
