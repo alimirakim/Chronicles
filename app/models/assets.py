@@ -26,6 +26,7 @@ class Asset(db.Model):
         return {
             "id": self.id,
             "user_id": self.user_id,
+            "creator": self.user.username,
             "category": self.category,
             "title": self.title,
             "description": self.description,

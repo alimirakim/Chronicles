@@ -23,6 +23,8 @@ class Tale(db.Model):
         """Convert to jsonifyable dictionary."""
         return {
             "id": self.id,
+            "user_id": self.chronicle.user.id,
+            "creator": self.chronicle.user.username,
             "title": self.title,
             "description": self.description,
             "color": self.color,

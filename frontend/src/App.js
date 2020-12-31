@@ -8,7 +8,6 @@ import Header from "./components/Header"
 import Footer from "./components/Footer"
 import SignUpForm from "./components/auth/SignUpForm"
 import LoginForm from "./components/auth/LoginForm"
-import FileForm from './components/forms/FileForm'
 
 // PAGE COMPONENTS
 import Home from './components/pages/Home'
@@ -23,6 +22,8 @@ import WorldWeaver from './components/pages/WorldWeaver'
 import TaleSpinner from './components/pages/TaleSpinner'
 import About from './components/pages/About'
 import Generator from './components/generator/Generator'
+import EntityPage from './components/pages/EntityPage'
+import CreationPage from './components/pages/CreationPage'
 
 
 // ACTIONS
@@ -33,10 +34,6 @@ function App() {
   const [auth, setAuth] = useState(false)
   const [loaded, setLoaded] = useState(false)
   const user = useSelector(state => state.user)
-  // const chronicles = useSelector(state => state.chronicles)
-  // const tales = useSelector(state => state.tales)
-  const threads = useSelector(state => state.threads)
-  // const choices = useSelector(state => state.choices)
 
   useEffect(() => {
     (async () => {
@@ -109,9 +106,18 @@ function App() {
         />
         <PlayGallery />
       </Route>
+      
+      <Route path="/entities/:eid" exact={true}>
+        <EntityPage auth={auth} setAuth={setAuth} />
+      </Route>
+      
+      {/* <Route path="/users/:uid/creations/:crid" exact={true}>
+        <CreationPage />
+      </Route> */}
+      
 
       <Route path="/chronicles/:cid" exact={true}>
-        <ChroniclePage />
+        <ChroniclePage  />
       </Route>
 
       <Route path="/chronicles/:cid/tales/:tid" exact={true}>
@@ -179,7 +185,7 @@ function App() {
           auth={auth} setAuth={setAuth}
           imageUrl="../images/blank-notebook-mock-up.jpg"
           title={user.username}
-          subtitle={`Joined: ${user.created_at.toLocaleString()}`}
+          subtitle={`Joined: ${user.created_at?.toLocaleString()}`}
         />
         <User auth={auth} setAuth={setAuth} />
       </ProtectedRoute>

@@ -22,11 +22,13 @@ import { addThread, updateThread, deleteThread } from '../../store/mainActions/t
 
 
 function createLink(choice, thread) {
-  return {
+  const link = {
     input: `outport-${choice.prev_thread_id}`,
     output: `inport-${choice.next_thread_id}`,
     label: choice.title !== thread.title ? choice.title : "",
   }
+  console.log("linked!", link)
+  return link
 }
 function createNode(thread, data) {
   return {
@@ -70,7 +72,9 @@ export default function TaleDiagram() {
   useEffect(() => {
     const nodes = taleThreads.map(thread => createNode(thread, { handleOpenDelete, handleOpenEdit, thread }))
     const links = taleChoices.map(choice => createLink(choice, threads[choice.next_thread_id]))
+    console.log("links", links)
     onChange({ nodes, links })
+    console.log("made it")
   }, [selectedTale])
 
   // on mouse-up, post moved node's xy coords to database's thread
@@ -99,7 +103,7 @@ export default function TaleDiagram() {
     } else if (schema.nodes.length < taleThreads.length) {
       const nodeIds = schema.nodes.map(n => n.id)
       const thread = taleThreads.find(th => !nodeIds.includes(th.id))
-      const newNode = createNode(thread, { handleOpenDelete, handleOpenEdit, thread})
+      const newNode = createNode(thread, { handleOpenDelete, handleOpenEdit, thread })
       console.log("pre-create schema", newNode, schema)
       addNode(newNode)
       console.log("post-create schema", schema)
@@ -120,6 +124,7 @@ export default function TaleDiagram() {
       <div className="pop lo-center">
         <button onClick={handleCloseCreate} className="lo-x">&times;</button>
         <ThreadForm
+          tid={selectedTale.id}
           id={selectedTale.id}
           open={openCreate}
           handleClose={handleCloseCreate}
@@ -132,6 +137,7 @@ export default function TaleDiagram() {
       <div className="pop lo-center">
         <button onClick={handleCloseEdit} className="lo-x">&times;</button>
         <ThreadForm
+          tid={selectedTale.id}
           id={selected.thread.id}
           edit={selected.thread}
           open={openEdit}

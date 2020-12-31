@@ -1,6 +1,6 @@
 import React from 'react'
 import CreationFormWrapper from './CreationFormWrapper'
-import { addCharacter, updateCharacter } from '../../store/mainActions/characterActions'
+import { addEntity, updateEntity } from '../../store/mainActions/entityActions'
 
 export default function CharacterForm({ id, edit, open, handleClose }) {
   const resetUniqueContent = () => console.log("No unique content to reset")
@@ -10,9 +10,9 @@ export default function CharacterForm({ id, edit, open, handleClose }) {
       open={open}
       handleClose={handleClose}
       edit={edit}
-      path={edit ? `/api/entities/${id}/edit` : `/api/chronicles/${id}/characters/create`}
+      path={edit ? `/api/entities/${id}/edit` : `/api/chronicles/${id}/entities/create`}
       creationType="character"
-      actionCreator={edit ? updateCharacter : addCharacter}
+      actionCreator={edit ? updateEntity : addEntity}
       uniqueContent={{}}
       resetUniqueContent={resetUniqueContent}
       uniqueForm={"span"}

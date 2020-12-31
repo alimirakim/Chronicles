@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import CreationFormWrapper from './CreationFormWrapper'
-import { AddToList } from './FormInputs'
+import AddToList from '../mylib/AddToList'
 
 
 import { addThread, updateThread } from '../../store/mainActions/threadActions'
@@ -12,8 +12,8 @@ import { addThread, updateThread } from '../../store/mainActions/threadActions'
 // const editChoiceTitle = (e) => 
 
 
-export default function ThreadForm({ id, edit, open, handleClose }) {
-  const threads = useSelector(state => state.threads)
+export default function ThreadForm({ tid, id, edit, open, handleClose }) {
+  const threads = useSelector(state => Object.values(state.threads).filter(th=>th.tale_id == tid))
   const [choices, setChoices] = useState(edit ? edit.choices : [])
 
   const resetUniqueContent = () => setChoices([])

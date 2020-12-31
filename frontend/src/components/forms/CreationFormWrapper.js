@@ -71,10 +71,15 @@ export default function CreationFormWrapper({
     data.append("image", imageFile)
     data.append("user_file", imageFile)
     for (const contentType in uniqueContent) {
-      data.append(contentType, uniqueContent[contentType])
+      console.log("content", contentType, uniqueContent[contentType])
+      if (Array.isArray(uniqueContent[contentType])) {
+        console.log("is array", uniqueContent[contentType])
+        data.append(contentType, JSON.stringify(uniqueContent[contentType]))
+      } else {
+        data.append(contentType, uniqueContent[contentType])
+      }
     }
-    console.log("submit data!", data)
-
+    console.log("data", data.get("choices"))
     resetState()
     const res = await fetch(path, {
       method: edit ? "PATCH" : "POST",
@@ -94,6 +99,7 @@ export default function CreationFormWrapper({
   }
 
   if (!open) return null
+  console.log("creationForm ping")
   return (<>
     <form method="POST" encType="multipart/form-data" onSubmit={submitCreation}>
       <h2>{edit ? `Edit ${creationType}: "${edit.title}"` : `Create a ${creationType}`}</h2>

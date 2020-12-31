@@ -1,4 +1,5 @@
 import os
+import json
 from flask import request, redirect
 from werkzeug.utils import secure_filename
 from wtforms.validators import ValidationError
@@ -23,10 +24,10 @@ def allowed_file(filename):
 
 def upload_file(files):
     """Uploads user file to AWS."""
-    print("\n\nREQUEST FILES\n", request.files)
     # Check for a user_file. If absent, return error message.
     # user_file is the name of the file input on the form.
     if "user_file" not in request.files:
+        print("\n\nREQUEST FILES\n", request.files)
         print("No user_file key in request.files")
         return "No user_file key in request.files"
 
@@ -137,9 +138,7 @@ def get_and_normalize_all_data_for_user(current_user):
     assets = {a.id: a.to_dict() for a in user.assets}
     statuses = {s.id: s.to_dict() for s in user.statuses}
     meters = {m.id: m.to_dict() for m in user.meters}
-    characters = {e.id: e.to_dict()
-                  for e in user.entities if e.type == "character"}
-    places = {e.id: e.to_dict() for e in user.entities if e.type == "place"}
+    entities = {e.id: e.to_dict() for e in user.entities}
     chronicles = {c.id: c.to_dict() for c in user.chronicles}
 
     tales = {}
@@ -160,19 +159,18 @@ def get_and_normalize_all_data_for_user(current_user):
         tales=tales,
         threads=threads,
         choices=choices,
-        characters=characters,
-        places=places,
+        entities=entities,
         assets=assets,
         statuses=statuses,
         meters=meters,)
 
     print("\n\nUSER, CHRONICLES, TALES, THREADS, CHOICES")
-    pprint(user)
+    # pprint(user)
     # pprint(chronicles)
-    pprint(tales)
+    # pprint(tales)
     # pprint(threads)
     # pprint(choices)
-    return user, pcs, chronicles, tales, threads, choices, characters, places, assets, statuses, meters
+    return user, pcs, chronicles, tales, threads, choices, entities, assets, statuses, meters
 
 
 def normalize_user_data(
@@ -182,8 +180,7 @@ def normalize_user_data(
     tales={},
     threads={},
     choices={},
-    characters={},
-    places={},
+    entities={},
     assets={},
     statuses={},
     meters={}
@@ -195,17 +192,37 @@ def normalize_user_data(
     norm_user["tale_ids"] = tuple(tales.keys())
     norm_user["thread_ids"] = tuple(threads.keys())
     norm_user["choice_ids"] = tuple(choices.keys())
-    norm_user["character_ids"] = tuple(characters.keys())
-    norm_user["place_ids"] = tuple(places.keys())
+    norm_user["entity_ids"] = tuple(entities.keys())
     norm_user["asset_ids"] = tuple(assets.keys())
     norm_user["status_ids"] = tuple(statuses.keys())
     norm_user["meter_ids"] = tuple(meters.keys())
     # norm_user["lock_ids"] = tuple(locks.keys())
     # norm_user["effect_ids"] = tuple(effects.keys())
     print("\n\n NORM USER")
-    pprint(norm_user)
+    # pprint(norm_user)
     return norm_user
 
+
+def createChoicesFromString(choices_string, thread):
+    """
+    Convert json data into new thread_choice records in the database,
+    then return a dictionary compilation of the choices.
+    """
+    # Create choices that new thread connects to
+    choices_dict = {}
+    choices = json.loads(choices_string)
+    print(choices, choices_string)
+    for choice in choices:
+        # TODO Check if 'choices' is object so as to grab alt title.
+        thread_choice = Choice(
+            title=" ".join(choice.split(" ")[1:]),
+            prev_thread=thread,
+            next_thread_id=int(choice.split(" ")[0]),
+        )
+        db.session.add(thread_choice)
+        db.session.commit()
+        choices_dict[thread_choice.id] = thread_choice.to_dict()
+    return choices_dict
 
 def createChoices(choices_data, thread):
     """

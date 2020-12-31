@@ -34,6 +34,7 @@ import { deleteChoice } from '../store/mainActions/choiceActions'
 
 
 export function YourChronicles() {
+  console.log("in yourChronicles")
   const user = useSelector(state => state.user)
   const chronicles = useSelector(state => state.chronicles)
   if (!user || !chronicles) return null

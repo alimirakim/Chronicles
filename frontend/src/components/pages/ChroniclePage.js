@@ -19,7 +19,7 @@ export default function ChroniclePage({ auth, setAuth }) {
   const user = useSelector(state => state.user)
   const chronicle = useSelector(state => state.chronicles[cid])
   const tales = useSelector(state => state.tales)
-  const pc = useSelector(state => Object.values(state.characters)
+  const pc = useSelector(state => Object.values(state.entities)
     .find(char => char.chronicle_id === Number(cid) && user.pc_ids.includes(char.id)))
   const assets = useSelector(state => state.assets)
   const statuses = useSelector(state => state.statuses)

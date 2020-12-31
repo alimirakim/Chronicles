@@ -11,7 +11,6 @@ export default function FileInput({ file, setFile }) {
       setFile(newFile)
     }
   }
-  console.log("file", file)
 
   return (<div className="fil-con">
     <input 

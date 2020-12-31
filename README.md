@@ -84,6 +84,7 @@ This is the backend for the Flask React project.
 4. Run
 
    ```bash
+   pipenv lock -r > requirements.txt
    heroku login
    ```
 5. Login to the heroku container registry

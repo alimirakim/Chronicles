@@ -5,7 +5,7 @@ import ErrorMessages from '../mylib/ErrorMessages'
 import { TextInput, SelectInputColors, SelectInputImages } from './FormInputs'
 
 import { getErrors, wipeErrors } from '../../store/mainActions/errorActions'
-import {addCharacter} from '../../store/mainActions/characterActions'
+import { addEntity} from '../../store/mainActions/entityActions'
 import {v4 as uuidv4} from 'uuid'
 
 
@@ -29,9 +29,9 @@ export default function PlayerCharacterForm({tid}) {
         body: JSON.stringify({ title: name, color, image, }),
       })
       const content = await res.json()
-      dispatch(addCharacter(content))
+      dispatch(addEntity(content))
     } else {
-      dispatch(addCharacter({
+      dispatch(addEntity({
         assets: [],
         chronicle_id: cid,
         color,

@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from app.models import db, Tale, Thread, Choice
 from app.forms import TaleForm, ThreadForm
-from app.utils import validation_errors_to_messages, createChoices, createEffects, createLocks, upload_file
+from app.utils import validation_errors_to_messages, createChoicesFromString, createEffects, createLocks, upload_file
 
 tale_routes = Blueprint("tales", __name__)
 
@@ -69,8 +69,7 @@ def create_thread(tid):
         # effects = createEffects(request.json["effects"], thread)
 
         # Creates choices for thread in database
-        # choices = createChoices(form["choices"], thread)
-        choices = []
+        choices = createChoicesFromString(form["choices"].data, thread)
 
         # Create locks for choices in database
         # locks = createLocks(request.json["locks"], thread)

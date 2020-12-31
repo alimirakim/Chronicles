@@ -32,9 +32,9 @@ export default function WorldWeaver({ auth, setAuth }) {
   const user = useSelector(state => state.user)
   const chronicles = useSelector(state => state.chronicles)
   const selected = useSelector(state => state.selections)
-  const characters = useSelector(state => state.characters)
+  const characters = useSelector(state => Object.values(state.entities).filter(e=>e.type === "character"))
   const assets = useSelector(state => state.assets)
-  const places = useSelector(state => state.places)
+  const places = useSelector(state => Object.values(state.entities).filter(e=>e.type === "place"))
   const statuses = useSelector(state => state.statuses)
   const meters = useSelector(state => state.meters)
 
@@ -52,7 +52,7 @@ export default function WorldWeaver({ auth, setAuth }) {
       
       <YourCreations
         creationType="character"
-        creations={Object.values(characters).filter(char => user.character_ids.includes(char.id))}
+        creations={Object.values(characters).filter(char => user.entity_ids.includes(char.id))}
         deleteActionCreator={deleteCharacter}
         creationForm={CharacterForm}
       />
@@ -60,7 +60,7 @@ export default function WorldWeaver({ auth, setAuth }) {
       {/* places */}
       <YourCreations
         creationType="place"
-        creations={Object.values(places).filter(p => user.place_ids.includes(p.id))}
+        creations={Object.values(places).filter(p => user.entity_ids.includes(p.id))}
         deleteActionCreator={deletePlace}
         creationForm={PlaceForm}
       />

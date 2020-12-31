@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, BooleanField, FileField
+from wtforms import StringField, SelectField, BooleanField, FileField, FieldList
 from wtforms.validators import DataRequired, ValidationError
 from app.models import Thread
 from app.utils import within_length_limit, color_choices, icon_choices
@@ -14,3 +14,4 @@ class ThreadForm(FlaskForm):
     image = FileField()
     is_sequitur = BooleanField()
     is_returnable = BooleanField()
+    choices = StringField()

@@ -87,42 +87,6 @@ def create_app(config):
             return app.send_static_file('favicon.ico')
         return app.send_static_file('index.html')
 
-
-    @app.route("/upload", methods=["POST"])
-    def upload_file():
-        """Uploads user file to AWS."""
-        
-
-        # Check for a user_file. If absent, return error message.
-        # user_file is the name of the file input on the form.
-        if "user_file" not in request.files:
-            return "No user_file key in request.files"
-
-        # If the key is in the request.files object, save in 'file' variable.
-        file = request.files["user_file"]
-        # These attributes are also available:
-        #     file.filename
-        #     file.content_type
-        #     file.content_length
-        #     file.mimetype
-
-        # Check filename attribute on the object
-        # If empty, return error message; the user submitted an empty form.
-        if file.filename == "":
-            return "Please select a file"
-
-        print("\n\nUPLOADING IMAGE? req", file.filename)
-        # Check that there is a file and that it has an allowed filetype 
-        # (allowed_file function does this, see more in Flask docs).
-        if file and allowed_file(file.filename):
-            file.filename = secure_filename(file.filename)
-            output = upload_file_to_s3(file, app.config["S3_BUCKET"])
-            print("\n\nOUTPUT", output)
-            return str(output)
-
-        else:
-            return redirect("/")
-
     return app
 
 app = create_app(Config)

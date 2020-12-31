@@ -23,6 +23,7 @@ class Chronicle(db.Model):
         return {
             "id": self.id,
             "user_id": self.user_id,
+            "creator": self.user.username,
             "title": self.title,
             "description": self.description,
             "color": self.color,

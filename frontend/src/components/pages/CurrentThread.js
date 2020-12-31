@@ -7,18 +7,12 @@ import Header from '../Header'
 
 export default function CurrentThread({auth, setAuth}) {
   const { cid, tid } = useParams()
-  const { state: { thid } } = useLocation()
   const tale = useSelector(state => state.tales[tid])
-  const { effects, threads, thread, choices, initCurrentChoices } = useSelector(state => ({
-    effects: state.effects,
-    threads: state.threads,
-    choices: state.choices,
-    thread: state.threads[thid],
-    initCurrentChoices: Object.values(state.choices).filter(choice => choice.prev_thread_id === thid),
-  }))
+  const { effects, threads } = useSelector(state => state)
   const [history, setHistory] = useState([])
-  const [currentThread, setCurrentThread] = useState(thread)
-  const [currentChoices, setCurrentChoices] = useState(initCurrentChoices)
+  console.log("tid", tid, tale)
+  const [currentThread, setCurrentThread] = useState(threads[Number(tale.first_thread_id)])
+  const [currentChoices, setCurrentChoices] = useState(threads[Number(tale.first_thread_id)].choices)
 
   const handleChoice = (chid) => (e) => {
     const updatedHistory = [...history]
@@ -26,7 +20,7 @@ export default function CurrentThread({auth, setAuth}) {
     setHistory(updatedHistory)
     console.log("history", history)
     setCurrentThread(threads[chid])
-    setCurrentChoices(Object.values(choices).filter(choice => choice.prev_thread_id == threads[chid].id))
+    setCurrentChoices(threads[chid].choices)
   }
 
   const handleGoBack = (e) => {
@@ -34,7 +28,7 @@ export default function CurrentThread({auth, setAuth}) {
     const prevThread = threads[history[history.length - 1]]
     setHistory(history.slice(0, history.length - 1))
     setCurrentThread(threads[prevThread.id])
-    setCurrentChoices(Object.values(choices).filter(choice => choice.prev_thread_id == prevThread.id))
+    setCurrentChoices(prevThread.choices)
   }
 
   const checkLocks = (e) => {
@@ -42,12 +36,13 @@ export default function CurrentThread({auth, setAuth}) {
     // TODO Check for locks. On each lock, check requirements, then eventually return final yes/no
   }
 
+  if (!currentThread) return null
   return (<>
         <Header
           auth={auth} setAuth={setAuth}
           imageUrl={currentThread.image}
           title={tale.title}
-          subtitle={currentThread.title}
+          subtitle="What shall you do?"
         />
     
     <main>
@@ -64,7 +59,7 @@ export default function CurrentThread({auth, setAuth}) {
     <h3>Effects</h3>
     <i>N/A</i>
     <ul>
-      {thread.asset_effects.map(i => <li key={i}>Effect: {effects[i].title}</li>)}
+      {currentThread.asset_effects.map(i => <li key={i}>Effect: {effects[i].title}</li>)}
     </ul>
     <hr />
 
@@ -72,7 +67,7 @@ export default function CurrentThread({auth, setAuth}) {
     <h3>Make Your Choice...</h3>
     <ul>
     {/* TODO Check if 'is_returnable' before allowing Go Back option */}
-      {thread.is_returnable && history.length
+      {currentThread.is_returnable && history.length
         ? <li className="card" >
         <button onClick={handleGoBack} className="yrc-con lo-center-y">
         <span><i className="fas fa-arrow-left" ></i> Go Back</span>

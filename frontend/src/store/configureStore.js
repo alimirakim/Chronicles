@@ -16,18 +16,18 @@ import effectsReducer from './mainReducers/effectsReducer'
 import errorsReducer from './mainReducers/errorsReducer'
 import userReducer from './mainReducers/userReducer'
 import genRootReducer from './genReducers/configureStore'
+import entitiesReducer from './mainReducers/entitiesReducer'
 
 // const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
 const rootReducer = combineReducers({
   assets: assetsReducer,
   choices: choicesReducer,
-  characters: charactersReducer,
   chronicles: chroniclesReducer,
   statuses: statusesReducer,
   effects: effectsReducer,
+  entities: entitiesReducer,
   errors: errorsReducer,
-  places: placesReducer,
   meters: metersReducer,
   selections: selectionsReducer,
   tales: talesReducer,

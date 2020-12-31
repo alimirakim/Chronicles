@@ -27,6 +27,8 @@ class Meter(db.Model):
         """Convert to jsonifyable dictionary."""
         return {
             "id": self.id,
+            "user_id": self.user_id,
+            "creator": self.user.username,
             "category": self.category,
             "title": self.title,
             "description": self.description,
