@@ -1,6 +1,7 @@
 import React, { useState, cloneElement, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
+import Header from '../Header'
 import TaleDiagram from './TaleDiagram'
 import {
   YourChronicles,
@@ -19,10 +20,9 @@ import { updateSelections, wipeSelections } from '../../store/mainActions/select
 // on -delete thread, feed node id to function, fetch-delete thread, listen for lesser threads, then delete node from schema
 // on change of selection, check for selected tale. if tale is different, create and render new schema
 
-export default function TaleSpinner() {
+export default function TaleSpinner({ auth, setAuth }) {
   const dispatch = useDispatch()
   const selected = useSelector(state => state.selections)
-  const chronicles = useSelector(state => state.chronicles)
 
 
   // Select a user's first chronicle and its tales/content upon initialization
@@ -48,7 +48,20 @@ export default function TaleSpinner() {
   }, [selected.thread])
 
 
-  return (
+
+  return (<>
+    <Header
+      auth={auth} setAuth={setAuth}
+      imageUrl={selected.tale && selected.tale.image
+        ? selected.tale.image
+        : "../../images/top-view-vintage-sewing-machine-with-scissors-thread.jpg"
+      }
+      title="TaleSpinner"
+      subtitle={selected.tale
+        ? selected.tale.title
+        : "Spin a tale by tying together scenes with choices."
+      }
+    />
     <main>
 
       <TaleDiagram />
@@ -60,5 +73,5 @@ export default function TaleSpinner() {
 
 
     </main>
-  )
+  </>)
 }

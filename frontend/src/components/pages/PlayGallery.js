@@ -3,11 +3,12 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import parse from 'html-react-parser'
 
+import Info from '../mylib/Info'
+
 import { getGalleryChronicles } from '../../store/mainActions/chronicleActions'
 
-import Header from '../Header'
 
-export default function PlayGallery({ auth, setAuth }) {
+export default function PlayGallery() {
 
   const dispatch = useDispatch()
   const chronicles = useSelector(state => state.chronicles)
@@ -33,23 +34,24 @@ export default function PlayGallery({ auth, setAuth }) {
       <small>No account? No problem! Play now and if you enjoy the tale you've started but haven't finished, you can make an account to save your progress any time before you leave!</small>
 
       <article>
-        <div className="chron-head th-card">
-          <Link to={`/chronicles/${gallery_ids[0]}`}>
-            {/* <img src={`/images/${item.icon}.svg`} alt={`Splash image for "${item.title}" by ${item.creator}`} /> */}
             <h2>Today's Spotlight</h2>
-            <dl>
-              <dt>Title</dt>
-              <dd>{chronicles[gallery_ids[0]].title}</dd>
-              <dt>Creator</dt>
-              <dd><address>{chronicles[gallery_ids[0]].creator}</address></dd>
+        <div className="spotlight"  style={{position: "relative", height: "30rem"}}>
+          <Link to={`/chronicles/${chronicles[1].id}`}>
+            {/* <img src={`/images/${item.icon}.svg`} alt={`Splash image for "${item.title}" by ${item.creator}`} /> */}
+
+            <div className="hack-img" style={{ backgroundImage: `url(${chronicles[1].image})` }}></div>
+            <article className="hack-lower" style={{marginLeft: "2rem"}}>
+            <br/>
+              <h2 style={{ margin: "0" }}><Info content={parse(chronicles[1].description)} /> {chronicles[1].title}</h2>
+              <dd><address>Created by: {chronicles[1].creator}</address></dd>
               {/* <dt>Latest Update</dt>
               <dd><datetime>{item.updated_at}</datetime></dd>
               <dt>Tags</dt>
               <dd>{item.tags}</dd>
               <dt>Description</dt> */}
-              <dd>{parse(chronicles[gallery_ids[0]].description)}</dd>
+              <dd>{parse(chronicles[1].description)}</dd>
               {/* TODO Notes like how many tales, how many users, wordcount, hearts/stars */}
-            </dl>
+            </article>
           </Link>
         </div>
       </article>
@@ -57,22 +59,21 @@ export default function PlayGallery({ auth, setAuth }) {
       <div className="lo-board">
         <ul className="gal">
           {gallery_ids.map(id => (
-            <li key={id} className="th-card gal-card">
+            <li key={id} className="th-card gal-card hack-card">
               <Link to={`/chronicles/${id}`}>
+                <div className="hack-img" style={{ backgroundImage: `url(${chronicles[id].image})`, }}>
+                </div>
                 {/* <img src={`/images/${item.icon}.svg`} alt={`Splash image for "${item.title}" by ${item.creator}`} /> */}
-                <dl>
-                  <dt>Title</dt>
-                  <dd>{chronicles[id].title}</dd>
-                  <dt>Creator</dt>
-                  <dd><address>{chronicles[id].creator}</address></dd>
+                <article className="hack-lower">
+
+                  <h3 style={{ margin: "0" }}><Info content={parse(chronicles[id].description)} /> {chronicles[id].title}</h3>
+                  <small><address>Created by {chronicles[id].creator}</address></small>
                   {/* <dt>Latest Update</dt>
               <dd><datetime>{item.updated_at}</datetime></dd>
               <dt>Tags</dt>
               <dd>{item.tags}</dd> */}
-                  <dt>Description</dt>
-                  <dd>{parse(chronicles[id].description)}</dd>
                   {/* TODO Notes like how many tales, how many users, wordcount, hearts/stars */}
-                </dl>
+                </article>
               </Link>
             </li>
           ))}

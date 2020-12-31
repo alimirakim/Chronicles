@@ -44,10 +44,10 @@ dl.cards > * {
   visibility: hidden;
   z-index: 10;
   position: absolute;
-  top: -0.8rem;
-  right: 2rem;
 
+  width: 15rem;
   opacity: 0;
+  border: 1px solid gray;
   padding: 0.5rem 2rem;
   font: normal 0.8rem Calibri;
   background-color: white;

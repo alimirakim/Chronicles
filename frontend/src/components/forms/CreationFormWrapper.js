@@ -32,10 +32,7 @@ export default function CreationFormWrapper({
   const [imageFile, setImageFile] = useState(edit ? edit.image : "")
   const [openIcons, setOpenIcons] = useState(false)
 
-  const toggleIcons = (e) => {
-    if (openIcons === false) setOpenIcons(true)
-    else setOpenIcons(false)
-  }
+  const toggleIcons = (e) => setOpenIcons(!openIcons)
 
   const handleSelection = (selection) => {
     if (creationType === "thread") return dispatch(updateSelection(creationType, selection.thread))

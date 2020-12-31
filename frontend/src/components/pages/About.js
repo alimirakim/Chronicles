@@ -31,6 +31,55 @@ export default function About() {
         </ul>
       </div>
       </article>
+      
+      <h2>Thanks and Attributions</h2>
+      
+      <h3>Image assets from Freepik.com</h3>
+      <a href="https://www.freepik.com/vectors/cartoon">Cartoon vector created by upklyak - www.freepik.com</a>
+      <a href="https://www.freepik.com/vectors/background">Background vector created by upklyak - www.freepik.com</a>
+      <a href="https://www.freepik.com/vectors/sale">Sale vector created by upklyak - www.freepik.com</a>
+      <a href="https://www.freepik.com/vectors/cartoon">Cartoon vector created by upklyak - www.freepik.com</a>
+      <a href="https://www.freepik.com/vectors/arrow">Arrow vector created by upklyak - www.freepik.com</a>
+      <a href="https://www.freepik.com/vectors/gold">Gold vector created by upklyak - www.freepik.com</a>
+      <a href="https://www.freepik.com/vectors/technology">Technology vector created by upklyak - www.freepik.com</a>
+      <a href="https://www.freepik.com/vectors/technology">Technology vector created by upklyak - www.freepik.com</a>
+      <a href="https://www.freepik.com/vectors/vintage">Vintage vector created by upklyak - www.freepik.com</a>
+      <a href="https://www.freepik.com/vectors/cartoon">Cartoon vector created by upklyak - www.freepik.com</a>
+      
+      <a href="https://www.freepik.com/photos/blue">Blue photo created by paymphotography - www.freepik.com</a>
+      <a href="https://www.freepik.com/photos/background">Background photo created by user5812043 - www.freepik.com</a>
+      <a href="https://www.freepik.com/photos/green">Green photo created by freepik - www.freepik.com</a>
+      <a href="https://www.freepik.com/photos/book">Book photo created by freepik - www.freepik.com</a>
+      <a href="https://www.freepik.com/photos/background">Background photo created by mrsiraphol - www.freepik.com</a>
+      <a href="https://www.freepik.com/photos/flower">Flower photo created by freepik - www.freepik.com</a>
+      <a href="https://www.freepik.com/photos/background">Background photo created by freepic.diller - www.freepik.com</a>
+      <a href="https://www.freepik.com/photos/background">Background photo created by freepik - www.freepik.com</a>
+      <a href="https://www.freepik.com/premium-photo/top-view-vintage-sewing-machine-with-scissors-thread_10889455.htm">Vintage sewing machine</a>
+      <a href="https://www.freepik.com/photos/education">Education photo created by Racool_studio - www.freepik.com</a>
+      <a href="https://www.freepik.com/photos/background">Background photo created by jcomp - www.freepik.com</a>
+      
+      <a href="https://www.freepik.com/photos/blue">Blue photo created by paymphotography - www.freepik.com</a>
+      <a href="https://www.freepik.com/photos/background">Background photo created by user5812043 - www.freepik.com</a>
+      <a href="https://www.freepik.com/photos/green">Green photo created by freepik - www.freepik.com</a>
+      <a href="https://www.freepik.com/photos/book">Book photo created by freepik - www.freepik.com</a>
+      <a href="https://www.freepik.com/photos/flower">Flower photo created by freepik - www.freepik.com</a>
+      <a href="https://www.freepik.com/photos/background">Background photo created by mrsiraphol - www.freepik.com</a>
+      <a href="https://www.freepik.com/photos/background">Background photo created by freepic.diller - www.freepik.com</a>
+      <a href="https://www.freepik.com/photos/background">Background photo created by freepik - www.freepik.com</a>
+      <a href="https://www.freepik.com/photos/education">Education photo created by Racool_studio - www.freepik.com</a>
+      <a href="https://www.freepik.com/photos/background">Background photo created by jcomp - www.freepik.com</a>
+      <a href="https://www.freepik.com/free-vector/bonfire-dark-ice-cave-with-snow-frozen-water-icy-crystals_9886759.htm">Icy background</a>
+      <a href="https://www.freepik.com/vectors/water">Water vector created by upklyak - www.freepik.com</a>
+      <a href="https://www.freepik.com/vectors/tree">Tree vector created by upklyak - www.freepik.com</a>
+      
+      <a href="https://www.freepik.com/vectors/house">House vector created by upklyak - www.freepik.com</a>
+      <a href="https://www.freepik.com/vectors/travel">Travel vector created by upklyak - www.freepik.com</a>
+      <a href="https://www.freepik.com/vectors/house">House vector created by upklyak - www.freepik.com</a>
+      <a href="https://www.freepik.com/vectors/house">House vector created by upklyak - www.freepik.com</a>
+      <a href="https://www.freepik.com/vectors/city">City vector created by upklyak - www.freepik.com</a>
+      <a href="https://www.freepik.com/vectors/background">Background vector created by upklyak - www.freepik.com</a>
+      <a href="https://www.freepik.com/vectors/school">School vector created by upklyak - www.freepik.com</a>
+      <a href="https://www.freepik.com/vectors/vintage">Vintage vector created by upklyak - www.freepik.com</a>
     </main>
   )
 }

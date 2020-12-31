@@ -121,7 +121,7 @@ function App() {
       
 
       <Route path="/chronicles/:cid" exact={true}>
-        <ChroniclePage  />
+        <ChroniclePage auth={auth} setAuth={setAuth}  />
       </Route>
 
       <Route path="/chronicles/:cid/tales/:tid" exact={true}>
@@ -163,13 +163,8 @@ function App() {
         <WorldWeaver />
       </ProtectedRoute>
 
-      <ProtectedRoute path="/talespinner" exact={true} auth={auth}>
-        <Header
-          auth={auth} setAuth={setAuth}
-          imageUrl="../../images/top-view-vintage-sewing-machine-with-scissors-thread.jpg"
-          title="TaleSpinner"
-          subtitle="Spin a tale by tying together scenes with choices."
-        />
+      <ProtectedRoute path="/talespinner" exact={true} auth={auth} setAuth={setAuth} >
+
         <TaleSpinner />
       </ProtectedRoute>
 

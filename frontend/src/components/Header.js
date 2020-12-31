@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { useSelector } from 'react-redux'
 import { NavLink, Redirect } from 'react-router-dom'
 import { logout } from "../services/auth"
@@ -7,28 +7,37 @@ import { logout } from "../services/auth"
 export default function Header({ auth, setAuth, title, subtitle, imageUrl }) {
 
   const user = useSelector(state => state.user)
+  let [isStarted, setIsStarted] = useState("")
 
   const onLogout = async (e) => {
     await logout();
     setAuth(false)
     return <Redirect to="/login" />
   }
+  
+  (async () => {
+    await setTimeout(()=>setIsStarted("is-started"), 500)
+    await setTimeout(()=> setIsStarted("is-display"), 500)
+  })()
 
   return (<header id="top">
     {/* <Link to="/"><h1 className="top-title">THE CHRONICLES</h1></Link> */}
 
     <nav className="top-con">
       <ul>
-        <NavLink to="/about" exact={true} activeClassName="active">
+
+        {auth && 
+          <li style={{ marginLeft: "1rem" }}>
+            <button onClick={onLogout} type="button" style={{ margin: 0, color: "white" }}>
+              Logout
+            </button>
+          </li>
+        }
+          <NavLink to="/about" exact={true} activeClassName="active">
           <li>About</li>
         </NavLink>
 
         {auth && <>
-          <li style={{ marginLeft: "1rem" }}>
-            <button onClick={onLogout} type="button" style={{ margin: 0 }}>
-              Logout
-            </button>
-          </li>
 
           <NavLink to={`/users/${user.id}`} exact={true} activeClassName="active">
             <li>Profile</li>
@@ -104,10 +113,10 @@ export default function Header({ auth, setAuth, title, subtitle, imageUrl }) {
       </ul>
     </nav>
 
-    <section className={`hdr lo-screen-fill`} style={{ backgroundImage: `url(${imageUrl})` }}>
+    <section className={`hdr lo-screen-fill ${isStarted}`} style={{ backgroundImage: `url(${imageUrl})` }}>
       <div className="lo-txt-center">
         <h1>{title}</h1>
-        <hr />
+         {/* <span style={{opacity: "0"}}><hr  /></span> */}
         <h2>{subtitle}</h2>
       </div>
     </section>

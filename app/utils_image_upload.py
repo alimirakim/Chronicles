@@ -4,7 +4,8 @@ def upload_file():
     """"""
     # A
     if "user_file" not in request.files:
-        return "No user_file key in request.files"
+        print("\n\nuser_file not in request.files")
+        return ""
         
     # B
     file = request.files["user_file"]

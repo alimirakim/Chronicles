@@ -12,6 +12,7 @@ class ThreadForm(FlaskForm):
     color = SelectField(choices=color_choices, validators=[DataRequired()], default=color_choices[0])
     icon = SelectField(choices=icon_choices, validators=[DataRequired()], default=icon_choices[0])
     image = FileField()
+    is_first = BooleanField()
     is_sequitur = BooleanField()
     is_returnable = BooleanField()
     choices = StringField()

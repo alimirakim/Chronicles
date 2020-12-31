@@ -20,21 +20,23 @@ export default function TalePage({auth, setAuth}) {
         />
   
     <main>
-      <div style={{ margin: "1rem" }}>
+      <div style={{ margin: "0 1rem", padding: "2rem" }}>
       <Link to={`/chronicles/${cid}`}><i className="fas fa-arrow-left" ></i> Go Back</Link>
       </div>
-
-      <section className="chron-head">
-        <p>{parse(tale.description)}</p>
-      </section>
-
-
+<div className="spotlight" style={{position: "relative", height: "30rem"}}>
+      <section className=" lo-center" style={{position: "absolute"}}>
+      <h2>{tale.title}</h2>
+      <hr />
+        {parse(tale.description)}
+<hr />
       <button className="lo-wow"><Link to={{
         pathname: `/chronicles/${cid}/tales/${tid}/play`,
         state: { thid: tale.first_thread_id }
       }}>
         Start!
       </Link></button>
+      </section>
+</div>
     </main>
   </>)
 }

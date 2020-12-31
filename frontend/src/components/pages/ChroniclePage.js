@@ -8,6 +8,7 @@ import DeleteForm from '../forms/DeleteForm'
 
 
 import Header from '../Header'
+import Info from '../mylib/Info'
 
 import { getChronicle, deleteChronicle } from '../../store/mainActions/chronicleActions'
 import { getTales } from '../../store/mainActions/taleActions'
@@ -80,6 +81,7 @@ export default function ChroniclePage({ auth, setAuth }) {
       {user.id === chronicle.user_id && <>
         <button type="button" onClick={handleOpenEdit}>Edit</button>
         <button type="button" onClick={handleOpenDelete}>Delete</button>
+
         {openEdit && <ChronicleForm
           open={openEdit}
           handleClose={handleCloseEdit}
@@ -126,38 +128,38 @@ export default function ChroniclePage({ auth, setAuth }) {
             {pc.assets.map(a => <li key={a.asset_id} style={{ listStyle: "square" }}><i><b>{assets[a.asset_id].title}</b></i> (Quantity: {a.quantity})</li>)}
           </ul>
 
-        <hr />
+          <hr />
 
-        <h3>Levels
+          <h3>Levels
           <i className="tip fas fa-question-circle">
-            <section className="tip-info">'Levels' can be any number of things, but they are all measured by a number, and are usually able to be improved and leveled up.</section></i>
-        </h3>
+              <section className="tip-info">'Levels' can be any number of things, but they are all measured by a number, and are usually able to be improved and leveled up.</section></i>
+          </h3>
 
-        <ul>
-          {pc.meters.map(m => <li key={m.meter_id}>
-            <div className="tip-card" style={{ backgroundColor: meters[m.meter_id].color }}>
-              <i className={`tip fas fa-2x fa-${meters[m.meter_id].icon}`} >
-                <section className="tip-info" style={{ color: "black" }}><b>{meters[m.meter_id].title}</b>: <hr />{parse(meters[m.meter_id].description)}</section>
-              </i></div>
-            <dl>
-              <li><b>Level Type:</b> {meters[m.meter_id].title}</li>
-              <li><b>Current Level:</b> {m.total}</li>
-              <li><b>Progress:</b> {m.progress} / {meters[m.meter_id].base}</li>
-            </dl>
-          </li>)}
-        </ul>
+          <ul>
+            {pc.meters.map(m => <li key={m.meter_id}>
+              <div className="tip-card" style={{ backgroundColor: meters[m.meter_id].color }}>
+                <i className={`tip fas fa-2x fa-${meters[m.meter_id].icon}`} >
+                  <section className="tip-info" style={{ color: "black" }}><b>{meters[m.meter_id].title}</b>: <hr />{parse(meters[m.meter_id].description)}</section>
+                </i></div>
+              <dl>
+                <li><b>Level Type:</b> {meters[m.meter_id].title}</li>
+                <li><b>Current Level:</b> {m.total}</li>
+                <li><b>Progress:</b> {m.progress} / {meters[m.meter_id].base}</li>
+              </dl>
+            </li>)}
+          </ul>
 
-      <hr />
+          <hr />
 
 
-      <h3>Conditions
+          <h3>Conditions
         <i className="tip fas fa-question-circle">
-          <section className="tip-info">These are conditions that are currently afflicting your character, for good or ill.</section>
-        </i></h3>
+              <section className="tip-info">These are conditions that are currently afflicting your character, for good or ill.</section>
+            </i></h3>
 
-      <p><i>N/A</i></p>
-      <ul>
-        {/* {pc.conditions.map(c => <li key={c}>
+          <p><i>N/A</i></p>
+          <ul>
+            {/* {pc.conditions.map(c => <li key={c}>
           <dl>
             <dt>Condition</dt>
             <dd>{conditions[c].title}</dd>
@@ -168,10 +170,10 @@ export default function ChroniclePage({ auth, setAuth }) {
             <dt>Time Limit</dt>
             <dd>{conditions[c].expiry</dd>
           </dl></li>)} */}
-      </ul>
+          </ul>
 
-      <hr />
-      </section>
+          <hr />
+        </section>
       </section>
       }
 
@@ -180,26 +182,26 @@ export default function ChroniclePage({ auth, setAuth }) {
       {/* TODO Add clickable map of locations */}
 
       {/* TODO Add list of started and finished tales */}
-
+      <hr />
       <h2>The Tales of "{chronicle.title}" <i className="tip fas fa-question-circle">
         <section className="tip-info">These are the available stories for "{chronicle.title}" that you can play. Maybe you can unlock more depending on certain circumstances...</section>
       </i></h2>
-
-      <ul className="gal">
-        {chronicle.tale_ids.map(tid => (
-          <li key={tid} className="th-card">
-            <Link to={`/chronicles/${cid}/tales/${tid}`}>
-              <dl>
-                <dt>Title</dt>
-                <dd>{tales[tid].title}</dd>
-                <dt>Description</dt>
-                <dd>{tales[tid].description ? parse(tales[tid].description) : "N/A"}</dd>
-              </dl>
-            </Link>
-          </li>
-        ))}
-      </ul>
-
+      <div className="lo-board">
+        <ul className="gal">
+          {chronicle.tale_ids.map(tid => (
+            <li key={tid} className="th-card gal-card hack-card">
+              <Link to={`/chronicles/${cid}/tales/${tid}`}>
+                <div className="hack-img" style={{ backgroundImage: `url(${tales[tid].image})`, }}>
+                </div>
+                <article className="hack-lower">
+                  <h3 style={{ margin: "0" }}><Info content={parse(tales[tid].description)} /> {tales[tid].title}</h3>
+                  <small><address>Created by {tales[tid].creator}</address></small>
+                </article>
+              </Link>
+            </li>
+          ))}
+        </ul>
+</div>
     </main>
   </>)
 }

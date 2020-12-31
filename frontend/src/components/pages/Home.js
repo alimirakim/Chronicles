@@ -7,6 +7,7 @@ import { getGalleryChronicles } from '../../store/mainActions/chronicleActions'
 // import { updateSelections, wipeSelections } from '../actions/selectionActions'
 
 // COMPONENTS
+import Info from '../mylib/Info'
 // import LoginForm from "../auth/LoginForm"
 // import SignUpForm from "../auth/SignUpForm"
 import Header from '../Header'
@@ -31,11 +32,15 @@ export default function Home({ auth, setAuth }) {
   return (
     <main>
       {!auth && <>
-        <div className="lo-wow"><Link to="/sign-up">Create and Account</Link></div>
-        <div className="lo-wow"><Link to="/login">Login</Link></div>
+        <div style={{ position: "relative", width: "70%", margin: "0 15%", height: "8rem", backgroundColor: "rgba(255,255,255,0.5)", borderRadius: "20px" }}>
+          <div style={{ position: "absolute", width: "100%", margin: "0 auto", textAlign: "center" }}>
+            <div className="lo-wow"><Link to="/sign-up">Create an Account</Link></div>
+            <div className="lo-wow"><Link to="/login">Login</Link></div>
+          </div>
+        </div>
       </>}
 
-      <GalleryRibbon ids={gallery_ids} />
+      <GalleryRibbon gallery_ids={gallery_ids} />
 
     </main>)
 }
@@ -50,35 +55,36 @@ export default function Home({ auth, setAuth }) {
       3. Both.
       4. Not sure. */}
 
-function GalleryRibbon({ ids }) {
+function GalleryRibbon({ gallery_ids }) {
   const chronicles = useSelector(state => state.chronicles)
 
   return (
-    <aside>
+    <aside style={{ margin: "4rem 10%", width: "80%" }}>
       <h2>Discover Your Next Adventure!</h2>
       <small>No account? No problem! Play now and if you enjoy the tale you've started but haven't finished, you can make an account to save your progress any time before you leave!</small>
-      <ul>
-        {Object.values(ids).map(id => (
-          <li key={id} className="card" style={{ padding: "0.5rem 1rem" }}>
-            <Link to={`/chronicles/${id}`}>
-              <i className={`fas fa-3x fa-${chronicles[id].icon}`} style={{ width: "3rem", height: "3rem", float: "left", margin: "0.5rem 1rem", color: chronicles[id].color }}></i>
-              <dl>
-                <dt>Title</dt>
-                <dd>{chronicles[id].title}</dd>
-                <dt>Creator</dt>
-                <dd><address>{chronicles[id].creator}</address></dd>
-                {/* <dt>Latest Update</dt>
-            <dd><datetime>{item.updated_at}</datetime></dd>
-            <dt>Tags</dt>
-            <dd>{item.tags}</dd>
-            <dt>Description</dt> */}
-                <dd>{parse(chronicles[id].description)}</dd>
-                {/* TODO Notes like how many tales, how many users, wordcount, hearts/stars */}
-              </dl>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <div className="lo-board">
+        <ul className="gal">
+          {gallery_ids.map(id => (
+            <li key={id} className="th-card gal-card hack-card">
+              <Link to={`/chronicles/${id}`}>
+                <div className="hack-img" style={{ backgroundImage: `url(${chronicles[id].image})`, }}>
+                </div>
+                {/* <img src={`/images/${item.icon}.svg`} alt={`Splash image for "${item.title}" by ${item.creator}`} /> */}
+                <article className="hack-lower">
+
+                  <h3 style={{ margin: "0" }}><Info content={parse(chronicles[id].description)} /> {chronicles[id].title}</h3>
+                  <small><address>Created by {chronicles[id].creator}</address></small>
+                  {/* <dt>Latest Update</dt>
+              <dd><datetime>{item.updated_at}</datetime></dd>
+              <dt>Tags</dt>
+              <dd>{item.tags}</dd> */}
+                  {/* TODO Notes like how many tales, how many users, wordcount, hearts/stars */}
+                </article>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
     </aside>
   )
 }

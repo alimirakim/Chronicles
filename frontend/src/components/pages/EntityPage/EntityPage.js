@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useParams } from 'react-router-dom'
 import parse from 'html-react-parser'
@@ -12,20 +12,11 @@ import EntityAssets from './EntityAssets'
 import EntityMeters from './EntityMeters'
 
 import Info from '../../mylib/Info'
+    
+import DeleteForm from '../../forms/DeleteForm'
+import CharacterForm from '../../forms/CharacterForm'
 
-import { addEntity } from '../../../store/mainActions/entityActions'
-
-
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: "rgb(250,40,60)",
-    },
-    secondary: {
-      main: '#f44336',
-    },
-  },
-});
+import { addEntity, deleteEntity } from '../../../store/mainActions/entityActions'
 
 
 
@@ -33,13 +24,19 @@ export default function EntityPage({ auth, setAuth }) {
   console.log("entity ping")
   const { eid } = useParams()
   const dispatch = useDispatch()
-  const { entities, chronicles, assets, meters, statuses, slots } = useSelector(state => state)
+  const { user, entities, chronicles } = useSelector(state => state)
   const entity = useSelector(state => state.entities[eid])
   const isPc = false
-
+  const [openEdit, setOpenEdit] = useState(false)
+  const [openDelete, setOpenDelete] = useState(false)
+  
+  // const handleOpenEdit = setOpenEdit(true)
+  // const handleCloseEdit = setOpenEdit(false)
+  // const handleOpenDelete = setOpenDelete(true)
+  // const handleCloseDelete = setOpenDelete(false)
 
   let location;
-  if (entity.location_id) location = entities[entity.location_id].image
+  if (entity.location_id) location = entities[entity.location_id]
   else location = ""
 
   useEffect(() => {
@@ -53,20 +50,46 @@ export default function EntityPage({ auth, setAuth }) {
   }, [entity])
 
 
-
+const currentLocation = () => {
+  return (<h2>
+    Currently at <Link to={`/places/${location.id}`} className=".is-display" style={{color: "white"}}>{entities[location.id].title}</Link>
+    </h2>
+    )
+}
 
   console.log("entity ping")
   if (!entity) return null
   return (<>
     <Header
       auth={auth} setAuth={setAuth}
-      imageUrl={location}
+      imageUrl={location.image}
       title={entity.title}
-      subtitle={location ? `Currently at ${location}` : parse(entity.description)}
+      subtitle={location ? currentLocation() : "Currently nowhere"}
     />
+
+    
     <main>
       <img src={entity.image} alt={entity.title} style={{ float: "left", marginRight: "1rem", borderRadius: "50%", height: "10rem", width: "10rem", objectFit: "cover" }} />
 
+
+      {user.id === entity.user_id && <>
+        {/* <button type="button" onClick={handleOpenEdit}>Edit</button>
+        <button type="button" onClick={handleOpenDelete}>Delete</button> */}
+        
+        {/* {openEdit && <CharacterForm
+          open={openEdit}
+          handleClose={handleCloseEdit}
+          id={entity.id}
+          edit={entity}
+        />} */}
+        {/* {openDelete && <DeleteForm
+          open={openDelete}
+          handleClose={handleCloseDelete}
+          creation={entity}
+          creationType="entity"
+          deleteActionCreator={deleteEntity}
+        />} */}
+      </>}
 
       <dl>
         <div style={{ fontSize: "1.5rem" }}><dt>Name</dt>

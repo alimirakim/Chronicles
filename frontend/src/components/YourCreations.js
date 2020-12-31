@@ -34,7 +34,6 @@ import { deleteChoice } from '../store/mainActions/choiceActions'
 
 
 export function YourChronicles() {
-  console.log("in yourChronicles")
   const user = useSelector(state => state.user)
   const chronicles = useSelector(state => state.chronicles)
   if (!user || !chronicles) return null
@@ -62,6 +61,7 @@ export function YourTales() {
       filterBySelect={(tales, cid) => Object.values(tales).filter(tale => tale.chronicle_id === cid)}
       deleteActionCreator={deleteTale}
       creationForm={TaleForm}
+      pagePath={`/chronicles/${parentChronicle.id}/tales`}
     />
   )
 }
@@ -70,6 +70,7 @@ export function YourTales() {
 export function YourThreads() {
   const parentTale = useSelector(state => state.selections.tale)
   const threads = useSelector(state => state.threads)
+  console.log("parentTale", parentTale)
   if (!parentTale || !threads) return null
   return (
     <YourCreations
@@ -79,6 +80,7 @@ export function YourThreads() {
       filterBySelect={(threads, tid) => Object.values(threads).filter(thread => thread.tale_id === tid)}
       deleteActionCreator={deleteThread}
       creationForm={ThreadForm}
+      pagePath={`/chronicles/${parentTale.chronicle_id}/tales/${parentTale.id}/threads`}
     />
   )
 }
@@ -110,6 +112,7 @@ export default function YourCreations({
   filterBySelect,
   deleteActionCreator,
   creationForm: CreationForm,
+  pagePath,
 }) {
   const dispatch = useDispatch()
   const errors = useSelector(state => state.errors)
@@ -120,7 +123,6 @@ export default function YourCreations({
   const [openDelete, setOpenDelete] = useState(false)
   const active = selected[creationType]
   // const active = selected[creationType] ? selected[creationType] : {id: ""}
-
 
 
   const handleActive = (selection) => (e) => dispatch(updateSelection(creationType, selection))
@@ -197,7 +199,7 @@ export default function YourCreations({
       <h2 className="lo-center-h" style={{ margin: "0 auto", fontSize: "1rem", opacity: 0.8 }}>Your {creationType}s</h2>
       {isEmpty ? <p>You have no {creationType}s yet! Why not start one? :B</p> :
         <>
-          <ul>
+          <ul style={{display: "flex", flexDirection: "column-reverse"}}>
             {Object.values(selectedCreations).map(creation => (
               <li
                 key={creation.id}
@@ -206,7 +208,7 @@ export default function YourCreations({
                 style={active.id === creation.id ? { background: `linear-gradient(240deg, ${creation.color} -50%, rgba(250,250,255,0.8) 20%)` } : {}}
               >
 
-                <Link to={`/${creationType}s/${creation.id}`}>
+                <Link to={pagePath ? pagePath+`/${creation.id}` : `/${creationType}s/${creation.id}`}>
                   <div style={{ backgroundColor: creation.color }} className="card-pic">
                     <i className={`fas fa-${creation.icon} lo-center `}></i>
                   </div>

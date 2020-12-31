@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 export default function TagList({ tagIds }) {
   const tags = useSelector(state => state.charGen.tags)
 console.log("taglist", tagIds)
-if (tagIds) {
+if (tagIds && tagIds !== 'custom') {
   
   return (
     <small>
