@@ -25,13 +25,10 @@ import { deleteStatus } from '../../store/mainActions/statusActions'
 import { deleteMeter } from '../../store/mainActions/meterActions'
 
 
-export default function WorldWeaver({ auth, setAuth }) {
+export default function WorldWeaver() {
 
-  const dispatch = useDispatch()
   // TODO QUESTION Ask, is this less efficient than selecting each individually??
   const user = useSelector(state => state.user)
-  const chronicles = useSelector(state => state.chronicles)
-  const selected = useSelector(state => state.selections)
   const characters = useSelector(state => Object.values(state.entities).filter(e=>e.type === "character"))
   const assets = useSelector(state => state.assets)
   const places = useSelector(state => Object.values(state.entities).filter(e=>e.type === "place"))

@@ -1,4 +1,4 @@
-const basePath = process.env.REACT_APP_BASE_PATH || `http://localhost:4000`
+const basePath = process.env.NPSEED_BASE_PATH || `http://localhost:4000`
 
 
 

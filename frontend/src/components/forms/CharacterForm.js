@@ -3,6 +3,7 @@ import CreationFormWrapper from './CreationFormWrapper'
 import { addEntity, updateEntity } from '../../store/mainActions/entityActions'
 
 export default function CharacterForm({ id, edit, open, handleClose }) {
+  
   const resetUniqueContent = () => console.log("No unique content to reset")
 
   return (<>
