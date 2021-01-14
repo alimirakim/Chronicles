@@ -20,7 +20,8 @@ import { setAllContent } from '../../store/genActions/traitActions'
 import { updateSetting, } from '../../store/genActions/settingActions'
 import { setGenerator } from '../../store/genActions/genActions'
 
-const basePath = process.env.NPSEED_BASE_PATH || `http://localhost:4000`
+// const basePath = process.env.NODE_ENV === "development" ? `http://localhost:4000` : process.env.NPSEED_BASE_PATH
+const basePath = process.env.NODE_ENV === "development" ? `http://localhost:4000` : "https://npseed.herokuapp.com"
 
 // *****************************************************************************
 

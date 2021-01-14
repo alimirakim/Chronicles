@@ -163,9 +163,9 @@ function App() {
         <WorldWeaver />
       </ProtectedRoute>
 
-      <ProtectedRoute path="/talespinner" exact={true} auth={auth} setAuth={setAuth} >
+      <ProtectedRoute path="/talespinner" exact={true} auth={auth}>
 
-        <TaleSpinner />
+        <TaleSpinner auth={auth} setAuth={setAuth} />
       </ProtectedRoute>
 
       {/* User list and individual user profiles */}
